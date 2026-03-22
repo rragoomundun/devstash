@@ -26,12 +26,12 @@ Developers keep their essentials scattered across too many surfaces:
 
 | What                | Where it ends up              |
 | ------------------- | ----------------------------- |
-| Code snippets       | VS Code, Notion, Gists       |
+| Code snippets       | VS Code, Notion, Gists        |
 | AI prompts          | Chat histories                |
 | Context files       | Buried in project directories |
 | Useful links        | Browser bookmarks             |
 | Docs & notes        | Random folders                |
-| Terminal commands    | `.bash_history`, `.txt` files |
+| Terminal commands   | `.bash_history`, `.txt` files |
 | Project boilerplate | GitHub Gists, repos           |
 
 This creates **context switching**, **lost knowledge**, and **inconsistent workflows**.
@@ -42,28 +42,28 @@ DevStash solves this by providing a single, fast, searchable, AI-enhanced hub fo
 
 ## Target Users
 
-| Persona                       | Core Need                                              |
-| ----------------------------- | ------------------------------------------------------ |
-| **Everyday Developer**        | Fast access to snippets, prompts, commands, links      |
-| **AI-first Developer**        | Save & organize prompts, contexts, system messages      |
-| **Content Creator / Educator**| Store code blocks, explanations, course notes          |
-| **Full-stack Builder**        | Collect patterns, boilerplates, API examples           |
+| Persona                        | Core Need                                          |
+| ------------------------------ | -------------------------------------------------- |
+| **Everyday Developer**         | Fast access to snippets, prompts, commands, links  |
+| **AI-first Developer**         | Save & organize prompts, contexts, system messages |
+| **Content Creator / Educator** | Store code blocks, explanations, course notes      |
+| **Full-stack Builder**         | Collect patterns, boilerplates, API examples       |
 
 ---
 
 ## Tech Stack
 
-| Layer              | Technology                                                                                                     |
-| ------------------ | -------------------------------------------------------------------------------------------------------------- |
-| **Framework**      | [Next.js 16](https://nextjs.org/) / [React 19](https://react.dev/)                                            |
-| **Language**       | [TypeScript](https://www.typescriptlang.org/)                                                                  |
-| **Database**       | [Neon](https://neon.tech/) (Serverless PostgreSQL)                                                             |
-| **ORM**            | [Prisma 7](https://www.prisma.io/) (latest — fetch docs before use)                                           |
-| **Auth**           | [NextAuth v5](https://authjs.dev/) — Email/password + GitHub OAuth                                             |
-| **File Storage**   | [Cloudflare R2](https://developers.cloudflare.com/r2/)                                                        |
-| **AI**             | [OpenAI](https://platform.openai.com/) — `gpt-5-nano`                                                         |
-| **Styling**        | [Tailwind CSS v4](https://tailwindcss.com/) + [shadcn/ui](https://ui.shadcn.com/)                             |
-| **Caching**        | Redis (TBD)                                                                                                    |
+| Layer            | Technology                                                                        |
+| ---------------- | --------------------------------------------------------------------------------- |
+| **Framework**    | [Next.js 16](https://nextjs.org/) / [React 19](https://react.dev/)                |
+| **Language**     | [TypeScript](https://www.typescriptlang.org/)                                     |
+| **Database**     | [Neon](https://neon.tech/) (Serverless PostgreSQL)                                |
+| **ORM**          | [Prisma 7](https://www.prisma.io/) (latest — fetch docs before use)               |
+| **Auth**         | [NextAuth v5](https://authjs.dev/) — Email/password + GitHub OAuth                |
+| **File Storage** | [Cloudflare R2](https://developers.cloudflare.com/r2/)                            |
+| **AI**           | [OpenAI](https://platform.openai.com/) — `gpt-5-nano`                             |
+| **Styling**      | [Tailwind CSS v4](https://tailwindcss.com/) + [shadcn/ui](https://ui.shadcn.com/) |
+| **Caching**      | Redis (TBD)                                                                       |
 
 **Key principle:** One codebase, one repo — SSR pages with dynamic client components, API routes for backend logic (items, file uploads, AI calls).
 
@@ -323,19 +323,20 @@ model ItemTag {
 
 System types are seeded on first deploy and cannot be modified by users. Custom types (Pro only) will be added later.
 
-| Type        | Icon          | Color                   | ContentType | Route              |
-| ----------- | ------------- | ----------------------- | ----------- | ------------------ |
-| 🔵 Snippet  | `Code`        | `#3b82f6` (blue)        | `TEXT`      | `/items/snippets`  |
-| 🟣 Prompt   | `Sparkles`    | `#8b5cf6` (purple)      | `TEXT`      | `/items/prompts`   |
-| 🟠 Command  | `Terminal`    | `#f97316` (orange)      | `TEXT`      | `/items/commands`  |
-| 🟡 Note     | `StickyNote`  | `#fde047` (yellow)      | `TEXT`      | `/items/notes`     |
-| ⚪ File     | `File`        | `#6b7280` (gray)        | `FILE`      | `/items/files`     |
-| 🩷 Image    | `Image`       | `#ec4899` (pink)        | `FILE`      | `/items/images`    |
-| 🟢 Link     | `Link`        | `#10b981` (emerald)     | `URL`       | `/items/links`     |
+| Type       | Icon         | Color               | ContentType | Route             |
+| ---------- | ------------ | ------------------- | ----------- | ----------------- |
+| 🔵 Snippet | `Code`       | `#3b82f6` (blue)    | `TEXT`      | `/items/snippets` |
+| 🟣 Prompt  | `Sparkles`   | `#8b5cf6` (purple)  | `TEXT`      | `/items/prompts`  |
+| 🟠 Command | `Terminal`   | `#f97316` (orange)  | `TEXT`      | `/items/commands` |
+| 🟡 Note    | `StickyNote` | `#fde047` (yellow)  | `TEXT`      | `/items/notes`    |
+| ⚪ File    | `File`       | `#6b7280` (gray)    | `FILE`      | `/items/files`    |
+| 🩷 Image   | `Image`      | `#ec4899` (pink)    | `FILE`      | `/items/images`   |
+| 🟢 Link    | `Link`       | `#10b981` (emerald) | `URL`       | `/items/links`    |
 
 > Icons are from [Lucide](https://lucide.dev/icons) (ships with shadcn/ui).
 
 **Access rules:**
+
 - File and Image types are **Pro only** (require file upload to Cloudflare R2).
 - All other system types are available on the Free tier.
 
@@ -363,6 +364,7 @@ System types are seeded on first deploy and cannot be modified by users. Custom 
 ### C. Search
 
 Full-text search across:
+
 - Item content
 - Item titles
 - Tags
@@ -389,12 +391,12 @@ Free tier gets basic search. Consider PostgreSQL full-text search (`tsvector`/`t
 
 All AI features use `gpt-5-nano` via the OpenAI API.
 
-| Feature                | Description                                        |
-| ---------------------- | -------------------------------------------------- |
-| **AI Auto-Tag**        | Suggest relevant tags based on item content        |
-| **AI Summary**         | Generate a concise summary of an item              |
-| **AI Explain Code**    | Plain-language explanation of a code snippet        |
-| **Prompt Optimizer**   | Rewrite/improve AI prompts for better results      |
+| Feature              | Description                                   |
+| -------------------- | --------------------------------------------- |
+| **AI Auto-Tag**      | Suggest relevant tags based on item content   |
+| **AI Summary**       | Generate a concise summary of an item         |
+| **AI Explain Code**  | Plain-language explanation of a code snippet  |
+| **Prompt Optimizer** | Rewrite/improve AI prompts for better results |
 
 ---
 
@@ -402,17 +404,17 @@ All AI features use `gpt-5-nano` via the OpenAI API.
 
 ### Tier Comparison
 
-| Feature                  | Free             | Pro ($8/mo · $72/yr) |
-| ------------------------ | ---------------- | -------------------- |
-| Items                    | 50               | Unlimited            |
-| Collections              | 3                | Unlimited            |
-| System types             | All except file/image | All              |
-| Custom types             | —                | Coming soon          |
-| File & image uploads     | —                | ✅                   |
-| AI features              | —                | ✅                   |
-| Search                   | Basic            | Full                 |
-| Export (JSON/ZIP)        | —                | ✅                   |
-| Priority support         | —                | ✅                   |
+| Feature              | Free                  | Pro ($8/mo · $72/yr) |
+| -------------------- | --------------------- | -------------------- |
+| Items                | 50                    | Unlimited            |
+| Collections          | 3                     | Unlimited            |
+| System types         | All except file/image | All                  |
+| Custom types         | —                     | Coming soon          |
+| File & image uploads | —                     | ✅                   |
+| AI features          | —                     | ✅                   |
+| Search               | Basic                 | Full                 |
+| Export (JSON/ZIP)    | —                     | ✅                   |
+| Priority support     | —                     | ✅                   |
 
 **Payment:** Stripe (store `stripeCustomerId` and `stripeSubscriptionId` on User).
 
@@ -429,6 +431,13 @@ All AI features use `gpt-5-nano` via the OpenAI API.
 - Clean typography, generous whitespace
 - Subtle borders and soft shadows
 - Syntax highlighting in all code views (use [Shiki](https://shiki.style/) or [Prism](https://prismjs.com/))
+
+### Screenshots
+
+Refer to the screenshots below as a base for the dashboard UI. It does not have to be exact, use it as a reference.
+
+- @context/screenshots/dashboard-ui-main.png
+- @context/screenshots/dashboard-ui-drawer.png
 
 ### Layout
 
