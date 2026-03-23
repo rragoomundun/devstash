@@ -1,10 +1,24 @@
-import { Search, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+'use client'
 
-export function TopBar() {
+import { Search, Plus, Menu } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+
+interface TopBarProps {
+  onMenuClick?: () => void
+}
+
+export function TopBar({ onMenuClick }: TopBarProps) {
   return (
-    <header className="flex items-center gap-4 border-b border-border px-4 h-14 shrink-0">
+    <header className="flex items-center gap-3 border-b border-border px-4 h-14 shrink-0">
+      <button
+        className="md:hidden p-1.5 rounded-md hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+        onClick={onMenuClick}
+        aria-label="Open sidebar"
+      >
+        <Menu className="size-5" />
+      </button>
+
       <span className="text-base font-semibold tracking-tight">DevStash</span>
 
       <div className="flex-1 flex justify-center">
@@ -19,15 +33,15 @@ export function TopBar() {
       </div>
 
       <div className="flex items-center gap-2">
-        <Button variant="outline" size="sm" className="gap-1.5">
+        <Button variant="outline" size="sm" className="gap-1.5 hidden sm:inline-flex">
           <Plus className="size-4" />
           New Collection
         </Button>
         <Button size="sm" className="gap-1.5">
           <Plus className="size-4" />
-          New Item
+          <span className="hidden sm:inline">New Item</span>
         </Button>
       </div>
     </header>
-  );
+  )
 }
