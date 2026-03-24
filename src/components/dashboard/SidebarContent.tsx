@@ -11,7 +11,6 @@ import {
   Image,
   Link as LinkIcon,
   Star,
-  Clock,
   Lock,
   ChevronDown,
   ChevronRight,
@@ -149,7 +148,10 @@ export function SidebarContent({ collapsed, sidebarData }: { collapsed?: boolean
                             href={`/collections/${col.id}`}
                             className="flex items-center gap-2 px-2 py-1.5 rounded-md text-sm text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
                           >
-                            <Clock className="size-3.5 shrink-0 text-muted-foreground" />
+                            <span
+                              className="size-3.5 shrink-0 rounded-full"
+                              style={{ backgroundColor: col.dominantColor }}
+                            />
                             <span className="flex-1 truncate">{col.name}</span>
                             <span className="text-xs tabular-nums text-muted-foreground">
                               {col.itemCount}
@@ -162,6 +164,13 @@ export function SidebarContent({ collapsed, sidebarData }: { collapsed?: boolean
                 )}
               </div>
             )}
+
+            <Link
+              href="/collections"
+              className="block px-2 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              View all collections →
+            </Link>
           </div>
         )}
       </div>

@@ -1,18 +1,22 @@
 # Current Feature
 
-<!-- Add next feature here -->
+Stats & Sidebar — Live DB Data
 
 ## Status
 
-<!-- In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- List goals here -->
+- Display stats pertaining to database data, keeping the current design/layout
+- Display item types in sidebar with their icons, linking to `/items/[typename]`
+- Add "View all collections" link under the collections list that goes to `/collections`
+- Keep the star icons for favorite collections but for recents, each collection should show a colored circle based on the most-used item type in that collection
+- Create `src/lib/db/items.ts` and add the database functions (use `collections.ts` for reference)
 
 ## Notes
 
-<!-- Add notes here -->
+- Reference: `src/lib/db/collections.ts`
 
 ## History
 
