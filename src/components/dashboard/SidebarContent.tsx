@@ -16,8 +16,10 @@ import {
   ChevronDown,
   ChevronRight,
 } from 'lucide-react'
-import { mockItemTypes, mockItems, mockCollections, mockUser } from '@/lib/mock-data'
 import { cn } from '@/lib/utils'
+import type { getSidebarData } from '@/lib/db/collections'
+
+type SidebarData = Awaited<ReturnType<typeof getSidebarData>>
 
 const ICON_MAP: Record<string, React.FC<{ className?: string; style?: React.CSSProperties }>> = {
   Code,
@@ -35,21 +37,13 @@ function getTypeSlug(name: string) {
   return name.toLowerCase() + 's'
 }
 
-function getItemCountForType(typeId: string) {
-  return mockItems.filter(item => item.itemTypeId === typeId).length
-}
-
-export function SidebarContent({ collapsed }: { collapsed?: boolean }) {
+export function SidebarContent({ collapsed, sidebarData }: { collapsed?: boolean; sidebarData: SidebarData }) {
   const [collectionsOpen, setCollectionsOpen] = useState(true)
 
-  const favoriteCollections = mockCollections.filter(c => c.isFavorite)
-  const recentCollections = [...mockCollections]
-    .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
-    .slice(0, 5)
-    .filter(c => !c.isFavorite)
+  const { itemTypes, favoriteCollections, recentCollections, user } = sidebarData
 
   const initials =
-    mockUser.name
+    user.name
       ?.split(' ')
       .map(n => n[0])
       .join('')
@@ -67,10 +61,9 @@ export function SidebarContent({ collapsed }: { collapsed?: boolean }) {
             </p>
           )}
           <ul className="space-y-0.5">
-            {mockItemTypes.map(type => {
+            {itemTypes.map(type => {
               const Icon = ICON_MAP[type.icon]
               const isPro = PRO_TYPES.has(type.name)
-              const count = getItemCountForType(type.id)
               const slug = getTypeSlug(type.name)
               return (
                 <li key={type.id}>
@@ -90,7 +83,7 @@ export function SidebarContent({ collapsed }: { collapsed?: boolean }) {
                         <span className="flex-1 truncate">{type.name}</span>
                         {isPro && <Lock className="size-3 text-muted-foreground" />}
                         <span className="text-xs tabular-nums text-muted-foreground">
-                          {count}
+                          {type.count}
                         </span>
                       </>
                     )}
@@ -135,7 +128,7 @@ export function SidebarContent({ collapsed }: { collapsed?: boolean }) {
                             <Star className="size-3.5 shrink-0 fill-amber-400 text-amber-400" />
                             <span className="flex-1 truncate">{col.name}</span>
                             <span className="text-xs tabular-nums text-muted-foreground">
-                              {col.itemIds.length}
+                              {col.itemCount}
                             </span>
                           </Link>
                         </li>
@@ -159,7 +152,7 @@ export function SidebarContent({ collapsed }: { collapsed?: boolean }) {
                             <Clock className="size-3.5 shrink-0 text-muted-foreground" />
                             <span className="flex-1 truncate">{col.name}</span>
                             <span className="text-xs tabular-nums text-muted-foreground">
-                              {col.itemIds.length}
+                              {col.itemCount}
                             </span>
                           </Link>
                         </li>
@@ -181,8 +174,8 @@ export function SidebarContent({ collapsed }: { collapsed?: boolean }) {
           </div>
           {!collapsed && (
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium leading-tight truncate">{mockUser.name}</p>
-              <p className="text-xs text-muted-foreground truncate">{mockUser.email}</p>
+              <p className="text-sm font-medium leading-tight truncate">{user.name}</p>
+              <p className="text-xs text-muted-foreground truncate">{user.email}</p>
             </div>
           )}
         </div>
