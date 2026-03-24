@@ -1,12 +1,8 @@
 import Link from 'next/link'
-import { mockItems } from '@/lib/mock-data'
 import { ItemCard } from './ItemCard'
+import type { DashboardItem } from '@/lib/db/items'
 
-export function RecentItems() {
-  const recent = [...mockItems]
-    .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
-    .slice(0, 10)
-
+export function RecentItems({ items }: { items: DashboardItem[] }) {
   return (
     <section>
       <div className="flex items-center justify-between mb-3">
@@ -21,7 +17,7 @@ export function RecentItems() {
         </Link>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-        {recent.map(item => (
+        {items.map(item => (
           <ItemCard key={item.id} item={item} />
         ))}
       </div>

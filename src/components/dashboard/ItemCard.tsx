@@ -7,8 +7,8 @@ import {
   Image,
   Link as LinkIcon,
 } from 'lucide-react'
-import { mockItemTypes } from '@/lib/mock-data'
 import { cn } from '@/lib/utils'
+import type { DashboardItem } from '@/lib/db/items'
 
 const ICON_MAP: Record<string, React.FC<{ className?: string; style?: React.CSSProperties }>> = {
   Code,
@@ -20,15 +20,14 @@ const ICON_MAP: Record<string, React.FC<{ className?: string; style?: React.CSSP
   Link: LinkIcon,
 }
 
-type Item = (typeof import('@/lib/mock-data').mockItems)[number]
-
-function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
-export function ItemCard({ item, large }: { item: Item; large?: boolean }) {
-  const type = mockItemTypes.find(t => t.id === item.itemTypeId)
-  const Icon = type ? ICON_MAP[type.icon] : null
+export function ItemCard({ item, large }: { item: DashboardItem; large?: boolean }) {
+  const type = item.itemType
+  const Icon = ICON_MAP[type.icon] ?? null
+  const tags = item.tags.map(t => t.tag.name)
 
   return (
     <div
@@ -36,13 +35,13 @@ export function ItemCard({ item, large }: { item: Item; large?: boolean }) {
         'rounded-lg border border-border bg-card flex flex-col gap-3 overflow-hidden',
         large ? 'p-4' : 'p-3'
       )}
-      style={{ borderLeftColor: type?.color, borderLeftWidth: 3 }}
+      style={{ borderLeftColor: type.color, borderLeftWidth: 3 }}
     >
       {/* Type badge */}
       <div className="flex items-center gap-1.5">
-        {Icon && <Icon className="size-3.5 shrink-0" style={{ color: type?.color }} />}
-        <span className="text-xs font-medium" style={{ color: type?.color }}>
-          {type?.name}
+        {Icon && <Icon className="size-3.5 shrink-0" style={{ color: type.color }} />}
+        <span className="text-xs font-medium" style={{ color: type.color }}>
+          {type.name}
         </span>
         {item.language && (
           <span className="ml-auto text-xs text-muted-foreground">{item.language}</span>
@@ -66,16 +65,16 @@ export function ItemCard({ item, large }: { item: Item; large?: boolean }) {
           {item.content}
         </pre>
       )}
-      {'url' in item && item.url && (
+      {item.url && (
         <p className="text-xs text-muted-foreground truncate bg-muted/50 rounded p-2">
-          {item.url as string}
+          {item.url}
         </p>
       )}
 
       {/* Footer */}
       <div className="flex items-center gap-2 mt-auto">
         <div className="flex flex-wrap gap-1 flex-1 min-w-0">
-          {item.tags.slice(0, 3).map(tag => (
+          {tags.slice(0, 3).map(tag => (
             <span
               key={tag}
               className="text-xs bg-muted rounded px-1.5 py-0.5 text-muted-foreground whitespace-nowrap"

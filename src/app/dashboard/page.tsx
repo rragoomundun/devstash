@@ -5,6 +5,7 @@ import { CollectionsGrid } from '@/components/dashboard/CollectionsGrid'
 import { PinnedItems } from '@/components/dashboard/PinnedItems'
 import { RecentItems } from '@/components/dashboard/RecentItems'
 import { getRecentCollections, getDashboardStats } from '@/lib/db/collections'
+import { getPinnedItems, getRecentItems } from '@/lib/db/items'
 import { prisma } from '@/lib/prisma'
 
 export default async function DashboardPage() {
@@ -12,9 +13,11 @@ export default async function DashboardPage() {
   const user = await prisma.user.findFirst({ where: { email: 'demo@devstash.io' } })
   const userId = user?.id ?? ''
 
-  const [collections, stats] = await Promise.all([
+  const [collections, stats, pinnedItems, recentItems] = await Promise.all([
     getRecentCollections(userId),
     getDashboardStats(userId),
+    getPinnedItems(userId),
+    getRecentItems(userId),
   ])
 
   const statCards = [
@@ -45,8 +48,8 @@ export default async function DashboardPage() {
       </div>
 
       <CollectionsGrid collections={collections} />
-      <PinnedItems />
-      <RecentItems />
+      <PinnedItems items={pinnedItems} />
+      <RecentItems items={recentItems} />
     </div>
   )
 }
