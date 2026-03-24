@@ -1,18 +1,29 @@
 # Current Feature
 
-<!--  Feature name and short description -->
+Seed Data — populate the database with a demo user, system item types, collections, and items for development and demos.
 
 ## Status
 
-<!-- Not Started | In Progress | Completed -->
+In Progress
 
 ## Goals
 
-<!-- Goals and requirements -->
+- Create demo user: demo@devstash.io / 12345678 (bcryptjs, 12 rounds), isPro: false
+- Seed system item types (Snippet, Prompt, Command, Note, File, Image, Link)
+- Seed collections with items:
+  - **React Patterns** — 3 TypeScript snippets (custom hooks, component patterns, utilities)
+  - **AI Workflows** — 3 prompts (code review, docs generation, refactoring)
+  - **DevOps** — 1 snippet, 1 command, 2 links (real URLs)
+  - **Terminal Commands** — 4 commands (git, docker, process mgmt, package manager)
+  - **Design Resources** — 4 links (real URLs: CSS/Tailwind, component libs, design systems, icons)
 
 ## Notes
 
-<!-- Any extra notes -->
+- Use `prisma/seed.ts` (TypeScript, run via tsx)
+- Password hashed with bcryptjs, 12 rounds
+- System item types use `isSystem: true` and `userId: null`
+- Links use real, valid URLs
+- Script must be idempotent (skip if data already exists)
 
 ## History
 
