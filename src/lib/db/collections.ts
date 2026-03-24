@@ -68,10 +68,32 @@ export async function getSidebarData(userId: string) {
     prisma.collection.findMany({
       where: { userId },
       orderBy: { updatedAt: 'desc' },
-      include: { _count: { select: { items: true } } },
+      include: {
+        _count: { select: { items: true } },
+        items: {
+          include: {
+            item: {
+              include: {
+                itemType: { select: { id: true, color: true } },
+              },
+            },
+          },
+        },
+      },
     }),
     prisma.user.findFirst({ where: { id: userId }, select: { name: true, email: true, image: true } }),
   ])
+
+  function getDominantColor(items: { item: { itemType: { id: string; color: string } } }[]) {
+    if (items.length === 0) return '#6b7280'
+    const counts: Record<string, { color: string; count: number }> = {}
+    for (const { item } of items) {
+      const { id, color } = item.itemType
+      if (!counts[id]) counts[id] = { color, count: 0 }
+      counts[id].count++
+    }
+    return Object.values(counts).sort((a, b) => b.count - a.count)[0].color
+  }
 
   const favoriteCollections = collections
     .filter(c => c.isFavorite)
@@ -80,7 +102,7 @@ export async function getSidebarData(userId: string) {
   const recentCollections = collections
     .filter(c => !c.isFavorite)
     .slice(0, 5)
-    .map(c => ({ id: c.id, name: c.name, itemCount: c._count.items }))
+    .map(c => ({ id: c.id, name: c.name, itemCount: c._count.items, dominantColor: getDominantColor(c.items) }))
 
   return {
     itemTypes: itemTypes.map(t => ({ id: t.id, name: t.name, icon: t.icon, color: t.color, count: t._count.items })),
