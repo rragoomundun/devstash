@@ -1,10 +1,8 @@
-import { mockItems } from '@/lib/mock-data'
 import { ItemCard } from './ItemCard'
+import type { DashboardItem } from '@/lib/db/items'
 
-export function PinnedItems() {
-  const pinned = mockItems.filter(i => i.isPinned)
-
-  if (pinned.length === 0) return null
+export function PinnedItems({ items }: { items: DashboardItem[] }) {
+  if (items.length === 0) return null
 
   return (
     <section>
@@ -12,7 +10,7 @@ export function PinnedItems() {
         Pinned Items
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-        {pinned.map(item => (
+        {items.map(item => (
           <ItemCard key={item.id} item={item} large />
         ))}
       </div>
