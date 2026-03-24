@@ -1,38 +1,34 @@
+export const dynamic = 'force-dynamic'
+
 import { Package, Layers, Star, Bookmark } from 'lucide-react'
-import { mockItems, mockCollections } from '@/lib/mock-data'
 import { CollectionsGrid } from '@/components/dashboard/CollectionsGrid'
 import { PinnedItems } from '@/components/dashboard/PinnedItems'
 import { RecentItems } from '@/components/dashboard/RecentItems'
+import { getRecentCollections, getDashboardStats } from '@/lib/db/collections'
+import { prisma } from '@/lib/prisma'
 
-const stats = [
-  {
-    label: 'Items',
-    value: mockItems.length,
-    Icon: Package,
-  },
-  {
-    label: 'Collections',
-    value: mockCollections.length,
-    Icon: Layers,
-  },
-  {
-    label: 'Favorite Items',
-    value: mockItems.filter(i => i.isFavorite).length,
-    Icon: Star,
-  },
-  {
-    label: 'Favorite Collections',
-    value: mockCollections.filter(c => c.isFavorite).length,
-    Icon: Bookmark,
-  },
-]
+export default async function DashboardPage() {
+  // TODO: replace with auth session once NextAuth is set up
+  const user = await prisma.user.findFirst({ where: { email: 'demo@devstash.io' } })
+  const userId = user?.id ?? ''
 
-export default function DashboardPage() {
+  const [collections, stats] = await Promise.all([
+    getRecentCollections(userId),
+    getDashboardStats(userId),
+  ])
+
+  const statCards = [
+    { label: 'Items', value: stats.totalItems, Icon: Package },
+    { label: 'Collections', value: stats.totalCollections, Icon: Layers },
+    { label: 'Favorite Items', value: stats.favoriteItems, Icon: Star },
+    { label: 'Favorite Collections', value: stats.favoriteCollections, Icon: Bookmark },
+  ]
+
   return (
     <div className="space-y-8 max-w-6xl mx-auto">
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map(({ label, value, Icon }) => (
+        {statCards.map(({ label, value, Icon }) => (
           <div
             key={label}
             className="rounded-lg border border-border bg-card p-4 flex items-center gap-3"
@@ -48,7 +44,7 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      <CollectionsGrid />
+      <CollectionsGrid collections={collections} />
       <PinnedItems />
       <RecentItems />
     </div>

@@ -4,8 +4,11 @@ import { useState } from 'react'
 import { PanelLeft } from 'lucide-react'
 import { SidebarContent } from './SidebarContent'
 import { cn } from '@/lib/utils'
+import type { getSidebarData } from '@/lib/db/collections'
 
-export function Sidebar() {
+type SidebarData = Awaited<ReturnType<typeof getSidebarData>>
+
+export function Sidebar({ sidebarData }: { sidebarData: SidebarData }) {
   const [collapsed, setCollapsed] = useState(false)
 
   return (
@@ -34,7 +37,7 @@ export function Sidebar() {
           <PanelLeft className="size-4" />
         </button>
       </div>
-      <SidebarContent collapsed={collapsed} />
+      <SidebarContent collapsed={collapsed} sidebarData={sidebarData} />
     </aside>
   )
 }

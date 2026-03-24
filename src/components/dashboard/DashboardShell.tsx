@@ -5,8 +5,11 @@ import { X } from 'lucide-react'
 import { TopBar } from './TopBar'
 import { Sidebar } from './Sidebar'
 import { SidebarContent } from './SidebarContent'
+import type { getSidebarData } from '@/lib/db/collections'
 
-export function DashboardShell({ children }: { children: React.ReactNode }) {
+type SidebarData = Awaited<ReturnType<typeof getSidebarData>>
+
+export function DashboardShell({ children, sidebarData }: { children: React.ReactNode; sidebarData: SidebarData }) {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
@@ -14,7 +17,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       <TopBar onMenuClick={() => setMobileOpen(o => !o)} />
 
       <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
+        <Sidebar sidebarData={sidebarData} />
         <main className="flex-1 overflow-auto p-6">{children}</main>
       </div>
 
@@ -32,7 +35,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                 <X className="size-4" />
               </button>
             </div>
-            <SidebarContent />
+            <SidebarContent sidebarData={sidebarData} />
           </aside>
         </div>
       )}
