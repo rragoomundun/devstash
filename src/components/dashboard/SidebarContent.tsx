@@ -11,11 +11,11 @@ import {
   Image,
   Link as LinkIcon,
   Star,
-  Lock,
   ChevronDown,
   ChevronRight,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Badge } from '@/components/ui/badge'
 import type { getSidebarData } from '@/lib/db/collections'
 
 type SidebarData = Awaited<ReturnType<typeof getSidebarData>>
@@ -79,8 +79,10 @@ export function SidebarContent({ collapsed, sidebarData }: { collapsed?: boolean
                     )}
                     {!collapsed && (
                       <>
-                        <span className="flex-1 truncate">{type.name}</span>
-                        {isPro && <Lock className="size-3 text-muted-foreground" />}
+                        <span className="flex-1 flex items-center gap-1.5 min-w-0">
+                          <span className="truncate">{type.name}</span>
+                          {isPro && <Badge variant="outline" className="h-4 px-1 text-[10px] font-semibold text-muted-foreground border-muted-foreground/30 shrink-0">PRO</Badge>}
+                        </span>
                         <span className="text-xs tabular-nums text-muted-foreground">
                           {type.count}
                         </span>
