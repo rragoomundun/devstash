@@ -1,22 +1,18 @@
 # Current Feature
 
-Stats & Sidebar — Live DB Data
+<!-- Add next feature here -->
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Completed -->
 
 ## Goals
 
-- Display stats pertaining to database data, keeping the current design/layout
-- Display item types in sidebar with their icons, linking to `/items/[typename]`
-- Add "View all collections" link under the collections list that goes to `/collections`
-- Keep the star icons for favorite collections but for recents, each collection should show a colored circle based on the most-used item type in that collection
-- Create `src/lib/db/items.ts` and add the database functions (use `collections.ts` for reference)
+<!-- List goals here -->
 
 ## Notes
 
-- Reference: `src/lib/db/collections.ts`
+<!-- Add notes here -->
 
 ## History
 
@@ -28,3 +24,5 @@ In Progress
 - **2026-03-24** — Seed Data: demo user (demo@devstash.io), system item types, 5 collections (React Patterns, AI Workflows, DevOps, Terminal Commands, Design Resources) with items
 - **2026-03-24** — Dashboard Collections: replaced mock data with real Neon DB data via Prisma; collections grid, stats cards, and sidebar (item type counts, collections, user) all use live data
 - **2026-03-24** — Dashboard Items: replaced mock item data with real Neon DB data via Prisma; pinned and recent items fetched in server component, ItemCard uses live item type and tags, pinned section hidden when empty
+- **2026-03-24** — Stats & Sidebar: sidebar item types link to /items/[slug] with live counts, recent collections show colored circle based on dominant item type, "View all collections" link added
+- **2026-03-25** — PRO Badge in Sidebar: replaced lock icon on File and Image types with a subtle shadcn/ui Badge displaying "PRO" inline beside the type name
