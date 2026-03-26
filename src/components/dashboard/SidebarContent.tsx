@@ -3,32 +3,16 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import {
-  Code,
-  Sparkles,
-  Terminal,
-  StickyNote,
-  File,
-  Image,
-  Link as LinkIcon,
   Star,
   ChevronDown,
   ChevronRight,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
+import { ICON_MAP } from '@/lib/icon-map'
 import type { getSidebarData } from '@/lib/db/collections'
 
 type SidebarData = Awaited<ReturnType<typeof getSidebarData>>
-
-const ICON_MAP: Record<string, React.FC<{ className?: string; style?: React.CSSProperties }>> = {
-  Code,
-  Sparkles,
-  Terminal,
-  StickyNote,
-  File,
-  Image,
-  Link: LinkIcon,
-}
 
 const PRO_TYPES = new Set(['File', 'Image'])
 

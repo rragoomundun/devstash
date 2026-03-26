@@ -159,6 +159,7 @@ model ItemCollection {
   addedAt DateTime @default(now())
 
   @@id([itemId, collectionId])
+  @@index([collectionId])
 }
 
 // ─────────────────────────────────────

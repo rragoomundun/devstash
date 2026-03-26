@@ -29,6 +29,7 @@ export function DashboardShell({ children, sidebarData }: { children: React.Reac
             <div className="flex items-center justify-between px-3 border-b border-border h-14 shrink-0">
               <span className="text-sm font-semibold">DevStash</span>
               <button
+                aria-label="Close sidebar"
                 onClick={() => setMobileOpen(false)}
                 className="p-1.5 rounded-md hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
               >

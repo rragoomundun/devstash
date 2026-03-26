@@ -55,7 +55,7 @@ async function main() {
           emailVerified: new Date(),
         },
       })
-      console.log("✓ Created demo user (demo@devstash.io / 12345678)")
+      console.log("✓ Created demo user (demo@devstash.io)")
     } else {
       console.log("  Demo user already exists")
     }

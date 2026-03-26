@@ -1,24 +1,6 @@
-import {
-  Code,
-  Sparkles,
-  Terminal,
-  StickyNote,
-  File,
-  Image,
-  Link as LinkIcon,
-} from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { ICON_MAP } from '@/lib/icon-map'
 import type { DashboardItem } from '@/lib/db/items'
-
-const ICON_MAP: Record<string, React.FC<{ className?: string; style?: React.CSSProperties }>> = {
-  Code,
-  Sparkles,
-  Terminal,
-  StickyNote,
-  File,
-  Image,
-  Link: LinkIcon,
-}
 
 function formatDate(date: Date) {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
@@ -59,8 +41,7 @@ export function ItemCard({ item, large }: { item: DashboardItem; large?: boolean
       {/* Content preview */}
       {item.content && (
         <pre
-          className="text-xs font-mono bg-muted/50 rounded p-2 overflow-hidden whitespace-pre-wrap break-all"
-          style={{ maxHeight: large ? '140px' : '68px' }}
+          className={cn('text-xs font-mono bg-muted/50 rounded p-2 overflow-hidden whitespace-pre-wrap break-all', large ? 'max-h-[140px]' : 'max-h-[68px]')}
         >
           {item.content}
         </pre>

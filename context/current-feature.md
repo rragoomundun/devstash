@@ -1,18 +1,33 @@
 # Current Feature
 
-<!-- Add next feature here -->
+Code Audit Quick Wins
 
 ## Status
 
-<!-- Not Started | In Progress | Completed -->
+In Progress
 
 ## Goals
 
-<!-- List goals here -->
+Fixes from the code-scanner audit that are low-risk and have clear value. Auth bypass is excluded (auth not implemented yet). Each item is independent and can be done in any order.
+
+1. **Fix N+1 dominant color query** — `getRecentCollections` and `getSidebarData` load all item rows per collection into memory to count types in JS. Replace with `prisma.itemCollection.groupBy` (grouped by `collectionId` + `itemTypeId` with `_count`) to compute dominant item type at the DB level. Also extract the shared `getDominantColor` logic to a module-level utility, reused by both functions.
+
+2. **Remove unused packages** — `postgres`, `ws`, and `@neondatabase/serverless` are listed in `package.json` but not used anywhere in `src/`. Remove them.
+
+3. **DATABASE_URL runtime guard** — `src/lib/prisma.ts` uses `process.env.DATABASE_URL!` with no check. Add an explicit `if (!process.env.DATABASE_URL) throw new Error(...)` before the client is created.
+
+4. **Shared ICON_MAP** — `ICON_MAP` is defined identically in `SidebarContent.tsx` and `ItemCard.tsx`. Extract to `src/lib/icon-map.ts` and import in both.
+
+5. **seed.ts password in logs** — `console.log` in seed prints the plaintext demo password. Remove the password from the message.
+
+6. **Inline maxHeight style** — `ItemCard.tsx:63` uses `style={{ maxHeight: ... }}` for a non-dynamic value. Replace with Tailwind classes.
+
+7. **Accessible close button** — Mobile drawer close button in `DashboardShell.tsx` has no `aria-label`. Add `aria-label="Close sidebar"`.
 
 ## Notes
 
-<!-- Add notes here -->
+- For the N+1 fix, use `prisma.itemCollection.groupBy` — no raw SQL. Check Prisma 7 groupBy API in `node_modules/next/dist/docs/` before writing.
+- The `getDominantColor` extraction should result in a single function used by both `getRecentCollections` and `getSidebarData`.
 
 ## History
 
