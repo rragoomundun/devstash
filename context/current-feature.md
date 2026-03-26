@@ -1,33 +1,18 @@
 # Current Feature
 
-Code Audit Quick Wins
+<!-- Add next feature here -->
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Completed -->
 
 ## Goals
 
-Fixes from the code-scanner audit that are low-risk and have clear value. Auth bypass is excluded (auth not implemented yet). Each item is independent and can be done in any order.
-
-1. **Fix N+1 dominant color query** — `getRecentCollections` and `getSidebarData` load all item rows per collection into memory to count types in JS. Replace with `prisma.itemCollection.groupBy` (grouped by `collectionId` + `itemTypeId` with `_count`) to compute dominant item type at the DB level. Also extract the shared `getDominantColor` logic to a module-level utility, reused by both functions.
-
-2. **Remove unused packages** — `postgres`, `ws`, and `@neondatabase/serverless` are listed in `package.json` but not used anywhere in `src/`. Remove them.
-
-3. **DATABASE_URL runtime guard** — `src/lib/prisma.ts` uses `process.env.DATABASE_URL!` with no check. Add an explicit `if (!process.env.DATABASE_URL) throw new Error(...)` before the client is created.
-
-4. **Shared ICON_MAP** — `ICON_MAP` is defined identically in `SidebarContent.tsx` and `ItemCard.tsx`. Extract to `src/lib/icon-map.ts` and import in both.
-
-5. **seed.ts password in logs** — `console.log` in seed prints the plaintext demo password. Remove the password from the message.
-
-6. **Inline maxHeight style** — `ItemCard.tsx:63` uses `style={{ maxHeight: ... }}` for a non-dynamic value. Replace with Tailwind classes.
-
-7. **Accessible close button** — Mobile drawer close button in `DashboardShell.tsx` has no `aria-label`. Add `aria-label="Close sidebar"`.
+<!-- List goals here -->
 
 ## Notes
 
-- For the N+1 fix, use `prisma.itemCollection.groupBy` — no raw SQL. Check Prisma 7 groupBy API in `node_modules/next/dist/docs/` before writing.
-- The `getDominantColor` extraction should result in a single function used by both `getRecentCollections` and `getSidebarData`.
+<!-- Add notes here -->
 
 ## History
 
@@ -41,3 +26,4 @@ Fixes from the code-scanner audit that are low-risk and have clear value. Auth b
 - **2026-03-24** — Dashboard Items: replaced mock item data with real Neon DB data via Prisma; pinned and recent items fetched in server component, ItemCard uses live item type and tags, pinned section hidden when empty
 - **2026-03-24** — Stats & Sidebar: sidebar item types link to /items/[slug] with live counts, recent collections show colored circle based on dominant item type, "View all collections" link added
 - **2026-03-25** — PRO Badge in Sidebar: replaced lock icon on File and Image types with a subtle shadcn/ui Badge displaying "PRO" inline beside the type name
+- **2026-03-26** — Code Audit Quick Wins: optimized dominant color queries (select vs include, shared getDominantColor), added ItemCollection collectionId index with migration, extracted shared ICON_MAP, added DATABASE_URL runtime guard, removed unused packages (postgres, ws, @neondatabase/serverless), removed plaintext password from seed log, replaced inline maxHeight style with Tailwind, added aria-label to mobile drawer close button
