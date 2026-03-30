@@ -1,23 +1,16 @@
-# Current Feature: Email Verification Toggle
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- Add a flag (env variable) to enable/disable the email verification requirement
-- When disabled, users can sign in immediately after registering without verifying their email
-- When enabled, the existing verification flow applies (send email via Resend, block unverified sign-in)
-- Default to disabled so development works without a configured Resend domain
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- Current constraint: Resend requires a verified domain to send to arbitrary addresses; in development only the Resend account owner's email can receive verification emails
-- Solution: `EMAIL_VERIFICATION_ENABLED` env variable (`true` | `false`, default `false`)
-- Touch points: registration API route (skip sending email if disabled), credentials sign-in check (skip verification gate if disabled), possibly the /verify-email page (still functional but not required)
-- `.env.example` should document the new variable
-- No database changes needed
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -36,3 +29,4 @@ In Progress
 - **2026-03-30** — Auth Phase 2: Credentials provider (email/password) with bcrypt validation, POST /api/auth/register endpoint with input validation and duplicate user check, split config pattern maintained
 - **2026-03-30** — Auth Phase 3 UI: custom /sign-in and /register pages, UserAvatar component, sidebar user area with sign-out dropdown, JWT/session callbacks for user.id, dashboard scoped to authenticated user, sidebar fixes (canonical type order, empty-state handling, pinned user area, h-dvh layout), Sonner toast on registration
 - **2026-03-30** — Email Verification: send verification email via Resend on registration, block unverified credentials sign-in, /verify-email route to validate token and mark user verified, toasts on sign-in page for unverified/verified states
+- **2026-03-30** — Email Verification Toggle: EMAIL_VERIFICATION_ENABLED env flag (false by default); when disabled users are marked verified at registration and the sign-in gate is bypassed, enabling dev use without a Resend sending domain
