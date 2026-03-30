@@ -18,9 +18,14 @@ function SignInForm() {
   const toastShown = useRef(false)
 
   useEffect(() => {
-    if (searchParams.get('registered') === 'true' && !toastShown.current) {
+    if (toastShown.current) return
+    if (searchParams.get('registered') === 'true') {
       toastShown.current = true
-      toast.success('Account created! You can now sign in.')
+      toast.success('Account created! Check your inbox to verify your email.')
+      router.replace('/sign-in')
+    } else if (searchParams.get('verified') === 'true') {
+      toastShown.current = true
+      toast.success('Email verified! You can now sign in.')
       router.replace('/sign-in')
     }
   }, [])
@@ -45,7 +50,9 @@ function SignInForm() {
       redirect: false,
     })
     setLoading(false)
-    if (result?.error) {
+    if (result?.error === 'unverified') {
+      setError('Please verify your email before signing in. Check your inbox.')
+    } else if (result?.error) {
       setError('Invalid email or password.')
     } else {
       window.location.href = callbackUrl
