@@ -6,12 +6,13 @@ import { PinnedItems } from '@/components/dashboard/PinnedItems'
 import { RecentItems } from '@/components/dashboard/RecentItems'
 import { getRecentCollections, getDashboardStats } from '@/lib/db/collections'
 import { getPinnedItems, getRecentItems } from '@/lib/db/items'
-import { prisma } from '@/lib/prisma'
+import { auth } from '@/auth'
+import { redirect } from 'next/navigation'
 
 export default async function DashboardPage() {
-  // TODO: replace with auth session once NextAuth is set up
-  const user = await prisma.user.findFirst({ where: { email: 'demo@devstash.io' } })
-  const userId = user?.id ?? ''
+  const session = await auth()
+  if (!session?.user?.id) redirect('/sign-in')
+  const userId = session.user.id
 
   const [collections, stats, pinnedItems, recentItems] = await Promise.all([
     getRecentCollections(userId),
@@ -47,9 +48,9 @@ export default async function DashboardPage() {
         ))}
       </div>
 
-      <CollectionsGrid collections={collections} />
+      {collections.length > 0 && <CollectionsGrid collections={collections} />}
       <PinnedItems items={pinnedItems} />
-      <RecentItems items={recentItems} />
+      {recentItems.length > 0 && <RecentItems items={recentItems} />}
     </div>
   )
 }

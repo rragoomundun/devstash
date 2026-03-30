@@ -13,7 +13,7 @@ export function DashboardShell({ children, sidebarData }: { children: React.Reac
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
-    <div className="flex flex-col h-full min-h-screen">
+    <div className="flex flex-col h-dvh">
       <TopBar onMenuClick={() => setMobileOpen(o => !o)} />
 
       <div className="flex flex-1 overflow-hidden">

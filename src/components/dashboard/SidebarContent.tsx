@@ -2,13 +2,18 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { signOut } from 'next-auth/react'
+import { Menu } from '@base-ui/react/menu'
 import {
   Star,
   ChevronDown,
   ChevronRight,
+  LogOut,
+  User,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
+import { UserAvatar } from '@/components/ui/UserAvatar'
 import { ICON_MAP } from '@/lib/icon-map'
 import type { getSidebarData } from '@/lib/db/collections'
 
@@ -24,13 +29,6 @@ export function SidebarContent({ collapsed, sidebarData }: { collapsed?: boolean
   const [collectionsOpen, setCollectionsOpen] = useState(true)
 
   const { itemTypes, favoriteCollections, recentCollections, user } = sidebarData
-
-  const initials =
-    user.name
-      ?.split(' ')
-      .map(n => n[0])
-      .join('')
-      .toUpperCase() ?? '?'
 
   return (
     <div className="flex flex-col flex-1 min-h-0">
@@ -151,29 +149,58 @@ export function SidebarContent({ collapsed, sidebarData }: { collapsed?: boolean
               </div>
             )}
 
-            <Link
-              href="/collections"
-              className="block px-2 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
-            >
-              View all collections →
-            </Link>
+            {favoriteCollections.length === 0 && recentCollections.length === 0 ? (
+              <p className="px-2 py-1 text-xs text-muted-foreground">No collections</p>
+            ) : (
+              <Link
+                href="/collections"
+                className="block px-2 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                View all collections →
+              </Link>
+            )}
           </div>
         )}
       </div>
 
       {/* User area */}
       <div className="shrink-0 border-t border-border p-3">
-        <div className={cn('flex items-center gap-2.5', collapsed && 'justify-center')}>
-          <div className="size-7 rounded-full bg-primary flex items-center justify-center text-xs font-semibold text-primary-foreground shrink-0">
-            {initials}
-          </div>
-          {!collapsed && (
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium leading-tight truncate">{user.name}</p>
-              <p className="text-xs text-muted-foreground truncate">{user.email}</p>
-            </div>
-          )}
-        </div>
+        <Menu.Root>
+          <Menu.Trigger
+            className={cn(
+              'flex items-center gap-2.5 w-full rounded-md p-1 hover:bg-muted transition-colors cursor-pointer',
+              collapsed && 'justify-center'
+            )}
+          >
+            <UserAvatar name={user.name} image={user.image} size={28} className="shrink-0" />
+            {!collapsed && (
+              <div className="flex-1 min-w-0 text-left">
+                <p className="text-sm font-medium leading-tight truncate">{user.name}</p>
+                <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+              </div>
+            )}
+          </Menu.Trigger>
+          <Menu.Portal>
+            <Menu.Positioner side="top" align="start" sideOffset={6}>
+              <Menu.Popup className="z-50 min-w-40 rounded-lg border border-border bg-card p-1 shadow-lg outline-none">
+                <Menu.Item
+                  render={<Link href="/profile" />}
+                  className="flex items-center gap-2 px-2 py-1.5 rounded-md text-sm text-foreground/80 hover:text-foreground hover:bg-muted transition-colors cursor-pointer outline-none data-highlighted:bg-muted data-highlighted:text-foreground"
+                >
+                  <User className="size-3.5" />
+                  Profile
+                </Menu.Item>
+                <Menu.Item
+                  onClick={() => signOut({ callbackUrl: '/sign-in' })}
+                  className="flex items-center gap-2 px-2 py-1.5 rounded-md text-sm text-foreground/80 hover:text-foreground hover:bg-muted transition-colors cursor-pointer outline-none data-highlighted:bg-muted data-highlighted:text-foreground"
+                >
+                  <LogOut className="size-3.5" />
+                  Sign out
+                </Menu.Item>
+              </Menu.Popup>
+            </Menu.Positioner>
+          </Menu.Portal>
+        </Menu.Root>
       </div>
     </div>
   )
