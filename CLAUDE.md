@@ -31,6 +31,13 @@ Read the following to get the full context of the project:
 - `src/app/` — App Router: pages, layouts, and global styles
 - `@/*` path alias maps to `./src/*`
 
+## Neon MCP
+
+- **Default project:** `devstash` (ID: `floral-flower-10070855`)
+- **Default branch:** `development` (ID: `br-square-hat-an02ppl9`)
+- Always use the development branch for all Neon MCP operations unless the user explicitly says "production".
+- **Never** query or modify the `production` branch (ID: `br-steep-fog-aniq9ybl`) without explicit instruction.
+
 ## Key Conventions
 
 - Fonts: Geist Sans and Geist Mono loaded via `next/font/google` in the root layout
