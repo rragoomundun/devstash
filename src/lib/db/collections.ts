@@ -1,5 +1,7 @@
 import { prisma } from '@/lib/prisma'
 
+const TYPE_ORDER = ['Snippet', 'Prompt', 'Command', 'Note', 'Link', 'File', 'Image']
+
 function getDominantColor(itemTypes: { id: string; color: string }[]) {
   if (itemTypes.length === 0) return '#6b7280'
   const counts: Record<string, { color: string; count: number }> = {}
@@ -66,7 +68,6 @@ export async function getSidebarData(userId: string) {
   const [itemTypes, collections, user] = await Promise.all([
     prisma.itemType.findMany({
       where: { OR: [{ isSystem: true }, { userId }] },
-      orderBy: { name: 'asc' },
       include: { _count: { select: { items: { where: { userId } } } } },
     }),
     prisma.collection.findMany({
@@ -106,7 +107,9 @@ export async function getSidebarData(userId: string) {
     }))
 
   return {
-    itemTypes: itemTypes.map(t => ({ id: t.id, name: t.name, icon: t.icon, color: t.color, count: t._count.items })),
+    itemTypes: itemTypes
+      .map(t => ({ id: t.id, name: t.name, icon: t.icon, color: t.color, count: t._count.items }))
+      .sort((a, b) => TYPE_ORDER.indexOf(a.name) - TYPE_ORDER.indexOf(b.name)),
     favoriteCollections,
     recentCollections,
     user: user ?? { name: null, email: null, image: null },
