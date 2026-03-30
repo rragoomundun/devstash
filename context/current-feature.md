@@ -1,16 +1,23 @@
-# Current Feature
+# Current Feature: Email Verification Toggle
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- Add a flag (env variable) to enable/disable the email verification requirement
+- When disabled, users can sign in immediately after registering without verifying their email
+- When enabled, the existing verification flow applies (send email via Resend, block unverified sign-in)
+- Default to disabled so development works without a configured Resend domain
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- Current constraint: Resend requires a verified domain to send to arbitrary addresses; in development only the Resend account owner's email can receive verification emails
+- Solution: `EMAIL_VERIFICATION_ENABLED` env variable (`true` | `false`, default `false`)
+- Touch points: registration API route (skip sending email if disabled), credentials sign-in check (skip verification gate if disabled), possibly the /verify-email page (still functional but not required)
+- `.env.example` should document the new variable
+- No database changes needed
 
 ## History
 
