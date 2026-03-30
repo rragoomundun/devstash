@@ -29,6 +29,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         const isValid = await bcrypt.compare(password, user.hashedPassword)
         if (!isValid) return null
 
+        if (!user.emailVerified) throw new Error('unverified')
+
         return { id: user.id, email: user.email, name: user.name, image: user.image }
       },
     }),

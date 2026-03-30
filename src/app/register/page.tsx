@@ -8,15 +8,17 @@ import { Input } from '@/components/ui/input'
 
 export default function RegisterPage() {
   const router = useRouter()
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const name = formData.get('name') as string
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
+    const confirmPassword = formData.get('confirmPassword') as string
+
     if (password !== confirmPassword) {
       setError('Passwords do not match.')
       return
@@ -51,30 +53,26 @@ export default function RegisterPage() {
 
         <form onSubmit={handleSubmit} className="space-y-3">
           <Input
+            name="name"
             placeholder="Name"
-            value={name}
-            onChange={e => setName(e.target.value)}
             required
           />
           <Input
+            name="email"
             type="email"
             placeholder="Email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
             required
           />
           <Input
+            name="password"
             type="password"
             placeholder="Password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
             required
           />
           <Input
+            name="confirmPassword"
             type="password"
             placeholder="Confirm password"
-            value={confirmPassword}
-            onChange={e => setConfirmPassword(e.target.value)}
             required
           />
           <Button type="submit" className="w-full" disabled={loading}>
