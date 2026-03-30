@@ -1,16 +1,27 @@
-# Current Feature
+# Current Feature: Forgot Password
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- "Forgot password?" link visible on the /sign-in page
+- /forgot-password page with an email input form
+- POST /api/auth/forgot-password: validate email, create a VerificationToken (identifier = email, token = secure random, expires in 1h), send reset email via Resend with the reset link
+- /reset-password?token=... page with new password + confirm fields
+- POST /api/auth/reset-password: validate token (exists, not expired), hash new password, update user.hashedPassword, delete the used token
+- Success and error states handled with toasts and redirects to /sign-in
+- Works seamlessly whether EMAIL_VERIFICATION_ENABLED is true or false
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- Reuse the existing `VerificationToken` model (identifier + token + expires); no schema changes needed
+- Reuse the Resend email sending pattern from email verification
+- Token should be a cryptographically secure random string (use `crypto.randomBytes`)
+- Expire tokens after 1 hour
+- If email not found, respond with a generic success message (don't reveal whether email exists)
+- Style pages consistent with existing /sign-in and /register pages
 
 ## History
 
