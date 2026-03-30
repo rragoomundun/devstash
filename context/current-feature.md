@@ -1,27 +1,16 @@
-# Current Feature: Forgot Password
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- "Forgot password?" link visible on the /sign-in page
-- /forgot-password page with an email input form
-- POST /api/auth/forgot-password: validate email, create a VerificationToken (identifier = email, token = secure random, expires in 1h), send reset email via Resend with the reset link
-- /reset-password?token=... page with new password + confirm fields
-- POST /api/auth/reset-password: validate token (exists, not expired), hash new password, update user.hashedPassword, delete the used token
-- Success and error states handled with toasts and redirects to /sign-in
-- Works seamlessly whether EMAIL_VERIFICATION_ENABLED is true or false
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- Reuse the existing `VerificationToken` model (identifier + token + expires); no schema changes needed
-- Reuse the Resend email sending pattern from email verification
-- Token should be a cryptographically secure random string (use `crypto.randomBytes`)
-- Expire tokens after 1 hour
-- If email not found, respond with a generic success message (don't reveal whether email exists)
-- Style pages consistent with existing /sign-in and /register pages
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -41,3 +30,4 @@ In Progress
 - **2026-03-30** — Auth Phase 3 UI: custom /sign-in and /register pages, UserAvatar component, sidebar user area with sign-out dropdown, JWT/session callbacks for user.id, dashboard scoped to authenticated user, sidebar fixes (canonical type order, empty-state handling, pinned user area, h-dvh layout), Sonner toast on registration
 - **2026-03-30** — Email Verification: send verification email via Resend on registration, block unverified credentials sign-in, /verify-email route to validate token and mark user verified, toasts on sign-in page for unverified/verified states
 - **2026-03-30** — Email Verification Toggle: EMAIL_VERIFICATION_ENABLED env flag (false by default); when disabled users are marked verified at registration and the sign-in gate is bypassed, enabling dev use without a Resend sending domain
+- **2026-03-30** — Forgot Password: /forgot-password page + POST /api/auth/forgot-password generates a VerificationToken (identifier: password-reset:{email}, 1h expiry) and sends reset email via Resend; /reset-password page + POST /api/auth/reset-password validates token, updates hashed password, deletes token; Forgot password? link on sign-in page; in dev without Resend the reset URL is returned directly to the client for frictionless testing
