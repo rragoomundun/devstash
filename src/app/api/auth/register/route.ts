@@ -21,19 +21,28 @@ export async function POST(request: Request) {
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);
+  const verificationEnabled = process.env.EMAIL_VERIFICATION_ENABLED === 'true';
 
   await prisma.user.create({
-    data: { name, email, hashedPassword }
+    data: {
+      name,
+      email,
+      hashedPassword,
+      // Mark as verified immediately when verification is disabled
+      emailVerified: verificationEnabled ? null : new Date(),
+    }
   });
 
-  const token = randomBytes(32).toString('hex');
-  const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  if (verificationEnabled) {
+    const token = randomBytes(32).toString('hex');
+    const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
-  await prisma.verificationToken.create({
-    data: { identifier: email, token, expires }
-  });
+    await prisma.verificationToken.create({
+      data: { identifier: email, token, expires }
+    });
 
-  await sendVerificationEmail(email, token);
+    await sendVerificationEmail(email, token);
+  }
 
   return NextResponse.json({ success: true }, { status: 201 });
 }
