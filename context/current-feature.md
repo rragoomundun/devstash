@@ -1,25 +1,16 @@
-# Current Feature: Rate Limiting for Auth
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- Add rate limiting to auth API routes using Upstash Redis + `@upstash/ratelimit`
-- Create reusable `src/lib/rate-limit.ts` utility with sliding window algorithm
-- Protect login (5/15min), register (3/1hr), forgot-password (3/1hr), reset-password (5/15min), resend-verification (3/15min)
-- Key by IP or IP+email depending on endpoint
-- Return 429 with `Retry-After` header and user-friendly JSON error
-- Display rate limit errors via toast on frontend
-- Fail open if Upstash is unavailable
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- Uses `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` env vars
-- Upstash free tier: 10k requests/day (sufficient for auth limiting)
-- Login limiting with NextAuth credentials may need custom sign-in handler
-- Extract IP from `x-forwarded-for` (Vercel) or request
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -41,3 +32,4 @@ In Progress
 - **2026-03-30** — Email Verification Toggle: EMAIL_VERIFICATION_ENABLED env flag (false by default); when disabled users are marked verified at registration and the sign-in gate is bypassed, enabling dev use without a Resend sending domain
 - **2026-03-30** — Forgot Password: /forgot-password page + POST /api/auth/forgot-password generates a VerificationToken (identifier: password-reset:{email}, 1h expiry) and sends reset email via Resend; /reset-password page + POST /api/auth/reset-password validates token, updates hashed password, deletes token; Forgot password? link on sign-in page; in dev without Resend the reset URL is returned directly to the client for frictionless testing
 - **2026-03-31** — Profile Page: /profile route with auth guard; user info card (avatar, name, email, join date); usage stats (total items/collections, per-type breakdown with colored icons); change password dialog (credentials users only) via POST /api/auth/change-password; delete account dialog with confirmation via DELETE /api/auth/delete-account; added shadcn AlertDialog and Dialog components
+- **2026-03-31** — Rate Limiting for Auth: Upstash Redis + @upstash/ratelimit with sliding window on login (5/15min, IP+email), register (3/1hr, IP), forgot-password (3/1hr, IP), reset-password (5/15min, IP); reusable src/lib/rate-limit.ts utility; CredentialsSignin subclasses for login errors; 429 responses with Retry-After header on API routes; fail-open when Upstash unavailable
