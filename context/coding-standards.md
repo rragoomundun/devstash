@@ -90,6 +90,13 @@ Example v4 configuration:
 - Return `{ success, data, error }` pattern from actions
 - Display user-friendly error messages via toast
 
+## Testing
+
+- **Vitest** for unit tests — server actions, utilities, and lib functions only
+- No component tests (no React Testing Library / jsdom)
+- Test files live next to source: `foo.ts` → `foo.test.ts`
+- Run `npm test` before committing; build must also pass
+
 ## Code Quality
 
 - No commented-out code unless specified

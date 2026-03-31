@@ -17,6 +17,8 @@ Read the following to get the full context of the project:
 - `npm run dev` — start dev server
 - `npm run build` — production build
 - `npm run lint` — run ESLint
+- `npm test` — run unit tests (Vitest)
+- `npm run test:watch` — run tests in watch mode
 - `npm start` — serve production build
 
 ## Tech Stack
