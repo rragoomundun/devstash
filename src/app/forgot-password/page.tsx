@@ -26,12 +26,12 @@ export default function ForgotPasswordPage() {
 
     setLoading(false)
 
+    const data = await res.json()
+
     if (!res.ok) {
-      setError('Something went wrong. Please try again.')
+      setError(data.error ?? 'Something went wrong. Please try again.')
       return
     }
-
-    const data = await res.json()
     if (data.devResetUrl) {
       router.push(data.devResetUrl)
     } else {

@@ -55,7 +55,9 @@ function SignInForm() {
       redirect: false,
     })
     setLoading(false)
-    if (result?.error === 'unverified') {
+    if (result?.code === 'rate-limited') {
+      setError('Too many login attempts. Please try again later.')
+    } else if (result?.code === 'unverified') {
       setError('Please verify your email before signing in. Check your inbox.')
     } else if (result?.error) {
       setError('Invalid email or password.')

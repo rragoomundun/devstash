@@ -3,8 +3,13 @@ import bcrypt from 'bcryptjs';
 import { randomBytes } from 'crypto';
 import { prisma } from '@/lib/prisma';
 import { sendVerificationEmail } from '@/lib/email';
+import { rateLimit, getClientIp, rateLimitResponse, AUTH_LIMITS } from '@/lib/rate-limit';
 
 export async function POST(request: Request) {
+  const ip = getClientIp(request);
+  const rl = await rateLimit(AUTH_LIMITS.register, ip);
+  if (!rl.success) return rateLimitResponse(rl.resetInSeconds);
+
   const body = await request.json();
   const { name, email, password, confirmPassword } = body;
 
