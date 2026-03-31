@@ -1,25 +1,16 @@
-# Current Feature: Profile Page
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- `/profile` route, protected (requires authentication)
-- Display user info: email, name, avatar (GitHub image or initials), account creation date
-- Show usage stats: total items, total collections, breakdown by item type (snippets, prompts, notes, commands, links, files, images)
-- Change password action — only visible for email/password users (not GitHub OAuth)
-- Delete account action with confirmation dialog
-- Follow existing codebase patterns for data fetching and components
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- Avatar logic: use GitHub avatar from OAuth `user.image` if available, otherwise generate initials from name/email
-- Change password: only show for users with `hashedPassword` set (credentials users)
-- Delete account: confirmation dialog (shadcn AlertDialog), cascading delete of all user data
-- Item type breakdown: show count per system type
-- Reuse existing patterns: server component data fetching via Prisma, shadcn/ui components
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -40,3 +31,4 @@ In Progress
 - **2026-03-30** — Email Verification: send verification email via Resend on registration, block unverified credentials sign-in, /verify-email route to validate token and mark user verified, toasts on sign-in page for unverified/verified states
 - **2026-03-30** — Email Verification Toggle: EMAIL_VERIFICATION_ENABLED env flag (false by default); when disabled users are marked verified at registration and the sign-in gate is bypassed, enabling dev use without a Resend sending domain
 - **2026-03-30** — Forgot Password: /forgot-password page + POST /api/auth/forgot-password generates a VerificationToken (identifier: password-reset:{email}, 1h expiry) and sends reset email via Resend; /reset-password page + POST /api/auth/reset-password validates token, updates hashed password, deletes token; Forgot password? link on sign-in page; in dev without Resend the reset URL is returned directly to the client for frictionless testing
+- **2026-03-31** — Profile Page: /profile route with auth guard; user info card (avatar, name, email, join date); usage stats (total items/collections, per-type breakdown with colored icons); change password dialog (credentials users only) via POST /api/auth/change-password; delete account dialog with confirmation via DELETE /api/auth/delete-account; added shadcn AlertDialog and Dialog components
