@@ -9,7 +9,7 @@ function CollectionCard({ col }: { col: Collection }) {
     <Link
       href={`/collections/${col.id}`}
       className="group rounded-lg border border-border bg-card flex flex-col gap-2 p-4 hover:bg-muted/30 transition-colors"
-      style={{ borderTopColor: col.dominantColor, borderTopWidth: 2 }}
+      style={{ borderLeftColor: col.dominantColor, borderLeftWidth: 2 }}
     >
       <div className="flex items-start justify-between gap-2">
         <p className="font-semibold text-sm leading-tight">{col.name}</p>
