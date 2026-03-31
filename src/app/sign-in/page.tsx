@@ -32,6 +32,7 @@ function SignInForm() {
       toast.success('Password updated! You can now sign in.')
       router.replace('/sign-in')
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional mount-only effect: show toast once and clear query params
   }, [])
 
   const [email, setEmail] = useState('')
