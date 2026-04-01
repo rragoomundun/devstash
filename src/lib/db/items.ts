@@ -48,4 +48,22 @@ export async function getItemsByType(userId: string, typeName: string) {
   })
 }
 
+const itemDetailSelect = {
+  ...itemSelect,
+  fileUrl: true,
+  fileName: true,
+  fileSize: true,
+  collections: {
+    include: { collection: { select: { id: true, name: true } } },
+  },
+} as const
+
+export async function getItemById(userId: string, itemId: string) {
+  return prisma.item.findFirst({
+    where: { id: itemId, userId },
+    select: itemDetailSelect,
+  })
+}
+
 export type DashboardItem = Awaited<ReturnType<typeof getRecentItems>>[number]
+export type ItemDetail = NonNullable<Awaited<ReturnType<typeof getItemById>>>

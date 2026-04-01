@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { Search, Plus, Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -19,7 +20,7 @@ export function TopBar({ onMenuClick }: TopBarProps) {
         <Menu className="size-5" />
       </button>
 
-      <span className="text-base font-semibold tracking-tight">DevStash</span>
+      <Link href="/dashboard" className="text-base font-semibold tracking-tight">DevStash</Link>
 
       <div className="flex-1 flex justify-center">
         <div className="relative w-full max-w-sm">

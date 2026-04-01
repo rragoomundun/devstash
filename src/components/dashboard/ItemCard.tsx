@@ -1,5 +1,8 @@
+'use client'
+
 import { cn } from '@/lib/utils'
 import { ICON_MAP } from '@/lib/icon-map'
+import { useItems } from '@/components/dashboard/ItemsProvider'
 import type { DashboardItem } from '@/lib/db/items'
 
 function formatDate(date: Date) {
@@ -7,14 +10,19 @@ function formatDate(date: Date) {
 }
 
 export function ItemCard({ item, large }: { item: DashboardItem; large?: boolean }) {
+  const { openItem } = useItems()
   const type = item.itemType
   const Icon = ICON_MAP[type.icon] ?? null
   const tags = item.tags.map(t => t.tag.name)
 
   return (
     <div
+      role="button"
+      tabIndex={0}
+      onClick={() => openItem(item.id)}
+      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') openItem(item.id) }}
       className={cn(
-        'rounded-lg border border-border bg-card flex flex-col gap-3 overflow-hidden',
+        'rounded-lg border border-border bg-card flex flex-col gap-3 overflow-hidden cursor-pointer hover:bg-muted/30 transition-colors',
         large ? 'p-4' : 'p-3'
       )}
       style={{ borderLeftColor: type.color, borderLeftWidth: 3 }}
