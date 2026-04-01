@@ -1,16 +1,23 @@
-# Current Feature
+# Current Feature: Items List View
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- Dynamic route at `/items/[type]` (e.g., /items/snippets, /items/notes)
+- Fetch and display items filtered by item type
+- Responsive grid of ItemCard components
+- Three columns on medium screens and up
+- Each card has left border colored by its item type
+- Follow existing codebase patterns
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- Route uses the type slug (plural lowercase name) to resolve the ItemType
+- Reuses existing ItemCard component from the dashboard
+- Server component — fetch items directly with Prisma
 
 ## History
 

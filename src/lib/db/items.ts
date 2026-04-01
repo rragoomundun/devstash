@@ -37,4 +37,15 @@ export async function getRecentItems(userId: string) {
   })
 }
 
+export async function getItemsByType(userId: string, typeName: string) {
+  return prisma.item.findMany({
+    where: {
+      userId,
+      itemType: { name: { equals: typeName, mode: 'insensitive' } },
+    },
+    orderBy: { updatedAt: 'desc' },
+    select: itemSelect,
+  })
+}
+
 export type DashboardItem = Awaited<ReturnType<typeof getRecentItems>>[number]

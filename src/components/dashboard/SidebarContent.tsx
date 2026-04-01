@@ -49,7 +49,7 @@ export function SidebarContent({ collapsed, sidebarData }: { collapsed?: boolean
               return (
                 <li key={type.id}>
                   <Link
-                    href={`/items/${slug}`}
+                    href={`/dashboard/items/${slug}`}
                     className={cn(
                       'flex items-center gap-2.5 px-2 py-1.5 rounded-md text-sm text-foreground/80 hover:text-foreground hover:bg-muted transition-colors',
                       collapsed && 'justify-center px-0'
