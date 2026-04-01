@@ -1,25 +1,16 @@
-# Current Feature: Item Drawer
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- Right-side slide-in drawer using shadcn Sheet component
-- Clicking an ItemCard opens the drawer with full item data
-- Works on both dashboard and items list pages
-- Action bar with Favorite (star, yellow when active), Pin, Copy, Edit (pencil), Delete (trash, right-aligned)
-- Client wrapper component to manage drawer state (pages are server components)
-- Full item detail fetched on click via GET `/api/items/[id]` (no page navigation)
-- Drawer shows skeleton/loading state while fetching
-- Query function in `lib/db/items.ts`, API route calls it with auth check
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- No code editor or item-specific extras yet — just the detail display and action bar
-- Card data already fetched by server component; full detail (content, collections, language) fetched on click
-- See `context/screenshots/dashboard-ui-drawer.png` for visual reference
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -43,3 +34,4 @@ In Progress
 - **2026-03-31** — Profile Page: /profile route with auth guard; user info card (avatar, name, email, join date); usage stats (total items/collections, per-type breakdown with colored icons); change password dialog (credentials users only) via POST /api/auth/change-password; delete account dialog with confirmation via DELETE /api/auth/delete-account; added shadcn AlertDialog and Dialog components
 - **2026-03-31** — Rate Limiting for Auth: Upstash Redis + @upstash/ratelimit with sliding window on login (5/15min, IP+email), register (3/1hr, IP), forgot-password (3/1hr, IP), reset-password (5/15min, IP); reusable src/lib/rate-limit.ts utility; CredentialsSignin subclasses for login errors; 429 responses with Retry-After header on API routes; fail-open when Upstash unavailable
 - **2026-04-01** — Items List View: dynamic /dashboard/items/[type] route displaying type-filtered items in a responsive 3-column grid; getItemsByType Prisma query; type header with icon and count; empty state; sidebar links updated to /dashboard/items/ prefix
+- **2026-04-01** — Item Drawer: right-side Sheet drawer with full item detail fetched via GET /api/items/[id]; skeleton loading state; action bar (favorite/pin/copy/edit/delete); tags and collections display; ItemsProvider context for drawer state; works on dashboard and items list pages; DevStash title linked to /dashboard
