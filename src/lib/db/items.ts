@@ -65,6 +65,42 @@ export async function getItemById(userId: string, itemId: string) {
   })
 }
 
+export interface CreateItemData {
+  title: string
+  description: string | null
+  content: string | null
+  url: string | null
+  language: string | null
+  itemTypeId: string
+  tags: string[]
+}
+
+export async function createItem(userId: string, data: CreateItemData) {
+  return prisma.item.create({
+    data: {
+      title: data.title,
+      description: data.description,
+      content: data.content,
+      url: data.url,
+      language: data.language,
+      contentType: data.url ? 'URL' : 'TEXT',
+      userId,
+      itemTypeId: data.itemTypeId,
+      tags: {
+        create: data.tags.map(name => ({
+          tag: {
+            connectOrCreate: {
+              where: { name },
+              create: { name },
+            },
+          },
+        })),
+      },
+    },
+    select: itemDetailSelect,
+  })
+}
+
 export interface UpdateItemData {
   title: string
   description: string | null
