@@ -13,6 +13,7 @@ import { ICON_MAP } from '@/lib/icon-map'
 import { toast } from 'sonner'
 import { createItem } from '@/actions/items'
 import { CodeEditor } from './CodeEditor'
+import { MarkdownEditor } from './MarkdownEditor'
 
 const TEXT_CONTENT_TYPES = new Set(['snippet', 'prompt', 'command', 'note'])
 const LANGUAGE_TYPES = new Set(['snippet', 'command'])
@@ -109,7 +110,6 @@ export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId 
 
   const inputClass =
     'w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring'
-  const textareaClass = `${inputClass} resize-none`
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -165,12 +165,9 @@ export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId 
                 language={form.language || undefined}
               />
             ) : (
-              <textarea
-                className={textareaClass}
-                rows={6}
+              <MarkdownEditor
                 value={form.content}
-                onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
-                placeholder="Content"
+                onChange={(val) => setForm(f => ({ ...f, content: val }))}
               />
             )
           )}

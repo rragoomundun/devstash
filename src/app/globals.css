@@ -127,3 +127,62 @@
     @apply font-sans;
     }
 }
+
+/* Markdown preview styles */
+.markdown-preview {
+  color: #e4e4e7;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+.markdown-preview h1 { font-size: 1.5rem; font-weight: 700; margin: 1rem 0 0.5rem; }
+.markdown-preview h2 { font-size: 1.25rem; font-weight: 600; margin: 0.875rem 0 0.4rem; }
+.markdown-preview h3 { font-size: 1.1rem; font-weight: 600; margin: 0.75rem 0 0.35rem; }
+.markdown-preview h4,
+.markdown-preview h5,
+.markdown-preview h6 { font-size: 1rem; font-weight: 600; margin: 0.65rem 0 0.3rem; }
+.markdown-preview p { margin: 0 0 0.75rem; }
+.markdown-preview p:last-child { margin-bottom: 0; }
+.markdown-preview code {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.85em;
+}
+.markdown-preview pre {
+  background: #0d0d0d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+  margin: 0.75rem 0;
+}
+.markdown-preview pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  font-size: 0.8rem;
+}
+.markdown-preview ul,
+.markdown-preview ol { padding-left: 1.5rem; margin: 0.5rem 0 0.75rem; }
+.markdown-preview ul { list-style: disc; }
+.markdown-preview ol { list-style: decimal; }
+.markdown-preview li { margin: 0.2rem 0; }
+.markdown-preview li > ul,
+.markdown-preview li > ol { margin: 0.2rem 0; }
+.markdown-preview blockquote {
+  border-left: 3px solid #4f4f4f;
+  margin: 0.75rem 0;
+  padding: 0.25rem 0.75rem;
+  color: #a1a1aa;
+}
+.markdown-preview a { color: #60a5fa; text-decoration: underline; text-underline-offset: 2px; }
+.markdown-preview a:hover { color: #93c5fd; }
+.markdown-preview table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.8rem; }
+.markdown-preview thead { background: rgba(255, 255, 255, 0.06); }
+.markdown-preview th,
+.markdown-preview td { border: 1px solid rgba(255, 255, 255, 0.1); padding: 0.4rem 0.6rem; text-align: left; }
+.markdown-preview th { font-weight: 600; color: #d4d4d8; }
+.markdown-preview hr { border: none; border-top: 1px solid rgba(255, 255, 255, 0.1); margin: 1rem 0; }
+.markdown-preview strong { font-weight: 700; color: #f4f4f5; }
+.markdown-preview em { font-style: italic; color: #d4d4d8; }
