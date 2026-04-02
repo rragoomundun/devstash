@@ -10,6 +10,7 @@ const itemSelect = {
   language: true,
   fileUrl: true,
   fileName: true,
+  fileSize: true,
   isPinned: true,
   isFavorite: true,
   updatedAt: true,
