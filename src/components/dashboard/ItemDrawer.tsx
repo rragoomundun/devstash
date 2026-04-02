@@ -36,6 +36,7 @@ import { toast } from 'sonner'
 import { updateItem, deleteItem } from '@/actions/items'
 import type { ItemDetail } from '@/lib/db/items'
 import { CodeEditor } from './CodeEditor'
+import { MarkdownEditor } from './MarkdownEditor'
 
 function formatDate(date: string) {
   return new Date(date).toLocaleDateString('en-US', {
@@ -353,12 +354,9 @@ export function ItemDrawer({ itemId, open, onOpenChange }: ItemDrawerProps) {
                           language={editState.language || undefined}
                         />
                       ) : (
-                        <textarea
-                          className={textareaClass}
-                          rows={8}
+                        <MarkdownEditor
                           value={editState.content}
-                          onChange={e => setEditState(s => ({ ...s, content: e.target.value }))}
-                          placeholder="Content"
+                          onChange={(val) => setEditState(s => ({ ...s, content: val }))}
                         />
                       )}
                     </div>
@@ -426,9 +424,7 @@ export function ItemDrawer({ itemId, open, onOpenChange }: ItemDrawerProps) {
                         readOnly
                       />
                     ) : (
-                      <pre className="text-sm font-mono bg-muted/50 rounded-lg p-4 overflow-x-auto whitespace-pre-wrap break-all">
-                        {item.content}
-                      </pre>
+                      <MarkdownEditor value={item.content} readOnly />
                     )
                   )}
 
