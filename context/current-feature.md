@@ -1,31 +1,16 @@
-# Current Feature: Item Create
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- "New Item" button in the top bar opens a shadcn `Dialog` modal
-- Type selector inside the modal: snippet, prompt, command, note, link (file/image excluded — Pro only)
-- Fields rendered based on selected type:
-  - All types: title (required), description, tags (comma-separated)
-  - snippet / command: content textarea, language input
-  - prompt / note: content textarea
-  - link: URL input (required)
-- `createItem(data)` server action in `src/actions/items.ts` with Zod validation and ownership check
-- `createItem` query function in `src/lib/db/items.ts`: connect-or-create tags, return created item
-- Zod schema `CreateItemSchema` in `src/lib/schemas/items.ts`
-- On success: close modal, `router.refresh()`, show success toast
-- On error: show field-level or general error toast, keep modal open
-- Save button disabled when required fields are empty (title always; URL for link type)
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- Reuse the field visibility constants (`TEXT_CONTENT_TYPES`, `LANGUAGE_TYPES`) already defined in `ItemDrawer.tsx` — extract to a shared location if needed
-- Item type IDs must be resolved by name (e.g. "snippet") from the DB — fetch system types for the selector
-- No file/image type in the selector (Pro only, file upload not yet implemented)
-- Follow the same controlled-input / no-form-library pattern used in the edit mode
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -52,3 +37,4 @@ In Progress
 - **2026-04-01** — Item Drawer: right-side Sheet drawer with full item detail fetched via GET /api/items/[id]; skeleton loading state; action bar (favorite/pin/copy/edit/delete); tags and collections display; ItemsProvider context for drawer state; works on dashboard and items list pages; DevStash title linked to /dashboard
 - **2026-04-02** — Item Drawer Edit Mode: inline edit mode toggled within the drawer; controlled inputs for title, description, tags (comma-separated), content, language, and URL; action bar swaps to Save/Cancel; updateItem server action with Zod validation and ownership check; router.refresh() after save to sync card list; field-level error display
 - **2026-04-02** — Item Delete: AlertDialog confirmation on delete button; deleteItem server action with ownership check; deleteItem db query with userId constraint; success closes drawer + toast + router.refresh(); error shows toast and keeps drawer open
+- **2026-04-02** — Item Create: "New Item" button in top bar opens a Dialog modal; type selector (snippet, prompt, command, note, link); conditional fields per type; createItem server action with Zod validation; createItem db query with connect-or-create tags; ItemsProvider lifted above DashboardShell so TopBar can access openCreate via context; Pro types (File, Image) excluded from selector
