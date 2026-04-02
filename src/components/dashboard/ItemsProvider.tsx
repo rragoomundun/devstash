@@ -13,7 +13,7 @@ interface ItemType {
 
 interface ItemsContextValue {
   openItem: (id: string) => void
-  openCreate: () => void
+  openCreate: (typeId?: string) => void
 }
 
 const ItemsContext = createContext<ItemsContextValue | null>(null)
@@ -33,13 +33,17 @@ export function ItemsProvider({ children, itemTypes }: ItemsProviderProps) {
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [createOpen, setCreateOpen] = useState(false)
+  const [preselectedTypeId, setPreselectedTypeId] = useState<string | undefined>()
 
   const openItem = useCallback((id: string) => {
     setSelectedItemId(id)
     setDrawerOpen(true)
   }, [])
 
-  const openCreate = useCallback(() => setCreateOpen(true), [])
+  const openCreate = useCallback((typeId?: string) => {
+    setPreselectedTypeId(typeId)
+    setCreateOpen(true)
+  }, [])
 
   const handleDrawerOpenChange = useCallback((next: boolean) => {
     setDrawerOpen(next)
@@ -50,7 +54,7 @@ export function ItemsProvider({ children, itemTypes }: ItemsProviderProps) {
     <ItemsContext value={{ openItem, openCreate }}>
       {children}
       <ItemDrawer itemId={selectedItemId} open={drawerOpen} onOpenChange={handleDrawerOpenChange} />
-      <CreateItemDialog open={createOpen} onOpenChange={setCreateOpen} itemTypes={itemTypes} />
+      <CreateItemDialog open={createOpen} onOpenChange={setCreateOpen} itemTypes={itemTypes} initialTypeId={preselectedTypeId} />
     </ItemsContext>
   )
 }

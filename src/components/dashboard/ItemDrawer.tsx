@@ -35,6 +35,7 @@ import {
 import { toast } from 'sonner'
 import { updateItem, deleteItem } from '@/actions/items'
 import type { ItemDetail } from '@/lib/db/items'
+import { CodeEditor } from './CodeEditor'
 
 function formatDate(date: string) {
   return new Date(date).toLocaleDateString('en-US', {
@@ -345,13 +346,21 @@ export function ItemDrawer({ itemId, open, onOpenChange }: ItemDrawerProps) {
                   {showContent && (
                     <div className="space-y-1">
                       <label className="text-xs text-muted-foreground">Content</label>
-                      <textarea
-                        className={textareaClass}
-                        rows={8}
-                        value={editState.content}
-                        onChange={e => setEditState(s => ({ ...s, content: e.target.value }))}
-                        placeholder="Content"
-                      />
+                      {showLanguage ? (
+                        <CodeEditor
+                          value={editState.content}
+                          onChange={(val) => setEditState(s => ({ ...s, content: val }))}
+                          language={editState.language || undefined}
+                        />
+                      ) : (
+                        <textarea
+                          className={textareaClass}
+                          rows={8}
+                          value={editState.content}
+                          onChange={e => setEditState(s => ({ ...s, content: e.target.value }))}
+                          placeholder="Content"
+                        />
+                      )}
                     </div>
                   )}
 
@@ -410,9 +419,17 @@ export function ItemDrawer({ itemId, open, onOpenChange }: ItemDrawerProps) {
               ) : (
                 <>
                   {item.content && (
-                    <pre className="text-sm font-mono bg-muted/50 rounded-lg p-4 overflow-x-auto whitespace-pre-wrap break-all">
-                      {item.content}
-                    </pre>
+                    showLanguage ? (
+                      <CodeEditor
+                        value={item.content}
+                        language={item.language ?? undefined}
+                        readOnly
+                      />
+                    ) : (
+                      <pre className="text-sm font-mono bg-muted/50 rounded-lg p-4 overflow-x-auto whitespace-pre-wrap break-all">
+                        {item.content}
+                      </pre>
+                    )
                   )}
 
                   {item.url && (

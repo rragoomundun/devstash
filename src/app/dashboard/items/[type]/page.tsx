@@ -4,6 +4,7 @@ import { notFound, redirect } from 'next/navigation'
 import { auth } from '@/auth'
 import { getItemsByType } from '@/lib/db/items'
 import { ItemCard } from '@/components/dashboard/ItemCard'
+import { AddTypeItemButton } from '@/components/dashboard/AddTypeItemButton'
 import { ICON_MAP } from '@/lib/icon-map'
 import { prisma } from '@/lib/prisma'
 
@@ -33,7 +34,7 @@ export default async function ItemsPage({
     getItemsByType(session.user.id, typeName),
     prisma.itemType.findFirst({
       where: { name: { equals: typeName, mode: 'insensitive' } },
-      select: { name: true, icon: true, color: true },
+      select: { id: true, name: true, icon: true, color: true },
     }),
   ])
 
@@ -56,6 +57,11 @@ export default async function ItemsPage({
             {items.length} {items.length === 1 ? 'item' : 'items'}
           </p>
         </div>
+        {itemType && (
+          <div className="ml-auto">
+            <AddTypeItemButton typeId={itemType.id} typeName={typeName} />
+          </div>
+        )}
       </div>
 
       {items.length === 0 ? (
