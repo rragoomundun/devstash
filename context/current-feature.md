@@ -1,24 +1,16 @@
-# Current Feature: Item Delete
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- Delete button in item drawer action bar opens a ShadCN `AlertDialog` confirmation ("Are you sure? This cannot be undone.")
-- Confirming calls a `deleteItem(itemId)` server action in `src/actions/items.ts` with ownership check
-- `deleteItem` query function in `src/lib/db/items.ts`: verify item belongs to user, then delete
-- On success: close the drawer, call `router.refresh()` to sync card list, show a success toast
-- On error: show an error toast, keep the drawer open
-- Delete button is disabled while the deletion is in progress
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- The delete button already exists in the action bar (Trash2 icon, no `onClick` yet)
-- Use the existing shadcn `AlertDialog` component (already added to the project)
-- Server action returns `{ success: true } | { success: false, error: string }`
-- No Zod schema needed — input is just the item ID (string)
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -44,3 +36,4 @@ In Progress
 - **2026-04-01** — Items List View: dynamic /dashboard/items/[type] route displaying type-filtered items in a responsive 3-column grid; getItemsByType Prisma query; type header with icon and count; empty state; sidebar links updated to /dashboard/items/ prefix
 - **2026-04-01** — Item Drawer: right-side Sheet drawer with full item detail fetched via GET /api/items/[id]; skeleton loading state; action bar (favorite/pin/copy/edit/delete); tags and collections display; ItemsProvider context for drawer state; works on dashboard and items list pages; DevStash title linked to /dashboard
 - **2026-04-02** — Item Drawer Edit Mode: inline edit mode toggled within the drawer; controlled inputs for title, description, tags (comma-separated), content, language, and URL; action bar swaps to Save/Cancel; updateItem server action with Zod validation and ownership check; router.refresh() after save to sync card list; field-level error display
+- **2026-04-02** — Item Delete: AlertDialog confirmation on delete button; deleteItem server action with ownership check; deleteItem db query with userId constraint; success closes drawer + toast + router.refresh(); error shows toast and keeps drawer open
