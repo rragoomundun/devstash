@@ -4,6 +4,7 @@ import { notFound, redirect } from 'next/navigation'
 import { auth } from '@/auth'
 import { getItemsByType } from '@/lib/db/items'
 import { ItemCard } from '@/components/dashboard/ItemCard'
+import { ImageCard } from '@/components/dashboard/ImageCard'
 import { AddTypeItemButton } from '@/components/dashboard/AddTypeItemButton'
 import { ICON_MAP } from '@/lib/icon-map'
 import { prisma } from '@/lib/prisma'
@@ -69,6 +70,12 @@ export default async function ItemsPage({
           <p className="text-sm text-muted-foreground">
             No {typeName.toLowerCase()}s yet.
           </p>
+        </div>
+      ) : slug === 'images' ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {items.map(item => (
+            <ImageCard key={item.id} item={item} />
+          ))}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">

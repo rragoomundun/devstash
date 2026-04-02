@@ -1,16 +1,20 @@
-# Current Feature
+# Current Feature: Image Gallery View
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- Image thumbnail card replaces the regular item card on the images page
+- 3-column grid layout for the images page
+- Thumbnail uses 16:9 aspect ratio (`aspect-video`) with `object-cover`
+- Subtle hover zoom effect (scale 105%, 300ms transition)
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- Only applies to the `/dashboard/items/images` route, not other type pages
+- The card should still be clickable to open the ItemDrawer
 
 ## History
 

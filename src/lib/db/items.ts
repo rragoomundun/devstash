@@ -8,6 +8,8 @@ const itemSelect = {
   content: true,
   url: true,
   language: true,
+  fileUrl: true,
+  fileName: true,
   isPinned: true,
   isFavorite: true,
   updatedAt: true,
