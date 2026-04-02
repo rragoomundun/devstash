@@ -1,19 +1,16 @@
-# Current Feature: File List View
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- Each card shows: file icon (by extension), file name, file size, upload date, download button
-- Download button triggers direct download without opening the drawer (stop propagation)
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- File icon should vary by extension (pdf, txt, json, csv, etc.)
-- File size already stored in DB but not currently in `itemSelect` — may need to add `fileSize`
-- Download link points to `/api/download/[...key]` proxy with `download` attribute
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -28,7 +25,7 @@ In Progress
 - **2026-03-24** — Stats & Sidebar: sidebar item types link to /items/[slug] with live counts, recent collections show colored circle based on dominant item type, "View all collections" link added
 - **2026-03-25** — PRO Badge in Sidebar: replaced lock icon on File and Image types with a subtle shadcn/ui Badge displaying "PRO" inline beside the type name
 - **2026-03-26** — Code Audit Quick Wins: optimized dominant color queries (select vs include, shared getDominantColor), added ItemCollection collectionId index with migration, extracted shared ICON_MAP, added DATABASE_URL runtime guard, removed unused packages (postgres, ws, @neondatabase/serverless), removed plaintext password from seed log, replaced inline maxHeight style with Tailwind, added aria-label to mobile drawer close button
-- **2026-03-30** — Auth Phase 1: NextAuth v5 with GitHub OAuth, split config for edge compatibility, proxy protecting /dashboard/\* with redirect to sign-in, dark theme on built-in sign-in page, Session type extended with user.id
+- **2026-03-30** — Auth Phase 1: NextAuth v5 with GitHub OAuth, split config for edge compatibility, proxy protecting /dashboard/* with redirect to sign-in, dark theme on built-in sign-in page, Session type extended with user.id
 - **2026-03-30** — Auth Phase 2: Credentials provider (email/password) with bcrypt validation, POST /api/auth/register endpoint with input validation and duplicate user check, split config pattern maintained
 - **2026-03-30** — Auth Phase 3 UI: custom /sign-in and /register pages, UserAvatar component, sidebar user area with sign-out dropdown, JWT/session callbacks for user.id, dashboard scoped to authenticated user, sidebar fixes (canonical type order, empty-state handling, pinned user area, h-dvh layout), Sonner toast on registration
 - **2026-03-30** — Email Verification: send verification email via Resend on registration, block unverified credentials sign-in, /verify-email route to validate token and mark user verified, toasts on sign-in page for unverified/verified states
@@ -45,3 +42,4 @@ In Progress
 - **2026-04-02** — Markdown Editor: MarkdownEditor component with Write/Preview tabs for notes and prompts; react-markdown + remark-gfm for GFM support; dark theme (bg-[#1e1e1e] / bg-[#2d2d2d]); copy button matching CodeEditor style; readonly shows Preview only; fluid height (120–400px); .markdown-preview CSS class with full styling (headings, code blocks, lists, blockquotes, links, tables); integrated in ItemDrawer (view + edit) and CreateItemDialog
 - **2026-04-02** — File & Image Upload: Cloudflare R2 integration via @aws-sdk/client-s3; POST /api/upload with MIME type and size validation (images 5 MB, files 10 MB); GET /api/download/[...key] auth-gated proxy; FileUpload component with drag-and-drop, progress bar, image preview and file info; CreateItemDialog uses shadcn Select for type picker and supports File/Image types; ItemDrawer shows image preview, file info card, and Download button; deleteItem cleans up R2 on deletion; action bar wraps on narrow drawers
 - **2026-04-02** — Image Gallery View: ImageCard component with aspect-video thumbnail, object-cover, and hover zoom (scale-105/300ms); /dashboard/items/images renders ImageCard grid instead of ItemCard; fileUrl and fileName added to itemSelect so DashboardItem carries them
+- **2026-04-02** — File Card Display: file items in ItemCard show extension-based icon (PDF→FileType, JSON→FileJson, YAML/TOML/XML/INI→FileCode, CSV→FileSpreadsheet, other→FileText); metadata block below description shows file name, size, upload date, and inline download button (stopPropagation); fileSize added to itemSelect
