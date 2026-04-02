@@ -1,35 +1,16 @@
-# Current Feature: File Upload with Cloudflare R2
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- Upload API route for Cloudflare R2
-- FileUpload component with drag-and-drop and progress indicator
-- Create item modal supports File/Image types via FileUpload
-- Delete files from R2 when items are deleted
-- Download proxy API route (avoids CORS)
-- Download button in ItemDrawer for file types
-- Image preview for images, file info for files
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-**File constraints:**
-
-| Type   | Max Size | Extensions                                                                       |
-| ------ | -------- | -------------------------------------------------------------------------------- |
-| Images | 5 MB     | `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`, `.svg`                                 |
-| Files  | 10 MB    | `.pdf`, `.txt`, `.md`, `.json`, `.yaml`, `.yml`, `.xml`, `.csv`, `.toml`, `.ini` |
-
-**MIME types:**
-- Images: `image/png`, `image/jpeg`, `image/gif`, `image/webp`, `image/svg+xml`
-- Files: `application/pdf`, `text/plain`, `text/markdown`, `application/json`, `application/x-yaml`, `text/yaml`, `application/xml`, `text/xml`, `text/csv`, `application/toml`
-
-**Implementation notes:**
-- Prisma/DB functions go in `src/lib/db/items.ts`
-- File types are Pro only (already gated in UI)
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -59,3 +40,4 @@ In Progress
 - **2026-04-02** — Item Create: "New Item" button in top bar opens a Dialog modal; type selector (snippet, prompt, command, note, link); conditional fields per type; createItem server action with Zod validation; createItem db query with connect-or-create tags; ItemsProvider lifted above DashboardShell so TopBar can access openCreate via context; Pro types (File, Image) excluded from selector
 - **2026-04-02** — Code Editor: Monaco Editor (vs-dark) for snippet/command types in ItemDrawer and CreateItemDialog; macOS window dots + language label + copy button in editor header; fluid height (80–400px) via onDidContentSizeChange; AddTypeItemButton client component on each type page; openCreate extended with optional typeId for preselection; initialTypeId prop on CreateItemDialog with useEffect sync
 - **2026-04-02** — Markdown Editor: MarkdownEditor component with Write/Preview tabs for notes and prompts; react-markdown + remark-gfm for GFM support; dark theme (bg-[#1e1e1e] / bg-[#2d2d2d]); copy button matching CodeEditor style; readonly shows Preview only; fluid height (120–400px); .markdown-preview CSS class with full styling (headings, code blocks, lists, blockquotes, links, tables); integrated in ItemDrawer (view + edit) and CreateItemDialog
+- **2026-04-02** — File & Image Upload: Cloudflare R2 integration via @aws-sdk/client-s3; POST /api/upload with MIME type and size validation (images 5 MB, files 10 MB); GET /api/download/[...key] auth-gated proxy; FileUpload component with drag-and-drop, progress bar, image preview and file info; CreateItemDialog uses shadcn Select for type picker and supports File/Image types; ItemDrawer shows image preview, file info card, and Download button; deleteItem cleans up R2 on deletion; action bar wraps on narrow drawers
