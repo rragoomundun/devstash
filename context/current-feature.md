@@ -1,20 +1,16 @@
-# Current Feature: Image Gallery View
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- Image thumbnail card replaces the regular item card on the images page
-- 3-column grid layout for the images page
-- Thumbnail uses 16:9 aspect ratio (`aspect-video`) with `object-cover`
-- Subtle hover zoom effect (scale 105%, 300ms transition)
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- Only applies to the `/dashboard/items/images` route, not other type pages
-- The card should still be clickable to open the ItemDrawer
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -45,3 +41,4 @@ In Progress
 - **2026-04-02** — Code Editor: Monaco Editor (vs-dark) for snippet/command types in ItemDrawer and CreateItemDialog; macOS window dots + language label + copy button in editor header; fluid height (80–400px) via onDidContentSizeChange; AddTypeItemButton client component on each type page; openCreate extended with optional typeId for preselection; initialTypeId prop on CreateItemDialog with useEffect sync
 - **2026-04-02** — Markdown Editor: MarkdownEditor component with Write/Preview tabs for notes and prompts; react-markdown + remark-gfm for GFM support; dark theme (bg-[#1e1e1e] / bg-[#2d2d2d]); copy button matching CodeEditor style; readonly shows Preview only; fluid height (120–400px); .markdown-preview CSS class with full styling (headings, code blocks, lists, blockquotes, links, tables); integrated in ItemDrawer (view + edit) and CreateItemDialog
 - **2026-04-02** — File & Image Upload: Cloudflare R2 integration via @aws-sdk/client-s3; POST /api/upload with MIME type and size validation (images 5 MB, files 10 MB); GET /api/download/[...key] auth-gated proxy; FileUpload component with drag-and-drop, progress bar, image preview and file info; CreateItemDialog uses shadcn Select for type picker and supports File/Image types; ItemDrawer shows image preview, file info card, and Download button; deleteItem cleans up R2 on deletion; action bar wraps on narrow drawers
+- **2026-04-02** — Image Gallery View: ImageCard component with aspect-video thumbnail, object-cover, and hover zoom (scale-105/300ms); /dashboard/items/images renders ImageCard grid instead of ItemCard; fileUrl and fileName added to itemSelect so DashboardItem carries them
