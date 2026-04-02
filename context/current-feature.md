@@ -1,29 +1,16 @@
-# Current Feature: Item Drawer — Edit Mode
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- Edit button in item drawer action bar toggles inline edit mode (same drawer, no navigation)
-- In edit mode: action bar replaced with Save and Cancel buttons
-- Cancel discards changes, returns to view mode
-- Save persists via server action, returns to view mode, refreshes drawer data, shows toast
-- Editable for all types: title (required), description, tags (comma-separated input)
-- Type-specific fields: content textarea (snippet/prompt/command/note), language input (snippet/command), URL input (link)
-- Non-editable in edit mode: item type, collections, dates
-- Zod validation in server action: title non-empty, optional fields nullable, tags as trimmed string array
-- `updateItem(itemId, data)` server action in `src/actions/items.ts` with ownership check
-- `updateItem` query function in `src/lib/db/items.ts`: disconnect all tags, connect-or-create new ones, return updated `ItemDetail`
-- After save, call `router.refresh()` so underlying card list reflects changes
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- No form library — controlled inputs with local state
-- Disable Save when title is empty (client-side UX guard only; Zod is source of truth)
-- Content textarea is plain text, not a code editor (code editor comes later)
-- Return Zod errors in `{ success: false, error }` so client can display field-level errors
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -48,3 +35,4 @@ In Progress
 - **2026-03-31** — Rate Limiting for Auth: Upstash Redis + @upstash/ratelimit with sliding window on login (5/15min, IP+email), register (3/1hr, IP), forgot-password (3/1hr, IP), reset-password (5/15min, IP); reusable src/lib/rate-limit.ts utility; CredentialsSignin subclasses for login errors; 429 responses with Retry-After header on API routes; fail-open when Upstash unavailable
 - **2026-04-01** — Items List View: dynamic /dashboard/items/[type] route displaying type-filtered items in a responsive 3-column grid; getItemsByType Prisma query; type header with icon and count; empty state; sidebar links updated to /dashboard/items/ prefix
 - **2026-04-01** — Item Drawer: right-side Sheet drawer with full item detail fetched via GET /api/items/[id]; skeleton loading state; action bar (favorite/pin/copy/edit/delete); tags and collections display; ItemsProvider context for drawer state; works on dashboard and items list pages; DevStash title linked to /dashboard
+- **2026-04-02** — Item Drawer Edit Mode: inline edit mode toggled within the drawer; controlled inputs for title, description, tags (comma-separated), content, language, and URL; action bar swaps to Save/Cancel; updateItem server action with Zod validation and ownership check; router.refresh() after save to sync card list; field-level error display
