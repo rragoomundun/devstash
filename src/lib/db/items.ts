@@ -99,5 +99,11 @@ export async function updateItem(userId: string, itemId: string, data: UpdateIte
   })
 }
 
+export async function deleteItem(userId: string, itemId: string) {
+  await prisma.item.delete({
+    where: { id: itemId, userId },
+  })
+}
+
 export type DashboardItem = Awaited<ReturnType<typeof getRecentItems>>[number]
 export type ItemDetail = NonNullable<Awaited<ReturnType<typeof getItemById>>>

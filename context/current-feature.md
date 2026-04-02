@@ -1,16 +1,24 @@
-# Current Feature
+# Current Feature: Item Delete
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- Delete button in item drawer action bar opens a ShadCN `AlertDialog` confirmation ("Are you sure? This cannot be undone.")
+- Confirming calls a `deleteItem(itemId)` server action in `src/actions/items.ts` with ownership check
+- `deleteItem` query function in `src/lib/db/items.ts`: verify item belongs to user, then delete
+- On success: close the drawer, call `router.refresh()` to sync card list, show a success toast
+- On error: show an error toast, keep the drawer open
+- Delete button is disabled while the deletion is in progress
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- The delete button already exists in the action bar (Trash2 icon, no `onClick` yet)
+- Use the existing shadcn `AlertDialog` component (already added to the project)
+- Server action returns `{ success: true } | { success: false, error: string }`
+- No Zod schema needed — input is just the item ID (string)
 
 ## History
 

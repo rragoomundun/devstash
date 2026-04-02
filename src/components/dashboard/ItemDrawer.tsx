@@ -9,6 +9,16 @@ import {
   SheetTitle,
   SheetDescription,
 } from '@/components/ui/sheet'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { ICON_MAP } from '@/lib/icon-map'
 import {
   Star,
@@ -23,7 +33,7 @@ import {
   X,
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { updateItem } from '@/actions/items'
+import { updateItem, deleteItem } from '@/actions/items'
 import type { ItemDetail } from '@/lib/db/items'
 
 function formatDate(date: string) {
@@ -102,6 +112,8 @@ export function ItemDrawer({ itemId, open, onOpenChange }: ItemDrawerProps) {
   const [error, setError] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
   const [editState, setEditState] = useState<EditState>({
     title: '',
     description: '',
@@ -172,6 +184,21 @@ export function ItemDrawer({ itemId, open, onOpenChange }: ItemDrawerProps) {
     router.refresh()
   }
 
+  async function handleDelete() {
+    if (!item) return
+    setIsDeleting(true)
+    const result = await deleteItem(item.id)
+    setIsDeleting(false)
+    if (!result.success) {
+      toast.error(result.error)
+      return
+    }
+    setDeleteConfirmOpen(false)
+    onOpenChange(false)
+    toast.success('Item deleted')
+    router.refresh()
+  }
+
   const typeName = item?.itemType.name.toLowerCase() ?? ''
   const showContent = TEXT_CONTENT_TYPES.has(typeName)
   const showLanguage = LANGUAGE_TYPES.has(typeName)
@@ -187,6 +214,7 @@ export function ItemDrawer({ itemId, open, onOpenChange }: ItemDrawerProps) {
   const textareaClass = `${inputClass} resize-none`
 
   return (
+    <>
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="right" className="w-full sm:max-w-lg overflow-y-auto">
         {item ? (
@@ -298,8 +326,10 @@ export function ItemDrawer({ itemId, open, onOpenChange }: ItemDrawerProps) {
                     <span>Edit</span>
                   </button>
                   <button
-                    className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground hover:text-destructive hover:bg-muted transition-colors ml-auto"
+                    className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground hover:text-destructive hover:bg-muted transition-colors ml-auto disabled:opacity-50"
                     title="Delete"
+                    onClick={() => setDeleteConfirmOpen(true)}
+                    disabled={isDeleting}
                   >
                     <Trash2 className="size-3.5" />
                     <span>Delete</span>
@@ -444,5 +474,27 @@ export function ItemDrawer({ itemId, open, onOpenChange }: ItemDrawerProps) {
         )}
       </SheetContent>
     </Sheet>
+
+    <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Delete item?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This cannot be undone. The item will be permanently deleted.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={handleDelete}
+            disabled={isDeleting}
+            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+          >
+            {isDeleting ? 'Deleting…' : 'Delete'}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+    </>
   )
 }
