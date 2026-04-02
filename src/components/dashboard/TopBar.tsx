@@ -41,7 +41,7 @@ export function TopBar({ onMenuClick }: TopBarProps) {
           <Plus className="size-4" />
           New Collection
         </Button>
-        <Button size="sm" className="gap-1.5" onClick={openCreate}>
+        <Button size="sm" className="gap-1.5" onClick={() => openCreate()}>
           <Plus className="size-4" />
           <span className="hidden sm:inline">New Item</span>
         </Button>

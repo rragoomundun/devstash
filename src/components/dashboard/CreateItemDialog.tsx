@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Dialog,
@@ -12,6 +12,7 @@ import {
 import { ICON_MAP } from '@/lib/icon-map'
 import { toast } from 'sonner'
 import { createItem } from '@/actions/items'
+import { CodeEditor } from './CodeEditor'
 
 const TEXT_CONTENT_TYPES = new Set(['snippet', 'prompt', 'command', 'note'])
 const LANGUAGE_TYPES = new Set(['snippet', 'command'])
@@ -27,6 +28,7 @@ interface CreateItemDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   itemTypes: ItemType[]
+  initialTypeId?: string
 }
 
 interface FormState {
@@ -47,9 +49,13 @@ const emptyForm: FormState = {
   tags: '',
 }
 
-export function CreateItemDialog({ open, onOpenChange, itemTypes }: CreateItemDialogProps) {
+export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId }: CreateItemDialogProps) {
   const router = useRouter()
-  const [selectedTypeId, setSelectedTypeId] = useState<string>(itemTypes[0]?.id ?? '')
+  const [selectedTypeId, setSelectedTypeId] = useState<string>(initialTypeId ?? itemTypes[0]?.id ?? '')
+
+  useEffect(() => {
+    if (open) setSelectedTypeId(initialTypeId ?? itemTypes[0]?.id ?? '')
+  }, [open, initialTypeId, itemTypes])
   const [form, setForm] = useState<FormState>(emptyForm)
   const [isSaving, setIsSaving] = useState(false)
 
@@ -152,13 +158,21 @@ export function CreateItemDialog({ open, onOpenChange, itemTypes }: CreateItemDi
           />
 
           {showContent && (
-            <textarea
-              className={textareaClass}
-              rows={6}
-              value={form.content}
-              onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
-              placeholder="Content"
-            />
+            showLanguage ? (
+              <CodeEditor
+                value={form.content}
+                onChange={(val) => setForm(f => ({ ...f, content: val }))}
+                language={form.language || undefined}
+              />
+            ) : (
+              <textarea
+                className={textareaClass}
+                rows={6}
+                value={form.content}
+                onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
+                placeholder="Content"
+              />
+            )
           )}
 
           {showLanguage && (
