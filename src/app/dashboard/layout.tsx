@@ -6,14 +6,22 @@ import { getSidebarData } from '@/lib/db/collections'
 
 export const dynamic = 'force-dynamic'
 
+const PRO_TYPE_NAMES = new Set(['File', 'Image'])
+
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
   if (!session?.user?.id) redirect('/sign-in')
   const sidebarData = await getSidebarData(session.user.id)
 
+  const availableTypes = sidebarData.itemTypes
+    .filter(t => !PRO_TYPE_NAMES.has(t.name))
+    .map(({ id, name, icon, color }) => ({ id, name, icon, color }))
+
   return (
-    <DashboardShell sidebarData={sidebarData}>
-      <ItemsProvider>{children}</ItemsProvider>
-    </DashboardShell>
+    <ItemsProvider itemTypes={availableTypes}>
+      <DashboardShell sidebarData={sidebarData}>
+        {children}
+      </DashboardShell>
+    </ItemsProvider>
   )
 }

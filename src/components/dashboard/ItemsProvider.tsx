@@ -2,9 +2,18 @@
 
 import { createContext, useContext, useState, useCallback } from 'react'
 import { ItemDrawer } from './ItemDrawer'
+import { CreateItemDialog } from './CreateItemDialog'
+
+interface ItemType {
+  id: string
+  name: string
+  icon: string
+  color: string
+}
 
 interface ItemsContextValue {
   openItem: (id: string) => void
+  openCreate: () => void
 }
 
 const ItemsContext = createContext<ItemsContextValue | null>(null)
@@ -15,24 +24,33 @@ export function useItems() {
   return ctx
 }
 
-export function ItemsProvider({ children }: { children: React.ReactNode }) {
+interface ItemsProviderProps {
+  children: React.ReactNode
+  itemTypes: ItemType[]
+}
+
+export function ItemsProvider({ children, itemTypes }: ItemsProviderProps) {
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null)
-  const [open, setOpen] = useState(false)
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [createOpen, setCreateOpen] = useState(false)
 
   const openItem = useCallback((id: string) => {
     setSelectedItemId(id)
-    setOpen(true)
+    setDrawerOpen(true)
   }, [])
 
-  const handleOpenChange = useCallback((next: boolean) => {
-    setOpen(next)
+  const openCreate = useCallback(() => setCreateOpen(true), [])
+
+  const handleDrawerOpenChange = useCallback((next: boolean) => {
+    setDrawerOpen(next)
     if (!next) setSelectedItemId(null)
   }, [])
 
   return (
-    <ItemsContext value={{ openItem }}>
+    <ItemsContext value={{ openItem, openCreate }}>
       {children}
-      <ItemDrawer itemId={selectedItemId} open={open} onOpenChange={handleOpenChange} />
+      <ItemDrawer itemId={selectedItemId} open={drawerOpen} onOpenChange={handleDrawerOpenChange} />
+      <CreateItemDialog open={createOpen} onOpenChange={setCreateOpen} itemTypes={itemTypes} />
     </ItemsContext>
   )
 }

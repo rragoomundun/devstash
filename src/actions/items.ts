@@ -2,11 +2,12 @@
 
 import { z } from 'zod'
 import { auth } from '@/auth'
-import { updateItem as dbUpdateItem, deleteItem as dbDeleteItem } from '@/lib/db/items'
+import { updateItem as dbUpdateItem, deleteItem as dbDeleteItem, createItem as dbCreateItem } from '@/lib/db/items'
 import type { ItemDetail } from '@/lib/db/items'
-import { UpdateItemSchema } from '@/lib/schemas/items'
+import { UpdateItemSchema, CreateItemSchema } from '@/lib/schemas/items'
 
 type UpdateItemInput = z.input<typeof UpdateItemSchema>
+type CreateItemInput = z.input<typeof CreateItemSchema>
 
 type ActionResult =
   | { success: true; data: ItemDetail }
@@ -34,6 +35,26 @@ export async function updateItem(
     return { success: true, data: item }
   } catch {
     return { success: false, error: 'Failed to save changes' }
+  }
+}
+
+export async function createItem(input: CreateItemInput): Promise<ActionResult> {
+  const session = await auth()
+  if (!session?.user?.id) {
+    return { success: false, error: 'Unauthorized' }
+  }
+
+  const parsed = CreateItemSchema.safeParse(input)
+  if (!parsed.success) {
+    const message = parsed.error.issues[0]?.message ?? 'Invalid input'
+    return { success: false, error: message }
+  }
+
+  try {
+    const item = await dbCreateItem(session.user.id, parsed.data)
+    return { success: true, data: item }
+  } catch {
+    return { success: false, error: 'Failed to create item' }
   }
 }
 

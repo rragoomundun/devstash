@@ -4,12 +4,15 @@ import Link from 'next/link'
 import { Search, Plus, Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { useItems } from './ItemsProvider'
 
 interface TopBarProps {
   onMenuClick?: () => void
 }
 
 export function TopBar({ onMenuClick }: TopBarProps) {
+  const { openCreate } = useItems()
+
   return (
     <header className="flex items-center gap-3 border-b border-border px-4 h-14 shrink-0">
       <button
@@ -38,7 +41,7 @@ export function TopBar({ onMenuClick }: TopBarProps) {
           <Plus className="size-4" />
           New Collection
         </Button>
-        <Button size="sm" className="gap-1.5">
+        <Button size="sm" className="gap-1.5" onClick={openCreate}>
           <Plus className="size-4" />
           <span className="hidden sm:inline">New Item</span>
         </Button>

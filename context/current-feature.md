@@ -1,16 +1,31 @@
-# Current Feature
+# Current Feature: Item Create
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- "New Item" button in the top bar opens a shadcn `Dialog` modal
+- Type selector inside the modal: snippet, prompt, command, note, link (file/image excluded — Pro only)
+- Fields rendered based on selected type:
+  - All types: title (required), description, tags (comma-separated)
+  - snippet / command: content textarea, language input
+  - prompt / note: content textarea
+  - link: URL input (required)
+- `createItem(data)` server action in `src/actions/items.ts` with Zod validation and ownership check
+- `createItem` query function in `src/lib/db/items.ts`: connect-or-create tags, return created item
+- Zod schema `CreateItemSchema` in `src/lib/schemas/items.ts`
+- On success: close modal, `router.refresh()`, show success toast
+- On error: show field-level or general error toast, keep modal open
+- Save button disabled when required fields are empty (title always; URL for link type)
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- Reuse the field visibility constants (`TEXT_CONTENT_TYPES`, `LANGUAGE_TYPES`) already defined in `ItemDrawer.tsx` — extract to a shared location if needed
+- Item type IDs must be resolved by name (e.g. "snippet") from the DB — fetch system types for the selector
+- No file/image type in the selector (Pro only, file upload not yet implemented)
+- Follow the same controlled-input / no-form-library pattern used in the edit mode
 
 ## History
 
