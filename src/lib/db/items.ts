@@ -71,11 +71,15 @@ export interface CreateItemData {
   content: string | null
   url: string | null
   language: string | null
+  fileUrl: string | null
+  fileName: string | null
+  fileSize: number | null
   itemTypeId: string
   tags: string[]
 }
 
 export async function createItem(userId: string, data: CreateItemData) {
+  const contentType = data.url ? 'URL' : data.fileUrl ? 'FILE' : 'TEXT'
   return prisma.item.create({
     data: {
       title: data.title,
@@ -83,7 +87,10 @@ export async function createItem(userId: string, data: CreateItemData) {
       content: data.content,
       url: data.url,
       language: data.language,
-      contentType: data.url ? 'URL' : 'TEXT',
+      fileUrl: data.fileUrl,
+      fileName: data.fileName,
+      fileSize: data.fileSize,
+      contentType,
       userId,
       itemTypeId: data.itemTypeId,
       tags: {
@@ -133,6 +140,14 @@ export async function updateItem(userId: string, itemId: string, data: UpdateIte
     },
     select: itemDetailSelect,
   })
+}
+
+export async function getItemFileUrl(userId: string, itemId: string): Promise<string | null> {
+  const item = await prisma.item.findFirst({
+    where: { id: itemId, userId },
+    select: { fileUrl: true },
+  })
+  return item?.fileUrl ?? null
 }
 
 export async function deleteItem(userId: string, itemId: string) {

@@ -9,14 +9,23 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { ICON_MAP } from '@/lib/icon-map'
 import { toast } from 'sonner'
 import { createItem } from '@/actions/items'
 import { CodeEditor } from './CodeEditor'
 import { MarkdownEditor } from './MarkdownEditor'
+import { FileUpload } from './FileUpload'
 
 const TEXT_CONTENT_TYPES = new Set(['snippet', 'prompt', 'command', 'note'])
 const LANGUAGE_TYPES = new Set(['snippet', 'command'])
+const FILE_CONTENT_TYPES = new Set(['file', 'image'])
 
 interface ItemType {
   id: string
@@ -30,6 +39,13 @@ interface CreateItemDialogProps {
   onOpenChange: (open: boolean) => void
   itemTypes: ItemType[]
   initialTypeId?: string
+}
+
+interface UploadedFile {
+  fileUrl: string
+  fileName: string
+  fileSize: number
+  mimeType: string
 }
 
 interface FormState {
@@ -58,6 +74,7 @@ export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId 
     if (open) setSelectedTypeId(initialTypeId ?? itemTypes[0]?.id ?? '')
   }, [open, initialTypeId, itemTypes])
   const [form, setForm] = useState<FormState>(emptyForm)
+  const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null)
   const [isSaving, setIsSaving] = useState(false)
 
   const selectedType = itemTypes.find(t => t.id === selectedTypeId)
@@ -65,16 +82,22 @@ export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId 
   const showContent = TEXT_CONTENT_TYPES.has(typeName)
   const showLanguage = LANGUAGE_TYPES.has(typeName)
   const showUrl = typeName === 'link'
-  const canSave = form.title.trim() !== '' && (!showUrl || form.url.trim() !== '')
+  const showFile = FILE_CONTENT_TYPES.has(typeName)
+  const canSave =
+    form.title.trim() !== '' &&
+    (!showUrl || form.url.trim() !== '') &&
+    (!showFile || uploadedFile !== null)
 
   function handleTypeChange(id: string) {
     setSelectedTypeId(id)
     setForm(f => ({ ...f, content: '', url: '', language: '' }))
+    setUploadedFile(null)
   }
 
   function handleOpenChange(next: boolean) {
     if (!next) {
       setForm(emptyForm)
+      setUploadedFile(null)
       setSelectedTypeId(itemTypes[0]?.id ?? '')
     }
     onOpenChange(next)
@@ -92,6 +115,9 @@ export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId 
       content: form.content || null,
       url: form.url || null,
       language: form.language || null,
+      fileUrl: uploadedFile?.fileUrl ?? null,
+      fileName: uploadedFile?.fileName ?? null,
+      fileSize: uploadedFile?.fileSize ?? null,
       itemTypeId: selectedTypeId,
       tags,
     })
@@ -120,27 +146,32 @@ export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId 
 
         <div className="space-y-3 py-1">
           {/* Type selector */}
-          <div className="flex flex-wrap gap-2">
-            {itemTypes.map(type => {
-              const Icon = ICON_MAP[type.icon]
-              const isSelected = type.id === selectedTypeId
-              return (
-                <button
-                  key={type.id}
-                  onClick={() => handleTypeChange(type.id)}
-                  className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium border transition-colors ${
-                    isSelected
-                      ? 'border-transparent text-background'
-                      : 'border-border text-muted-foreground hover:text-foreground'
-                  }`}
-                  style={isSelected ? { backgroundColor: type.color } : {}}
-                >
-                  {Icon && <Icon className="size-3.5" />}
-                  {type.name}
-                </button>
-              )
-            })}
-          </div>
+          <Select value={selectedTypeId} onValueChange={(id) => id && handleTypeChange(id)}>
+            <SelectTrigger className="w-full">
+              <SelectValue>
+                {selectedType && (() => {
+                  const Icon = ICON_MAP[selectedType.icon]
+                  return (
+                    <span className="flex items-center gap-2">
+                      {Icon && <Icon className="size-3.5" style={{ color: selectedType.color }} />}
+                      {selectedType.name}
+                    </span>
+                  )
+                })()}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              {itemTypes.map(type => {
+                const Icon = ICON_MAP[type.icon]
+                return (
+                  <SelectItem key={type.id} value={type.id}>
+                    {Icon && <Icon className="size-3.5" style={{ color: type.color }} />}
+                    {type.name}
+                  </SelectItem>
+                )
+              })}
+            </SelectContent>
+          </Select>
 
           <input
             className={inputClass}
@@ -170,6 +201,14 @@ export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId 
                 onChange={(val) => setForm(f => ({ ...f, content: val }))}
               />
             )
+          )}
+
+          {showFile && (
+            <FileUpload
+              itemType={typeName as 'file' | 'image'}
+              value={uploadedFile}
+              onChange={setUploadedFile}
+            />
           )}
 
           {showLanguage && (

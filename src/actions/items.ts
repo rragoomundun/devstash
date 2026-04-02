@@ -2,9 +2,10 @@
 
 import { z } from 'zod'
 import { auth } from '@/auth'
-import { updateItem as dbUpdateItem, deleteItem as dbDeleteItem, createItem as dbCreateItem } from '@/lib/db/items'
+import { updateItem as dbUpdateItem, deleteItem as dbDeleteItem, createItem as dbCreateItem, getItemFileUrl } from '@/lib/db/items'
 import type { ItemDetail } from '@/lib/db/items'
 import { UpdateItemSchema, CreateItemSchema } from '@/lib/schemas/items'
+import { deleteFromR2, keyFromUrl } from '@/lib/r2'
 
 type UpdateItemInput = z.input<typeof UpdateItemSchema>
 type CreateItemInput = z.input<typeof CreateItemSchema>
@@ -51,7 +52,18 @@ export async function createItem(input: CreateItemInput): Promise<ActionResult> 
   }
 
   try {
-    const item = await dbCreateItem(session.user.id, parsed.data)
+    const item = await dbCreateItem(session.user.id, {
+      title: parsed.data.title,
+      description: parsed.data.description,
+      content: parsed.data.content,
+      url: parsed.data.url,
+      language: parsed.data.language,
+      fileUrl: parsed.data.fileUrl,
+      fileName: parsed.data.fileName,
+      fileSize: parsed.data.fileSize,
+      itemTypeId: parsed.data.itemTypeId,
+      tags: parsed.data.tags,
+    })
     return { success: true, data: item }
   } catch {
     return { success: false, error: 'Failed to create item' }
@@ -65,7 +77,15 @@ export async function deleteItem(itemId: string): Promise<DeleteResult> {
   }
 
   try {
+    const fileUrl = await getItemFileUrl(session.user.id, itemId)
     await dbDeleteItem(session.user.id, itemId)
+    if (fileUrl) {
+      try {
+        await deleteFromR2(keyFromUrl(fileUrl))
+      } catch {
+        // R2 cleanup failure is non-fatal — DB record is already deleted
+      }
+    }
     return { success: true }
   } catch {
     return { success: false, error: 'Failed to delete item' }

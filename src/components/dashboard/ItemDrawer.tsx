@@ -31,6 +31,8 @@ import {
   FolderOpen,
   Save,
   X,
+  Download,
+  FileText,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { updateItem, deleteItem } from '@/actions/items'
@@ -205,6 +207,7 @@ export function ItemDrawer({ itemId, open, onOpenChange }: ItemDrawerProps) {
   const showContent = TEXT_CONTENT_TYPES.has(typeName)
   const showLanguage = LANGUAGE_TYPES.has(typeName)
   const showUrl = typeName === 'link'
+  const showFile = typeName === 'file' || typeName === 'image'
 
   const type = item?.itemType
   const Icon = type ? ICON_MAP[type.icon] : null
@@ -274,7 +277,7 @@ export function ItemDrawer({ itemId, open, onOpenChange }: ItemDrawerProps) {
             </SheetHeader>
 
             {/* Action bar */}
-            <div className="flex items-center gap-1 px-4 py-2 border-y border-border">
+            <div className="flex flex-wrap items-center gap-1 px-4 py-2 border-y border-border">
               {isEditing ? (
                 <>
                   <button
@@ -319,6 +322,17 @@ export function ItemDrawer({ itemId, open, onOpenChange }: ItemDrawerProps) {
                     <Copy className="size-3.5" />
                     <span>Copy</span>
                   </button>
+                  {showFile && item.fileUrl && (
+                    <a
+                      href={`/api/download/${item.fileUrl.split('/').slice(-2).join('/')}`}
+                      download={item.fileName ?? undefined}
+                      className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                      title="Download file"
+                    >
+                      <Download className="size-3.5" />
+                      <span>Download</span>
+                    </a>
+                  )}
                   <button
                     className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                     title="Edit"
@@ -328,7 +342,7 @@ export function ItemDrawer({ itemId, open, onOpenChange }: ItemDrawerProps) {
                     <span>Edit</span>
                   </button>
                   <button
-                    className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground hover:text-destructive hover:bg-muted transition-colors ml-auto disabled:opacity-50"
+                    className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground hover:text-destructive hover:bg-muted transition-colors disabled:opacity-50"
                     title="Delete"
                     onClick={() => setDeleteConfirmOpen(true)}
                     disabled={isDeleting}
@@ -439,6 +453,33 @@ export function ItemDrawer({ itemId, open, onOpenChange }: ItemDrawerProps) {
                         {item.url}
                       </a>
                     </div>
+                  )}
+
+                  {showFile && item.fileUrl && (
+                    typeName === 'image' ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={item.fileUrl}
+                        alt={item.fileName ?? 'Image'}
+                        className="max-h-96 w-full rounded-lg object-contain bg-muted/30"
+                      />
+                    ) : (
+                      <div className="flex items-center gap-3 rounded-lg border border-border bg-muted/30 p-4">
+                        <FileText className="size-8 shrink-0 text-muted-foreground" />
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium truncate">
+                            {item.fileName ?? 'File'}
+                          </p>
+                          {item.fileSize && (
+                            <p className="text-xs text-muted-foreground">
+                              {item.fileSize < 1024 * 1024
+                                ? `${(item.fileSize / 1024).toFixed(1)} KB`
+                                : `${(item.fileSize / (1024 * 1024)).toFixed(1)} MB`}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    )
                   )}
 
                   {/* Tags */}
