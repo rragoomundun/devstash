@@ -65,5 +65,39 @@ export async function getItemById(userId: string, itemId: string) {
   })
 }
 
+export interface UpdateItemData {
+  title: string
+  description: string | null
+  content: string | null
+  url: string | null
+  language: string | null
+  tags: string[]
+}
+
+export async function updateItem(userId: string, itemId: string, data: UpdateItemData) {
+  return prisma.item.update({
+    where: { id: itemId, userId },
+    data: {
+      title: data.title,
+      description: data.description,
+      content: data.content,
+      url: data.url,
+      language: data.language,
+      tags: {
+        deleteMany: {},
+        create: data.tags.map(name => ({
+          tag: {
+            connectOrCreate: {
+              where: { name },
+              create: { name },
+            },
+          },
+        })),
+      },
+    },
+    select: itemDetailSelect,
+  })
+}
+
 export type DashboardItem = Awaited<ReturnType<typeof getRecentItems>>[number]
 export type ItemDetail = NonNullable<Awaited<ReturnType<typeof getItemById>>>
