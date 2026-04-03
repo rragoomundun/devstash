@@ -8,6 +8,7 @@ import { Github } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { AuthPageShell } from '@/components/auth/AuthPageShell'
 
 function SignInForm() {
   const searchParams = useSearchParams()
@@ -67,12 +68,7 @@ function SignInForm() {
   }
 
   return (
-    <div className="w-full max-w-sm space-y-6">
-      <div className="text-center space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">DevStash</h1>
-        <p className="text-sm text-muted-foreground">Sign in to your account</p>
-      </div>
-
+    <AuthPageShell subtitle="Sign in to your account">
       {error && (
         <p className="text-sm text-destructive text-center">{error}</p>
       )}
@@ -128,16 +124,14 @@ function SignInForm() {
           Register
         </Link>
       </p>
-    </div>
+    </AuthPageShell>
   )
 }
 
 export default function SignInPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <Suspense>
-        <SignInForm />
-      </Suspense>
-    </div>
+    <Suspense>
+      <SignInForm />
+    </Suspense>
   )
 }

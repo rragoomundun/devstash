@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Copy, Check } from 'lucide-react'
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
 
 interface MarkdownEditorProps {
   value: string
@@ -13,13 +14,7 @@ interface MarkdownEditorProps {
 
 export function MarkdownEditor({ value, onChange, readOnly = false }: MarkdownEditorProps) {
   const [tab, setTab] = useState<'write' | 'preview'>(readOnly ? 'preview' : 'write')
-  const [copied, setCopied] = useState(false)
-
-  const handleCopy = useCallback(async () => {
-    await navigator.clipboard.writeText(value)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1500)
-  }, [value])
+  const { copied, copy: handleCopy } = useCopyToClipboard(value)
 
   return (
     <div className="rounded-lg overflow-hidden border border-white/10">

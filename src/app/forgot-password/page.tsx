@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { AuthPageShell } from '@/components/auth/AuthPageShell'
 
 export default function ForgotPasswordPage() {
   const router = useRouter()
@@ -40,14 +41,8 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-sm space-y-6">
-        <div className="text-center space-y-1">
-          <h1 className="text-2xl font-semibold tracking-tight">DevStash</h1>
-          <p className="text-sm text-muted-foreground">Reset your password</p>
-        </div>
-
-        {submitted ? (
+    <AuthPageShell subtitle="Reset your password">
+      {submitted ? (
           <div className="space-y-4 text-center">
             <p className="text-sm text-muted-foreground">
               If an account exists for <span className="text-foreground">{email}</span>, you will
@@ -83,7 +78,6 @@ export default function ForgotPasswordPage() {
             </p>
           </>
         )}
-      </div>
-    </div>
+    </AuthPageShell>
   )
 }

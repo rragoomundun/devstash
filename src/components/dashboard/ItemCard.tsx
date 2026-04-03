@@ -1,10 +1,11 @@
 'use client'
 
 import { Download, Copy, Check, FileText, FileJson, FileCode, FileSpreadsheet, FileType, type LucideIcon } from 'lucide-react'
-import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { ICON_MAP } from '@/lib/icon-map'
 import { useItems } from '@/components/dashboard/ItemsProvider'
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
+import { formatBytes } from '@/lib/format'
 import type { DashboardItem } from '@/lib/db/items'
 
 function getFileIcon(fileName: string | null): LucideIcon {
@@ -16,19 +17,13 @@ function getFileIcon(fileName: string | null): LucideIcon {
   return FileText
 }
 
-function formatBytes(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
-}
-
 function formatDate(date: Date) {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
 export function ItemCard({ item, large }: { item: DashboardItem; large?: boolean }) {
   const { openItem } = useItems()
-  const [copied, setCopied] = useState(false)
+  const { copied, copy } = useCopyToClipboard(item.content ?? item.url ?? '')
   const type = item.itemType
   const Icon = item.contentType === 'FILE' ? getFileIcon(item.fileName) : (ICON_MAP[type.icon] ?? null)
   const tags = item.tags.map(t => t.tag.name)
@@ -123,10 +118,7 @@ export function ItemCard({ item, large }: { item: DashboardItem; large?: boolean
           <button
             onClick={e => {
               e.stopPropagation()
-              const text = item.content ?? item.url ?? ''
-              navigator.clipboard.writeText(text)
-              setCopied(true)
-              setTimeout(() => setCopied(false), 1500)
+              copy()
             }}
             className="shrink-0 rounded-md p-1 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
             title="Copy"

@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs'
 import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
 import { rateLimit, rateLimitResponse, AUTH_LIMITS } from '@/lib/rate-limit'
+import { validatePassword } from '@/lib/auth-validation'
 
 export async function POST(request: Request) {
   const session = await auth()
@@ -20,12 +21,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'All fields are required' }, { status: 400 })
   }
 
-  if (newPassword.length < 8) {
-    return NextResponse.json({ error: 'Password must be at least 8 characters' }, { status: 400 })
-  }
-
-  if (newPassword !== confirmPassword) {
-    return NextResponse.json({ error: 'New passwords do not match' }, { status: 400 })
+  const passwordError = validatePassword(newPassword, confirmPassword)
+  if (passwordError) {
+    return NextResponse.json({ error: passwordError }, { status: 400 })
   }
 
   const user = await prisma.user.findUnique({

@@ -19,13 +19,10 @@ import {
 import { ICON_MAP } from '@/lib/icon-map'
 import { toast } from 'sonner'
 import { createItem } from '@/actions/items'
+import { TEXT_CONTENT_TYPES, LANGUAGE_TYPES, FILE_CONTENT_TYPES } from '@/lib/item-type-utils'
 import { CodeEditor } from './CodeEditor'
 import { MarkdownEditor } from './MarkdownEditor'
 import { FileUpload } from './FileUpload'
-
-const TEXT_CONTENT_TYPES = new Set(['snippet', 'prompt', 'command', 'note'])
-const LANGUAGE_TYPES = new Set(['snippet', 'command'])
-const FILE_CONTENT_TYPES = new Set(['file', 'image'])
 
 interface ItemType {
   id: string

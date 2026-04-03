@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Sheet,
@@ -37,6 +37,8 @@ import {
 import { toast } from 'sonner'
 import { updateItem, deleteItem } from '@/actions/items'
 import type { ItemDetail } from '@/lib/db/items'
+import { useItemDetail } from '@/hooks/useItemDetail'
+import { TEXT_CONTENT_TYPES, LANGUAGE_TYPES } from '@/lib/item-type-utils'
 import { CodeEditor } from './CodeEditor'
 import { MarkdownEditor } from './MarkdownEditor'
 
@@ -81,8 +83,6 @@ function DrawerSkeleton() {
   )
 }
 
-const TEXT_CONTENT_TYPES = new Set(['snippet', 'prompt', 'command', 'note'])
-const LANGUAGE_TYPES = new Set(['snippet', 'command'])
 
 interface EditState {
   title: string
@@ -112,8 +112,7 @@ interface ItemDrawerProps {
 
 export function ItemDrawer({ itemId, open, onOpenChange }: ItemDrawerProps) {
   const router = useRouter()
-  const [item, setItem] = useState<ItemDetail | null>(null)
-  const [error, setError] = useState(false)
+  const { item, setItem, error } = useItemDetail(itemId, open)
   const [isEditing, setIsEditing] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
@@ -128,23 +127,7 @@ export function ItemDrawer({ itemId, open, onOpenChange }: ItemDrawerProps) {
   })
 
   useEffect(() => {
-    if (!itemId || !open) {
-      setItem(null)
-      setError(false)
-      setIsEditing(false)
-      return
-    }
-
-    setItem(null)
-    setError(false)
     setIsEditing(false)
-    fetch(`/api/items/${itemId}`)
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch')
-        return res.json()
-      })
-      .then(data => setItem(data))
-      .catch(() => setError(true))
   }, [itemId, open])
 
   function enterEditMode() {

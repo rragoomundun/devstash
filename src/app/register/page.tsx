@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { AuthPageShell } from '@/components/auth/AuthPageShell'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -40,18 +41,12 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-sm space-y-6">
-        <div className="text-center space-y-1">
-          <h1 className="text-2xl font-semibold tracking-tight">DevStash</h1>
-          <p className="text-sm text-muted-foreground">Create your account</p>
-        </div>
+    <AuthPageShell subtitle="Create your account">
+      {error && (
+        <p className="text-sm text-destructive text-center">{error}</p>
+      )}
 
-        {error && (
-          <p className="text-sm text-destructive text-center">{error}</p>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-3">
+      <form onSubmit={handleSubmit} className="space-y-3">
           <Input
             name="name"
             placeholder="Name"
@@ -86,7 +81,6 @@ export default function RegisterPage() {
             Sign in
           </Link>
         </p>
-      </div>
-    </div>
+    </AuthPageShell>
   )
 }

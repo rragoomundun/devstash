@@ -1,16 +1,27 @@
-# Current Feature
+# Current Feature: Code Decomposition & Shared Utilities
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- Extract `useCopyToClipboard` hook from `CodeEditor`, `MarkdownEditor`, and `ItemCard` into `src/hooks/useCopyToClipboard.ts`
+- Extract `useItemDetail` fetch hook from `ItemDrawer` into `src/hooks/useItemDetail.ts`
+- Extract item type flag sets (`TEXT_CONTENT_TYPES`, `LANGUAGE_TYPES`, `FILE_CONTENT_TYPES`) shared between `ItemDrawer` and `CreateItemDialog` into `src/lib/item-type-utils.ts`
+- Extract `formatBytes` shared between `FileUpload` and `ItemCard` into `src/lib/format.ts`
+- Extract `AuthPageShell` component shared across `sign-in`, `register`, `forgot-password`, and `reset-password` pages into `src/components/auth/AuthPageShell.tsx`
+- Extract `validatePassword` helper shared across `register`, `change-password`, and `reset-password` API routes into `src/lib/auth-validation.ts`
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- No behavior changes — all extractions are pure refactors
+- `useCopyToClipboard(text)` returns `{ copied: boolean; copy: () => void }` with 1500ms timeout
+- `useItemDetail(itemId, open)` returns `{ item, setItem, error }` — extracted from `ItemDrawer`'s fetch `useEffect`
+- Item type flag sets are currently defined twice with the same values; a single source of truth prevents drift when new types are added
+- `formatBytes` is character-for-character identical in both files
+- `AuthPageShell` accepts `title` and `subtitle` props and wraps `children` in the centered card layout
+- `validatePassword(password, confirm)` returns an error string or `null`; apply in all three routes
 
 ## History
 

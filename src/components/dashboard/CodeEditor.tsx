@@ -4,6 +4,7 @@ import { useState, useRef, useCallback } from 'react'
 import Editor, { type OnMount } from '@monaco-editor/react'
 import type { editor } from 'monaco-editor'
 import { Copy, Check } from 'lucide-react'
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
 
 const MIN_HEIGHT = 80
 const MAX_HEIGHT = 400
@@ -16,15 +17,9 @@ interface CodeEditorProps {
 }
 
 export function CodeEditor({ value, onChange, language, readOnly = false }: CodeEditorProps) {
-  const [copied, setCopied] = useState(false)
+  const { copied, copy: handleCopy } = useCopyToClipboard(value)
   const [height, setHeight] = useState(MIN_HEIGHT)
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null)
-
-  const handleCopy = useCallback(async () => {
-    await navigator.clipboard.writeText(value)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1500)
-  }, [value])
 
   const handleMount: OnMount = useCallback((editor) => {
     editorRef.current = editor

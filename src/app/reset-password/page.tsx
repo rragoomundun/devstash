@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { AuthPageShell } from '@/components/auth/AuthPageShell'
 
 function ResetPasswordForm() {
   const searchParams = useSearchParams()
@@ -19,12 +20,14 @@ function ResetPasswordForm() {
 
   if (!token || !email) {
     return (
-      <div className="w-full max-w-sm space-y-6 text-center">
-        <p className="text-sm text-destructive">Invalid or missing reset link.</p>
-        <Link href="/forgot-password" className="text-sm text-foreground hover:underline">
-          Request a new one
-        </Link>
-      </div>
+      <AuthPageShell>
+        <div className="text-center space-y-4">
+          <p className="text-sm text-destructive">Invalid or missing reset link.</p>
+          <Link href="/forgot-password" className="text-sm text-foreground hover:underline">
+            Request a new one
+          </Link>
+        </div>
+      </AuthPageShell>
     )
   }
 
@@ -54,12 +57,7 @@ function ResetPasswordForm() {
   }
 
   return (
-    <div className="w-full max-w-sm space-y-6">
-      <div className="text-center space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">DevStash</h1>
-        <p className="text-sm text-muted-foreground">Set a new password</p>
-      </div>
-
+    <AuthPageShell subtitle="Set a new password">
       {error && (
         <p className="text-sm text-destructive text-center">{error}</p>
       )}
@@ -83,16 +81,14 @@ function ResetPasswordForm() {
           {loading ? 'Saving…' : 'Set new password'}
         </Button>
       </form>
-    </div>
+    </AuthPageShell>
   )
 }
 
 export default function ResetPasswordPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <Suspense>
-        <ResetPasswordForm />
-      </Suspense>
-    </div>
+    <Suspense>
+      <ResetPasswordForm />
+    </Suspense>
   )
 }
