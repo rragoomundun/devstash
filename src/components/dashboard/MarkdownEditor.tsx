@@ -66,8 +66,7 @@ export function MarkdownEditor({ value, onChange, readOnly = false }: MarkdownEd
       {/* Write tab */}
       {tab === 'write' && !readOnly && (
         <textarea
-          className="w-full bg-[#1e1e1e] text-zinc-100 text-sm font-mono px-4 py-3 resize-none focus:outline-none placeholder:text-zinc-600 block"
-          style={{ minHeight: 120, maxHeight: 400, overflowY: 'auto' }}
+          className="w-full bg-[#1e1e1e] text-zinc-100 text-sm font-mono px-4 py-3 resize-none focus:outline-none placeholder:text-zinc-600 block min-h-30 max-h-100 overflow-y-auto"
           value={value}
           onChange={e => onChange?.(e.target.value)}
           placeholder="Write markdown…"
@@ -78,8 +77,7 @@ export function MarkdownEditor({ value, onChange, readOnly = false }: MarkdownEd
       {/* Preview tab */}
       {(tab === 'preview' || readOnly) && (
         <div
-          className="bg-[#1e1e1e] px-4 py-3 overflow-y-auto"
-          style={{ minHeight: 80, maxHeight: 400 }}
+          className="bg-[#1e1e1e] px-4 py-3 overflow-y-auto min-h-20 max-h-100"
         >
           {value.trim() ? (
             <div className="markdown-preview">

@@ -31,13 +31,14 @@ export default async function ItemsPage({
   const typeName = SLUG_TO_TYPE[slug]
   if (!typeName) notFound()
 
-  const [items, itemType] = await Promise.all([
-    getItemsByType(session.user.id, typeName),
-    prisma.itemType.findFirst({
-      where: { name: { equals: typeName, mode: 'insensitive' } },
-      select: { id: true, name: true, icon: true, color: true },
-    }),
-  ])
+  const items = await getItemsByType(session.user.id, typeName)
+
+  const itemType = items.length > 0
+    ? items[0].itemType
+    : await prisma.itemType.findFirst({
+        where: { name: { equals: typeName, mode: 'insensitive' } },
+        select: { id: true, name: true, icon: true, color: true },
+      })
 
   const Icon = itemType ? ICON_MAP[itemType.icon] : null
 

@@ -113,4 +113,5 @@ export const AUTH_LIMITS = {
   forgotPassword: { limit: 3, window: "1 h", prefix: "auth:forgot-password" },
   resetPassword: { limit: 5, window: "15 m", prefix: "auth:reset-password" },
   resendVerification: { limit: 3, window: "15 m", prefix: "auth:resend-verification" },
+  changePassword: { limit: 5, window: "15 m", prefix: "auth:change-password" },
 } as const satisfies Record<string, RateLimitConfig>;

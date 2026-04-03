@@ -1,16 +1,23 @@
-# Current Feature
+# Current Feature: Quick Win Code Fixes
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- Replace inline `style={{ minHeight, maxHeight }}` props in `MarkdownEditor` with Tailwind utility classes
+- Add minimum password length (8 chars) validation in `register`, `change-password`, and `reset-password` API routes
+- Gate the dev reset token URL leak behind `DEV_RESET_URL_ENABLED=true` env flag instead of `NODE_ENV === 'development'`
+- Add rate limiting to the `change-password` API route using the existing `rateLimit` utility
+- Eliminate the redundant `prisma.itemType.findFirst` query on the items list page when items already carry `itemType` data
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- All fixes are additive or cosmetic — no schema changes, no new dependencies
+- Password minimum length: 8 characters, consistent across all three auth routes
+- Rate limit for change-password: scope to `session.user.id` (authenticated user, not IP), same sliding window pattern as other auth routes
+- Items list page: use `items[0]?.itemType` when items exist; only fall back to `findFirst` when the list is empty
 
 ## History
 

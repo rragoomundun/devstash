@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     try {
       await sendPasswordResetEmail(email, token);
     } catch (err) {
-      if (process.env.NODE_ENV === 'development') {
+      if (process.env.DEV_RESET_URL_ENABLED === 'true') {
         const resetUrl = `/reset-password?token=${token}&email=${encodeURIComponent(email)}`;
         return NextResponse.json({ success: true, devResetUrl: resetUrl });
       }
