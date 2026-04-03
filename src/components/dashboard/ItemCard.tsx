@@ -1,6 +1,7 @@
 'use client'
 
-import { Download, FileText, FileJson, FileCode, FileSpreadsheet, FileType, type LucideIcon } from 'lucide-react'
+import { Download, Copy, Check, FileText, FileJson, FileCode, FileSpreadsheet, FileType, type LucideIcon } from 'lucide-react'
+import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { ICON_MAP } from '@/lib/icon-map'
 import { useItems } from '@/components/dashboard/ItemsProvider'
@@ -27,6 +28,7 @@ function formatDate(date: Date) {
 
 export function ItemCard({ item, large }: { item: DashboardItem; large?: boolean }) {
   const { openItem } = useItems()
+  const [copied, setCopied] = useState(false)
   const type = item.itemType
   const Icon = item.contentType === 'FILE' ? getFileIcon(item.fileName) : (ICON_MAP[type.icon] ?? null)
   const tags = item.tags.map(t => t.tag.name)
@@ -117,6 +119,21 @@ export function ItemCard({ item, large }: { item: DashboardItem; large?: boolean
         <span className="text-xs text-muted-foreground shrink-0">
           {formatDate(item.updatedAt)}
         </span>
+        {(item.content || item.url) && (
+          <button
+            onClick={e => {
+              e.stopPropagation()
+              const text = item.content ?? item.url ?? ''
+              navigator.clipboard.writeText(text)
+              setCopied(true)
+              setTimeout(() => setCopied(false), 1500)
+            }}
+            className="shrink-0 rounded-md p-1 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+            title="Copy"
+          >
+            {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+          </button>
+        )}
       </div>
     </div>
   )
