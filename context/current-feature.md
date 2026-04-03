@@ -1,27 +1,16 @@
-# Current Feature: Code Decomposition & Shared Utilities
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- Extract `useCopyToClipboard` hook from `CodeEditor`, `MarkdownEditor`, and `ItemCard` into `src/hooks/useCopyToClipboard.ts`
-- Extract `useItemDetail` fetch hook from `ItemDrawer` into `src/hooks/useItemDetail.ts`
-- Extract item type flag sets (`TEXT_CONTENT_TYPES`, `LANGUAGE_TYPES`, `FILE_CONTENT_TYPES`) shared between `ItemDrawer` and `CreateItemDialog` into `src/lib/item-type-utils.ts`
-- Extract `formatBytes` shared between `FileUpload` and `ItemCard` into `src/lib/format.ts`
-- Extract `AuthPageShell` component shared across `sign-in`, `register`, `forgot-password`, and `reset-password` pages into `src/components/auth/AuthPageShell.tsx`
-- Extract `validatePassword` helper shared across `register`, `change-password`, and `reset-password` API routes into `src/lib/auth-validation.ts`
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- No behavior changes — all extractions are pure refactors
-- `useCopyToClipboard(text)` returns `{ copied: boolean; copy: () => void }` with 1500ms timeout
-- `useItemDetail(itemId, open)` returns `{ item, setItem, error }` — extracted from `ItemDrawer`'s fetch `useEffect`
-- Item type flag sets are currently defined twice with the same values; a single source of truth prevents drift when new types are added
-- `formatBytes` is character-for-character identical in both files
-- `AuthPageShell` accepts `title` and `subtitle` props and wraps `children` in the centered card layout
-- `validatePassword(password, confirm)` returns an error string or `null`; apply in all three routes
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -55,3 +44,4 @@ In Progress
 - **2026-04-02** — Image Gallery View: ImageCard component with aspect-video thumbnail, object-cover, and hover zoom (scale-105/300ms); /dashboard/items/images renders ImageCard grid instead of ItemCard; fileUrl and fileName added to itemSelect so DashboardItem carries them
 - **2026-04-02** — File Card Display: file items in ItemCard show extension-based icon (PDF→FileType, JSON→FileJson, YAML/TOML/XML/INI→FileCode, CSV→FileSpreadsheet, other→FileText); metadata block below description shows file name, size, upload date, and inline download button (stopPropagation); fileSize added to itemSelect
 - **2026-04-03** — Quick Win Code Fixes: MarkdownEditor inline styles replaced with Tailwind classes; minimum 8-char password validation added to register/change-password/reset-password routes; dev reset token URL gated behind DEV_RESET_URL_ENABLED env flag; rate limiting added to change-password route (scoped to userId); redundant prisma.itemType.findFirst query eliminated on items list page when items already carry itemType data
+- **2026-04-03** — Code Decomposition: extracted useCopyToClipboard hook (CodeEditor, MarkdownEditor, ItemCard), useItemDetail hook (ItemDrawer), item-type-utils constants (ItemDrawer, CreateItemDialog), formatBytes utility (FileUpload, ItemCard), AuthPageShell component (sign-in, register, forgot-password, reset-password), and validatePassword helper (register, change-password, reset-password)
