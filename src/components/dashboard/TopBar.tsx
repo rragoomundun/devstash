@@ -11,7 +11,7 @@ interface TopBarProps {
 }
 
 export function TopBar({ onMenuClick }: TopBarProps) {
-  const { openCreate } = useItems()
+  const { openCreate, openCreateCollection } = useItems()
 
   return (
     <header className="flex items-center gap-3 border-b border-border px-4 h-14 shrink-0">
@@ -37,7 +37,7 @@ export function TopBar({ onMenuClick }: TopBarProps) {
       </div>
 
       <div className="flex items-center gap-2">
-        <Button variant="outline" size="sm" className="gap-1.5 hidden sm:inline-flex">
+        <Button variant="outline" size="sm" className="gap-1.5 hidden sm:inline-flex" onClick={openCreateCollection}>
           <Plus className="size-4" />
           New Collection
         </Button>

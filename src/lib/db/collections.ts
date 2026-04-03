@@ -116,6 +116,17 @@ export async function getSidebarData(userId: string) {
   }
 }
 
+export async function createCollection(userId: string, data: { name: string; description: string | null }) {
+  return prisma.collection.create({
+    data: {
+      name: data.name,
+      description: data.description,
+      userId,
+    },
+    select: { id: true, name: true, description: true },
+  })
+}
+
 export async function getDashboardStats(userId: string) {
   const [totalItems, totalCollections, favoriteItems, favoriteCollections] = await Promise.all([
     prisma.item.count({ where: { userId } }),

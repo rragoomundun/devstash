@@ -1,16 +1,25 @@
-# Current Feature
+# Current Feature: Collection Create
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- "New Collection" button in the top bar opens a modal dialog
+- Modal has fields: name (required) and description (optional)
+- Submitting creates a collection scoped to the authenticated user
+- Toast shown on success and on failure
+- Dashboard and sidebar update to reflect the new collection on save
+- Server-side data fetching via `src/lib/db/collections.ts`; mutations via a server action or API route following existing item patterns
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- Follow the same patterns as item create: Dialog modal, server action with Zod validation, `router.refresh()` after success
+- Collections are user-scoped — always include `userId` from the session when querying or creating
+- The top bar already has a "New Item" button; add "New Collection" alongside it with consistent styling
+- Use the existing `CollectionsProvider` context pattern if one exists, otherwise wire state through `ItemsProvider` or a new provider at the same level
+- No file upload or type selection needed — name + description only
 
 ## History
 
