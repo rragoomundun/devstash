@@ -1,23 +1,16 @@
-# Current Feature: Quick Win Code Fixes
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- Replace inline `style={{ minHeight, maxHeight }}` props in `MarkdownEditor` with Tailwind utility classes
-- Add minimum password length (8 chars) validation in `register`, `change-password`, and `reset-password` API routes
-- Gate the dev reset token URL leak behind `DEV_RESET_URL_ENABLED=true` env flag instead of `NODE_ENV === 'development'`
-- Add rate limiting to the `change-password` API route using the existing `rateLimit` utility
-- Eliminate the redundant `prisma.itemType.findFirst` query on the items list page when items already carry `itemType` data
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- All fixes are additive or cosmetic — no schema changes, no new dependencies
-- Password minimum length: 8 characters, consistent across all three auth routes
-- Rate limit for change-password: scope to `session.user.id` (authenticated user, not IP), same sliding window pattern as other auth routes
-- Items list page: use `items[0]?.itemType` when items exist; only fall back to `findFirst` when the list is empty
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -50,3 +43,4 @@ In Progress
 - **2026-04-02** — File & Image Upload: Cloudflare R2 integration via @aws-sdk/client-s3; POST /api/upload with MIME type and size validation (images 5 MB, files 10 MB); GET /api/download/[...key] auth-gated proxy; FileUpload component with drag-and-drop, progress bar, image preview and file info; CreateItemDialog uses shadcn Select for type picker and supports File/Image types; ItemDrawer shows image preview, file info card, and Download button; deleteItem cleans up R2 on deletion; action bar wraps on narrow drawers
 - **2026-04-02** — Image Gallery View: ImageCard component with aspect-video thumbnail, object-cover, and hover zoom (scale-105/300ms); /dashboard/items/images renders ImageCard grid instead of ItemCard; fileUrl and fileName added to itemSelect so DashboardItem carries them
 - **2026-04-02** — File Card Display: file items in ItemCard show extension-based icon (PDF→FileType, JSON→FileJson, YAML/TOML/XML/INI→FileCode, CSV→FileSpreadsheet, other→FileText); metadata block below description shows file name, size, upload date, and inline download button (stopPropagation); fileSize added to itemSelect
+- **2026-04-03** — Quick Win Code Fixes: MarkdownEditor inline styles replaced with Tailwind classes; minimum 8-char password validation added to register/change-password/reset-password routes; dev reset token URL gated behind DEV_RESET_URL_ENABLED env flag; rate limiting added to change-password route (scoped to userId); redundant prisma.itemType.findFirst query eliminated on items list page when items already carry itemType data
