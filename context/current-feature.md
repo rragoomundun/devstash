@@ -1,25 +1,16 @@
-# Current Feature: Collection Create
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- "New Collection" button in the top bar opens a modal dialog
-- Modal has fields: name (required) and description (optional)
-- Submitting creates a collection scoped to the authenticated user
-- Toast shown on success and on failure
-- Dashboard and sidebar update to reflect the new collection on save
-- Server-side data fetching via `src/lib/db/collections.ts`; mutations via a server action or API route following existing item patterns
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- Follow the same patterns as item create: Dialog modal, server action with Zod validation, `router.refresh()` after success
-- Collections are user-scoped — always include `userId` from the session when querying or creating
-- The top bar already has a "New Item" button; add "New Collection" alongside it with consistent styling
-- Use the existing `CollectionsProvider` context pattern if one exists, otherwise wire state through `ItemsProvider` or a new provider at the same level
-- No file upload or type selection needed — name + description only
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -54,3 +45,4 @@ In Progress
 - **2026-04-02** — File Card Display: file items in ItemCard show extension-based icon (PDF→FileType, JSON→FileJson, YAML/TOML/XML/INI→FileCode, CSV→FileSpreadsheet, other→FileText); metadata block below description shows file name, size, upload date, and inline download button (stopPropagation); fileSize added to itemSelect
 - **2026-04-03** — Quick Win Code Fixes: MarkdownEditor inline styles replaced with Tailwind classes; minimum 8-char password validation added to register/change-password/reset-password routes; dev reset token URL gated behind DEV_RESET_URL_ENABLED env flag; rate limiting added to change-password route (scoped to userId); redundant prisma.itemType.findFirst query eliminated on items list page when items already carry itemType data
 - **2026-04-03** — Code Decomposition: extracted useCopyToClipboard hook (CodeEditor, MarkdownEditor, ItemCard), useItemDetail hook (ItemDrawer), item-type-utils constants (ItemDrawer, CreateItemDialog), formatBytes utility (FileUpload, ItemCard), AuthPageShell component (sign-in, register, forgot-password, reset-password), and validatePassword helper (register, change-password, reset-password)
+- **2026-04-03** — Collection Create: "New Collection" button in TopBar opens CreateCollectionDialog; CreateCollectionSchema (Zod) + createCollection server action + createCollection db function; openCreateCollection wired through ItemsProvider context; toast on success/failure, router.refresh() on save; 9 schema unit tests
