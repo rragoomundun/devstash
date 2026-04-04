@@ -1,16 +1,22 @@
-# Current Feature
+# Current Feature: Add Item to Collections
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- Multi-select collection picker in the Create Item dialog
+- Multi-select collection picker in the Edit Item drawer (pre-populated with current collections)
+- Saving creates/updates the ItemCollection join records correctly
+- Works with existing createItem and updateItem server actions
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- Collections are fetched per authenticated user
+- Items can belong to multiple collections (many-to-many via ItemCollection)
+- Do not implement collection detail pages — only the item-level association UI
+- The picker should show all user collections with names; allow selecting zero or more
 
 ## History
 

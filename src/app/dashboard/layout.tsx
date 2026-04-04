@@ -15,7 +15,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     .map(({ id, name, icon, color }) => ({ id, name, icon, color }))
 
   return (
-    <ItemsProvider itemTypes={availableTypes}>
+    <ItemsProvider itemTypes={availableTypes} collections={sidebarData.collections}>
       <DashboardShell sidebarData={sidebarData}>
         {children}
       </DashboardShell>

@@ -41,6 +41,7 @@ import { useItemDetail } from '@/hooks/useItemDetail'
 import { TEXT_CONTENT_TYPES, LANGUAGE_TYPES } from '@/lib/item-type-utils'
 import { CodeEditor } from './CodeEditor'
 import { MarkdownEditor } from './MarkdownEditor'
+import { CollectionPicker } from './CollectionPicker'
 
 function formatDate(date: string) {
   return new Date(date).toLocaleDateString('en-US', {
@@ -84,6 +85,11 @@ function DrawerSkeleton() {
 }
 
 
+interface Collection {
+  id: string
+  name: string
+}
+
 interface EditState {
   title: string
   description: string
@@ -91,6 +97,7 @@ interface EditState {
   url: string
   language: string
   tags: string
+  collectionIds: string[]
 }
 
 function itemToEditState(item: ItemDetail): EditState {
@@ -101,6 +108,7 @@ function itemToEditState(item: ItemDetail): EditState {
     url: item.url ?? '',
     language: item.language ?? '',
     tags: item.tags.map(t => t.tag.name).join(', '),
+    collectionIds: item.collections?.map(c => c.collection.id) ?? [],
   }
 }
 
@@ -108,9 +116,10 @@ interface ItemDrawerProps {
   itemId: string | null
   open: boolean
   onOpenChange: (open: boolean) => void
+  collections: Collection[]
 }
 
-export function ItemDrawer({ itemId, open, onOpenChange }: ItemDrawerProps) {
+export function ItemDrawer({ itemId, open, onOpenChange, collections }: ItemDrawerProps) {
   const router = useRouter()
   const { item, setItem, error } = useItemDetail(itemId, open)
   const [isEditing, setIsEditing] = useState(false)
@@ -124,6 +133,7 @@ export function ItemDrawer({ itemId, open, onOpenChange }: ItemDrawerProps) {
     url: '',
     language: '',
     tags: '',
+    collectionIds: [],
   })
 
   useEffect(() => {
@@ -156,6 +166,7 @@ export function ItemDrawer({ itemId, open, onOpenChange }: ItemDrawerProps) {
       url: editState.url || null,
       language: editState.language || null,
       tags,
+      collectionIds: editState.collectionIds,
     })
 
     setIsSaving(false)
@@ -195,7 +206,7 @@ export function ItemDrawer({ itemId, open, onOpenChange }: ItemDrawerProps) {
   const type = item?.itemType
   const Icon = type ? ICON_MAP[type.icon] : null
   const tags = item?.tags.map(t => t.tag.name) ?? []
-  const collections = item?.collections?.map(c => c.collection) ?? []
+  const itemCollections = item?.collections?.map(c => c.collection) ?? []
 
   const inputClass =
     'w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring'
@@ -394,22 +405,11 @@ export function ItemDrawer({ itemId, open, onOpenChange }: ItemDrawerProps) {
                     />
                   </div>
 
-                  {/* Collections — display only */}
-                  {collections.length > 0 && (
-                    <div className="flex items-start gap-2">
-                      <FolderOpen className="size-3.5 text-muted-foreground mt-0.5 shrink-0" />
-                      <div className="flex flex-wrap gap-1.5">
-                        {collections.map(col => (
-                          <span
-                            key={col.id}
-                            className="text-xs bg-muted rounded-md px-2 py-0.5 text-muted-foreground"
-                          >
-                            {col.name}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                  <CollectionPicker
+                    collections={collections}
+                    selectedIds={editState.collectionIds}
+                    onChange={ids => setEditState(s => ({ ...s, collectionIds: ids }))}
+                  />
                 </>
               ) : (
                 <>
@@ -483,11 +483,11 @@ export function ItemDrawer({ itemId, open, onOpenChange }: ItemDrawerProps) {
                   )}
 
                   {/* Collections */}
-                  {collections.length > 0 && (
+                  {itemCollections.length > 0 && (
                     <div className="flex items-start gap-2">
                       <FolderOpen className="size-3.5 text-muted-foreground mt-0.5 shrink-0" />
                       <div className="flex flex-wrap gap-1.5">
-                        {collections.map(col => (
+                        {itemCollections.map(col => (
                           <span
                             key={col.id}
                             className="text-xs bg-muted rounded-md px-2 py-0.5 text-muted-foreground"

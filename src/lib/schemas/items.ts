@@ -11,6 +11,7 @@ export const CreateItemSchema = z.object({
   fileSize: z.number().int().nullable().optional().transform(v => v ?? null),
   itemTypeId: z.string().min(1, 'Item type is required'),
   tags: z.array(z.string().trim().min(1)).default([]),
+  collectionIds: z.array(z.string()).default([]),
 })
 
 export const UpdateItemSchema = z.object({
@@ -20,4 +21,5 @@ export const UpdateItemSchema = z.object({
   url: z.url('Must be a valid URL').nullable().optional().transform(v => v ?? null),
   language: z.string().trim().nullable().optional().transform(v => v ?? null),
   tags: z.array(z.string().trim().min(1)).default([]),
+  collectionIds: z.array(z.string()).default([]),
 })

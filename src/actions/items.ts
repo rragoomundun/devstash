@@ -32,7 +32,15 @@ export async function updateItem(
   }
 
   try {
-    const item = await dbUpdateItem(session.user.id, itemId, parsed.data)
+    const item = await dbUpdateItem(session.user.id, itemId, {
+      title: parsed.data.title,
+      description: parsed.data.description,
+      content: parsed.data.content,
+      url: parsed.data.url,
+      language: parsed.data.language,
+      tags: parsed.data.tags,
+      collectionIds: parsed.data.collectionIds,
+    })
     return { success: true, data: item }
   } catch {
     return { success: false, error: 'Failed to save changes' }
@@ -63,6 +71,7 @@ export async function createItem(input: CreateItemInput): Promise<ActionResult> 
       fileSize: parsed.data.fileSize,
       itemTypeId: parsed.data.itemTypeId,
       tags: parsed.data.tags,
+      collectionIds: parsed.data.collectionIds,
     })
     return { success: true, data: item }
   } catch {

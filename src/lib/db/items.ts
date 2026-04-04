@@ -79,6 +79,7 @@ export interface CreateItemData {
   fileSize: number | null
   itemTypeId: string
   tags: string[]
+  collectionIds: string[]
 }
 
 export async function createItem(userId: string, data: CreateItemData) {
@@ -106,6 +107,9 @@ export async function createItem(userId: string, data: CreateItemData) {
           },
         })),
       },
+      collections: {
+        create: data.collectionIds.map(collectionId => ({ collectionId })),
+      },
     },
     select: itemDetailSelect,
   })
@@ -118,6 +122,7 @@ export interface UpdateItemData {
   url: string | null
   language: string | null
   tags: string[]
+  collectionIds: string[]
 }
 
 export async function updateItem(userId: string, itemId: string, data: UpdateItemData) {
@@ -139,6 +144,10 @@ export async function updateItem(userId: string, itemId: string, data: UpdateIte
             },
           },
         })),
+      },
+      collections: {
+        deleteMany: {},
+        create: data.collectionIds.map(collectionId => ({ collectionId })),
       },
     },
     select: itemDetailSelect,

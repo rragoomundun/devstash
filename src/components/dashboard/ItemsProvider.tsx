@@ -12,6 +12,11 @@ interface ItemType {
   color: string
 }
 
+interface Collection {
+  id: string
+  name: string
+}
+
 interface ItemsContextValue {
   openItem: (id: string) => void
   openCreate: (typeId?: string) => void
@@ -29,9 +34,10 @@ export function useItems() {
 interface ItemsProviderProps {
   children: React.ReactNode
   itemTypes: ItemType[]
+  collections: Collection[]
 }
 
-export function ItemsProvider({ children, itemTypes }: ItemsProviderProps) {
+export function ItemsProvider({ children, itemTypes, collections }: ItemsProviderProps) {
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [createOpen, setCreateOpen] = useState(false)
@@ -60,8 +66,8 @@ export function ItemsProvider({ children, itemTypes }: ItemsProviderProps) {
   return (
     <ItemsContext value={{ openItem, openCreate, openCreateCollection }}>
       {children}
-      <ItemDrawer itemId={selectedItemId} open={drawerOpen} onOpenChange={handleDrawerOpenChange} />
-      <CreateItemDialog open={createOpen} onOpenChange={setCreateOpen} itemTypes={itemTypes} initialTypeId={preselectedTypeId} />
+      <ItemDrawer itemId={selectedItemId} open={drawerOpen} onOpenChange={handleDrawerOpenChange} collections={collections} />
+      <CreateItemDialog open={createOpen} onOpenChange={setCreateOpen} itemTypes={itemTypes} initialTypeId={preselectedTypeId} collections={collections} />
       <CreateCollectionDialog open={createCollectionOpen} onOpenChange={setCreateCollectionOpen} />
     </ItemsContext>
   )

@@ -23,6 +23,7 @@ import { TEXT_CONTENT_TYPES, LANGUAGE_TYPES, FILE_CONTENT_TYPES } from '@/lib/it
 import { CodeEditor } from './CodeEditor'
 import { MarkdownEditor } from './MarkdownEditor'
 import { FileUpload } from './FileUpload'
+import { CollectionPicker } from './CollectionPicker'
 
 interface ItemType {
   id: string
@@ -31,11 +32,17 @@ interface ItemType {
   color: string
 }
 
+interface Collection {
+  id: string
+  name: string
+}
+
 interface CreateItemDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   itemTypes: ItemType[]
   initialTypeId?: string
+  collections: Collection[]
 }
 
 interface UploadedFile {
@@ -63,12 +70,16 @@ const emptyForm: FormState = {
   tags: '',
 }
 
-export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId }: CreateItemDialogProps) {
+export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId, collections }: CreateItemDialogProps) {
   const router = useRouter()
   const [selectedTypeId, setSelectedTypeId] = useState<string>(initialTypeId ?? itemTypes[0]?.id ?? '')
+  const [selectedCollectionIds, setSelectedCollectionIds] = useState<string[]>([])
 
   useEffect(() => {
-    if (open) setSelectedTypeId(initialTypeId ?? itemTypes[0]?.id ?? '')
+    if (open) {
+      setSelectedTypeId(initialTypeId ?? itemTypes[0]?.id ?? '')
+      setSelectedCollectionIds([])
+    }
   }, [open, initialTypeId, itemTypes])
   const [form, setForm] = useState<FormState>(emptyForm)
   const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null)
@@ -96,6 +107,7 @@ export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId 
       setForm(emptyForm)
       setUploadedFile(null)
       setSelectedTypeId(itemTypes[0]?.id ?? '')
+      setSelectedCollectionIds([])
     }
     onOpenChange(next)
   }
@@ -117,6 +129,7 @@ export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId 
       fileSize: uploadedFile?.fileSize ?? null,
       itemTypeId: selectedTypeId,
       tags,
+      collectionIds: selectedCollectionIds,
     })
 
     setIsSaving(false)
@@ -232,6 +245,12 @@ export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId 
             value={form.tags}
             onChange={e => setForm(f => ({ ...f, tags: e.target.value }))}
             placeholder="Tags (comma-separated)"
+          />
+
+          <CollectionPicker
+            collections={collections}
+            selectedIds={selectedCollectionIds}
+            onChange={setSelectedCollectionIds}
           />
         </div>
 

@@ -112,6 +112,7 @@ export async function getSidebarData(userId: string) {
       .sort((a, b) => TYPE_ORDER.indexOf(a.name) - TYPE_ORDER.indexOf(b.name)),
     favoriteCollections,
     recentCollections,
+    collections: collections.map(c => ({ id: c.id, name: c.name })),
     user: user ?? { name: null, email: null, image: null },
   }
 }
