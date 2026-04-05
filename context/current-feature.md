@@ -1,28 +1,16 @@
-# Current Feature: Global Search / Command Palette
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- Cmd+K / Ctrl+K opens a command palette from anywhere in the app
-- Fuzzy search across all items (id, title, type, content preview) and collections (id, name, itemCount)
-- Results are grouped: Items section and Collections section
-- Keyboard navigation with arrow keys; Enter selects
-- Item results show type icon and title; selecting opens the item drawer
-- Collection results show name and item count; selecting navigates to `/collections/[id]`
-- TopBar search input opens the palette on click
-- Search input placeholder shows ⌘K hint
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- Use the shadcn `cmdk` component (`Command`) — install if not already present
-- Client-side fuzzy search only, no server round-trips after initial load
-- Search data is pre-fetched at app load in the `(app)` layout and passed down via context (or a new SearchProvider)
-- Reuse `getRecentItems`/`getItemsByType` or add a lightweight `getAllItems` DB function for the full item list
-- Reuse `getAllCollections` for collections data, or a slimmer variant
-- Wire the existing TopBar search button/input to open the palette
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -61,3 +49,4 @@ In Progress
 - **2026-04-04** — Item Collection Picker: shadcn DropdownMenu with DropdownMenuCheckboxItem in Create Item dialog and Item Drawer edit mode; collectionIds added to CreateItemSchema/UpdateItemSchema; createItem/updateItem DB functions sync ItemCollection records; CollectionPicker shared component with full-width trigger and label
 - **2026-04-05** — Collections Pages: /collections lists all user collections; /collections/[id] shows collection detail with items grid; routes and shared layout moved under (app) route group; sidebar "View all collections" link and collection cards on dashboard link to correct routes; ImageCard updated (no aspect-video, max-h-50)
 - **2026-04-05** — Collection Actions: Edit (modal), Delete (AlertDialog, unlinks items), and Favorite (UI-only) on /collections/[id] header; 3-dots dropdown on collection cards (dashboard + /collections); card body navigates, dropdown sits in top-right corner; revalidatePath on all mutations for sidebar freshness
+- **2026-04-05** — Global Search / Command Palette: Cmd+K / Ctrl+K opens cmdk palette; grouped Items and Collections results; items open drawer, collections navigate; search matches title+type for items, name for collections; TopBar search button opens palette with ⌘K hint
