@@ -1,23 +1,12 @@
-# Current Feature: Collections Pages
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- `/collections` page lists all user collections with existing collection cards
-- `/collections/[id]` page shows items in a specific collection using existing item cards
-- "View all collections" link in sidebar navigates to `/collections`
-- All collection cards on the dashboard link to `/collections/[id]`
-
 ## Notes
-
-- Reuse existing `CollectionCard` and `ItemCard` / `ImageCard` components
-- Fetch data server-side with Prisma
-- Collection detail page should show collection metadata (name, description, item count) plus a grid of items
-- Follow the existing `/dashboard/items/[type]` pattern for the items grid
-- Routes live under `/dashboard/collections` to stay within the dashboard layout (check existing routing)
 
 ## History
 
@@ -54,3 +43,4 @@ In Progress
 - **2026-04-03** — Code Decomposition: extracted useCopyToClipboard hook (CodeEditor, MarkdownEditor, ItemCard), useItemDetail hook (ItemDrawer), item-type-utils constants (ItemDrawer, CreateItemDialog), formatBytes utility (FileUpload, ItemCard), AuthPageShell component (sign-in, register, forgot-password, reset-password), and validatePassword helper (register, change-password, reset-password)
 - **2026-04-03** — Collection Create: "New Collection" button in TopBar opens CreateCollectionDialog; CreateCollectionSchema (Zod) + createCollection server action + createCollection db function; openCreateCollection wired through ItemsProvider context; toast on success/failure, router.refresh() on save; 9 schema unit tests
 - **2026-04-04** — Item Collection Picker: shadcn DropdownMenu with DropdownMenuCheckboxItem in Create Item dialog and Item Drawer edit mode; collectionIds added to CreateItemSchema/UpdateItemSchema; createItem/updateItem DB functions sync ItemCollection records; CollectionPicker shared component with full-width trigger and label
+- **2026-04-05** — Collections Pages: /collections lists all user collections; /collections/[id] shows collection detail with items grid; routes and shared layout moved under (app) route group; sidebar "View all collections" link and collection cards on dashboard link to correct routes; ImageCard updated (no aspect-video, max-h-50)
