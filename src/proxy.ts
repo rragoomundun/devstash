@@ -11,7 +11,10 @@ export const proxy = auth(function proxy(
 ) {
   const isLoggedIn = !!req.auth?.user
 
-  if (req.nextUrl.pathname.startsWith("/dashboard") && !isLoggedIn) {
+  const protectedPaths = ["/dashboard", "/items", "/collections"]
+  const isProtected = protectedPaths.some(p => req.nextUrl.pathname.startsWith(p))
+
+  if (isProtected && !isLoggedIn) {
     const signInUrl = new URL("/sign-in", req.nextUrl.origin)
     signInUrl.searchParams.set("callbackUrl", req.nextUrl.href)
     return NextResponse.redirect(signInUrl)
@@ -21,5 +24,5 @@ export const proxy = auth(function proxy(
 })
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: ["/dashboard/:path*", "/items/:path*", "/collections/:path*"],
 }

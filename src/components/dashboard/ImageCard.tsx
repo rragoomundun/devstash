@@ -14,7 +14,7 @@ export function ImageCard({ item }: { item: DashboardItem }) {
       onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') openItem(item.id) }}
       className="group rounded-lg overflow-hidden border border-border bg-card cursor-pointer"
     >
-      <div className="aspect-video overflow-hidden bg-muted">
+      <div className="overflow-hidden bg-muted max-h-50">
         {item.fileUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img

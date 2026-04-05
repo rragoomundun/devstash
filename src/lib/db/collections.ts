@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma'
+import { itemSelect } from '@/lib/db/items'
 
 const TYPE_ORDER = ['Snippet', 'Prompt', 'Command', 'Note', 'Link', 'File', 'Image']
 
@@ -114,6 +115,91 @@ export async function getSidebarData(userId: string) {
     recentCollections,
     collections: collections.map(c => ({ id: c.id, name: c.name })),
     user: user ?? { name: null, email: null, image: null },
+  }
+}
+
+export async function getAllCollections(userId: string) {
+  const collections = await prisma.collection.findMany({
+    where: { userId },
+    orderBy: { updatedAt: 'desc' },
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      isFavorite: true,
+      updatedAt: true,
+      createdAt: true,
+      _count: { select: { items: true } },
+      items: {
+        select: {
+          item: {
+            select: {
+              itemType: { select: { id: true, name: true, color: true } },
+            },
+          },
+        },
+      },
+    },
+  })
+
+  return collections.map(col => {
+    const itemTypes = col.items.map(ic => ic.item.itemType)
+    const dominantColor = getDominantColor(itemTypes)
+
+    const seen = new Set<string>()
+    const uniqueTypes = itemTypes
+      .filter(t => {
+        if (seen.has(t.id)) return false
+        seen.add(t.id)
+        return true
+      })
+      .slice(0, 4)
+
+    return {
+      id: col.id,
+      name: col.name,
+      description: col.description,
+      isFavorite: col.isFavorite,
+      itemCount: col._count.items,
+      dominantColor,
+      types: uniqueTypes,
+      updatedAt: col.updatedAt,
+      createdAt: col.createdAt,
+    }
+  })
+}
+
+export async function getCollectionWithItems(userId: string, collectionId: string) {
+  const collection = await prisma.collection.findFirst({
+    where: { id: collectionId, userId },
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      isFavorite: true,
+      updatedAt: true,
+      createdAt: true,
+      _count: { select: { items: true } },
+      items: {
+        orderBy: { addedAt: 'desc' },
+        select: {
+          item: { select: itemSelect },
+        },
+      },
+    },
+  })
+
+  if (!collection) return null
+
+  return {
+    id: collection.id,
+    name: collection.name,
+    description: collection.description,
+    isFavorite: collection.isFavorite,
+    itemCount: collection._count.items,
+    updatedAt: collection.updatedAt,
+    createdAt: collection.createdAt,
+    items: collection.items.map(ic => ic.item),
   }
 }
 

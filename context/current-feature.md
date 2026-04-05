@@ -1,16 +1,23 @@
-# Current Feature
+# Current Feature: Collections Pages
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- `/collections` page lists all user collections with existing collection cards
+- `/collections/[id]` page shows items in a specific collection using existing item cards
+- "View all collections" link in sidebar navigates to `/collections`
+- All collection cards on the dashboard link to `/collections/[id]`
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- Reuse existing `CollectionCard` and `ItemCard` / `ImageCard` components
+- Fetch data server-side with Prisma
+- Collection detail page should show collection metadata (name, description, item count) plus a grid of items
+- Follow the existing `/dashboard/items/[type]` pattern for the items grid
+- Routes live under `/dashboard/collections` to stay within the dashboard layout (check existing routing)
 
 ## History
 

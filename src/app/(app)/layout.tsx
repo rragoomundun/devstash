@@ -6,7 +6,7 @@ import { getSidebarData } from '@/lib/db/collections'
 
 export const dynamic = 'force-dynamic'
 
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
   if (!session?.user?.id) redirect('/sign-in')
   const sidebarData = await getSidebarData(session.user.id)

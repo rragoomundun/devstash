@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ItemCard } from './ItemCard'
+import { ImageCard } from './ImageCard'
 import type { DashboardItem } from '@/lib/db/items'
 
 export function RecentItems({ items }: { items: DashboardItem[] }) {
@@ -17,9 +18,11 @@ export function RecentItems({ items }: { items: DashboardItem[] }) {
         </Link>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-        {items.map(item => (
-          <ItemCard key={item.id} item={item} />
-        ))}
+        {items.map(item =>
+          item.itemType.name === 'Image'
+            ? <ImageCard key={item.id} item={item} />
+            : <ItemCard key={item.id} item={item} />
+        )}
       </div>
     </section>
   )

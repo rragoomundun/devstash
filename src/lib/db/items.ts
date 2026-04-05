@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma'
 
-const itemSelect = {
+export const itemSelect = {
   id: true,
   title: true,
   description: true,
