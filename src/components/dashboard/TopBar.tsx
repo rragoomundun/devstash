@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { Search, Plus, Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { useItems } from './ItemsProvider'
 
 interface TopBarProps {
@@ -11,7 +10,7 @@ interface TopBarProps {
 }
 
 export function TopBar({ onMenuClick }: TopBarProps) {
-  const { openCreate, openCreateCollection } = useItems()
+  const { openCreate, openCreateCollection, openSearch } = useItems()
 
   return (
     <header className="flex items-center gap-3 border-b border-border px-4 h-14 shrink-0">
@@ -26,14 +25,16 @@ export function TopBar({ onMenuClick }: TopBarProps) {
       <Link href="/dashboard" className="text-base font-semibold tracking-tight">DevStash</Link>
 
       <div className="flex-1 flex justify-center">
-        <div className="relative w-full max-w-sm">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
-          <Input
-            placeholder="Search..."
-            className="pl-8 h-8 bg-muted border-none text-sm"
-            readOnly
-          />
-        </div>
+        <button
+          onClick={openSearch}
+          className="relative w-full max-w-sm flex items-center h-8 rounded-md bg-muted px-3 gap-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors"
+        >
+          <Search className="size-4 shrink-0" />
+          <span className="flex-1 text-left">Search…</span>
+          <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-border px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+            <span>⌘</span>K
+          </kbd>
+        </button>
       </div>
 
       <div className="flex items-center gap-2">

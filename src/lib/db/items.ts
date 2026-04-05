@@ -168,5 +168,19 @@ export async function deleteItem(userId: string, itemId: string) {
   })
 }
 
+export async function getAllItemsForSearch(userId: string) {
+  return prisma.item.findMany({
+    where: { userId },
+    orderBy: { updatedAt: 'desc' },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      itemType: { select: { name: true, icon: true, color: true } },
+    },
+  })
+}
+
 export type DashboardItem = Awaited<ReturnType<typeof getRecentItems>>[number]
 export type ItemDetail = NonNullable<Awaited<ReturnType<typeof getItemById>>>
+export type SearchItem = Awaited<ReturnType<typeof getAllItemsForSearch>>[number]
