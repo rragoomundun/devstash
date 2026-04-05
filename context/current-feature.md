@@ -1,12 +1,28 @@
-# Current Feature
+# Current Feature: Collection Actions
 
 ## Status
 
-Not Started
+In Progress
 
 ## Goals
 
+- `/collections/[id]` page has Edit, Delete, and Favorite buttons in the header
+  - Edit opens a modal to edit collection name and description
+  - Delete shows a confirmation dialog; removes the collection only (items are unlinked, not deleted)
+  - Favorite button renders the icon/UI but is not wired up yet
+- Collection cards on `/collections` and dashboard have a 3-dots menu (DropdownMenu) with Edit, Delete, Favorite options
+  - Clicking the card body (anywhere outside the 3-dots) navigates to `/collections/[id]`
+  - Edit and Delete behave the same as on the detail page
+  - Favorite is icon-only, not wired up yet
+
 ## Notes
+
+- Reuse `CreateCollectionSchema` and `createCollection` patterns for the edit action (new `updateCollection` server action + DB function)
+- Delete removes the `Collection` record; Prisma cascade handles `ItemCollection` join rows — items themselves are untouched
+- Collection cards are currently plain `<Link>` wrappers — they need to become relative-positioned containers so the 3-dots button can sit in the corner without being part of the link
+- Follow the existing `deleteItem` / `AlertDialog` pattern for delete confirmation
+- Follow the existing `CreateCollectionDialog` pattern for the edit modal (pre-populate fields)
+- `isFavorite` toggle DB function can be stubbed or skipped; just render the `Star` button as disabled/non-functional
 
 ## History
 

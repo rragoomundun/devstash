@@ -6,6 +6,7 @@ import { auth } from '@/auth'
 import { getCollectionWithItems } from '@/lib/db/collections'
 import { ItemCard } from '@/components/dashboard/ItemCard'
 import { ImageCard } from '@/components/dashboard/ImageCard'
+import { CollectionActions } from '@/components/dashboard/CollectionActions'
 
 export default async function CollectionPage({
   params,
@@ -22,7 +23,7 @@ export default async function CollectionPage({
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
-      <div className="flex items-start gap-2">
+      <div className="flex items-start justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-bold">{collection.name}</h1>
@@ -37,6 +38,7 @@ export default async function CollectionPage({
             {collection.itemCount} {collection.itemCount === 1 ? 'item' : 'items'}
           </p>
         </div>
+        <CollectionActions collection={collection} redirectOnDelete />
       </div>
 
       {collection.items.length === 0 ? (

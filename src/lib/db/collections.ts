@@ -203,6 +203,22 @@ export async function getCollectionWithItems(userId: string, collectionId: strin
   }
 }
 
+export async function updateCollection(
+  userId: string,
+  collectionId: string,
+  data: { name: string; description: string | null },
+) {
+  return prisma.collection.update({
+    where: { id: collectionId, userId },
+    data: { name: data.name, description: data.description },
+    select: { id: true, name: true, description: true },
+  })
+}
+
+export async function deleteCollection(userId: string, collectionId: string) {
+  await prisma.collection.delete({ where: { id: collectionId, userId } })
+}
+
 export async function createCollection(userId: string, data: { name: string; description: string | null }) {
   return prisma.collection.create({
     data: {
