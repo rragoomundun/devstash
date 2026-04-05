@@ -1,28 +1,12 @@
-# Current Feature: Collection Actions
+# Current Feature
 
 ## Status
 
-In Progress
+Not Started
 
 ## Goals
 
-- `/collections/[id]` page has Edit, Delete, and Favorite buttons in the header
-  - Edit opens a modal to edit collection name and description
-  - Delete shows a confirmation dialog; removes the collection only (items are unlinked, not deleted)
-  - Favorite button renders the icon/UI but is not wired up yet
-- Collection cards on `/collections` and dashboard have a 3-dots menu (DropdownMenu) with Edit, Delete, Favorite options
-  - Clicking the card body (anywhere outside the 3-dots) navigates to `/collections/[id]`
-  - Edit and Delete behave the same as on the detail page
-  - Favorite is icon-only, not wired up yet
-
 ## Notes
-
-- Reuse `CreateCollectionSchema` and `createCollection` patterns for the edit action (new `updateCollection` server action + DB function)
-- Delete removes the `Collection` record; Prisma cascade handles `ItemCollection` join rows — items themselves are untouched
-- Collection cards are currently plain `<Link>` wrappers — they need to become relative-positioned containers so the 3-dots button can sit in the corner without being part of the link
-- Follow the existing `deleteItem` / `AlertDialog` pattern for delete confirmation
-- Follow the existing `CreateCollectionDialog` pattern for the edit modal (pre-populate fields)
-- `isFavorite` toggle DB function can be stubbed or skipped; just render the `Star` button as disabled/non-functional
 
 ## History
 
@@ -60,3 +44,4 @@ In Progress
 - **2026-04-03** — Collection Create: "New Collection" button in TopBar opens CreateCollectionDialog; CreateCollectionSchema (Zod) + createCollection server action + createCollection db function; openCreateCollection wired through ItemsProvider context; toast on success/failure, router.refresh() on save; 9 schema unit tests
 - **2026-04-04** — Item Collection Picker: shadcn DropdownMenu with DropdownMenuCheckboxItem in Create Item dialog and Item Drawer edit mode; collectionIds added to CreateItemSchema/UpdateItemSchema; createItem/updateItem DB functions sync ItemCollection records; CollectionPicker shared component with full-width trigger and label
 - **2026-04-05** — Collections Pages: /collections lists all user collections; /collections/[id] shows collection detail with items grid; routes and shared layout moved under (app) route group; sidebar "View all collections" link and collection cards on dashboard link to correct routes; ImageCard updated (no aspect-video, max-h-50)
+- **2026-04-05** — Collection Actions: Edit (modal), Delete (AlertDialog, unlinks items), and Favorite (UI-only) on /collections/[id] header; 3-dots dropdown on collection cards (dashboard + /collections); card body navigates, dropdown sits in top-right corner; revalidatePath on all mutations for sidebar freshness
