@@ -5,6 +5,7 @@ import { auth } from '@/auth'
 import { getProfileData } from '@/lib/db/profile'
 import { ChangePasswordDialog } from '@/components/profile/ChangePasswordDialog'
 import { DeleteAccountDialog } from '@/components/profile/DeleteAccountDialog'
+import { EditorPreferencesSection } from '@/components/settings/EditorPreferencesSection'
 
 export default async function SettingsPage() {
   const session = await auth()
@@ -19,6 +20,8 @@ export default async function SettingsPage() {
         <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
         <p className="text-sm text-muted-foreground mt-1">Manage your account settings</p>
       </div>
+
+      <EditorPreferencesSection />
 
       {/* Account section */}
       <section className="rounded-lg border border-border bg-card overflow-hidden">

@@ -1,16 +1,29 @@
-# Current Feature
+# Current Feature: Editor Preferences Settings
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- Add `editorPreferences` JSON column to the User model via a migration (no db push)
+- Create a server action to update editor preferences
+- Create `EditorPreferencesContext` to provide preferences to client components
+- Apply preferences to the Monaco editor (font size, tab size, word wrap, minimap, theme)
+- Add an Editor Preferences section to the Settings page with:
+  - Font size dropdown
+  - Tab size dropdown
+  - Word wrap toggle (default: on)
+  - Minimap toggle (default: off)
+  - Theme dropdown: vs-dark, monokai, github-dark (default: vs-dark)
+- Auto-save on change with a success toast — no save button
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- Store preferences as a JSON column `editorPreferences` on the User model
+- Supported themes: `vs-dark`, `monokai`, `github-dark`
+- Defaults: word wrap on, minimap off, theme vs-dark
+- Context must be usable by the existing CodeEditor component
 
 ## History
 

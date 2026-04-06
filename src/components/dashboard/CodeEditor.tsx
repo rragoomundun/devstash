@@ -1,10 +1,12 @@
 'use client'
 
 import { useState, useRef, useCallback } from 'react'
-import Editor, { type OnMount } from '@monaco-editor/react'
+import Editor, { type OnMount, type BeforeMount } from '@monaco-editor/react'
 import type { editor } from 'monaco-editor'
 import { Copy, Check } from 'lucide-react'
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
+import { useEditorPreferences } from '@/components/dashboard/EditorPreferencesProvider'
+import { registerEditorThemes } from '@/lib/editor-themes'
 
 const MIN_HEIGHT = 80
 const MAX_HEIGHT = 400
@@ -18,8 +20,13 @@ interface CodeEditorProps {
 
 export function CodeEditor({ value, onChange, language, readOnly = false }: CodeEditorProps) {
   const { copied, copy: handleCopy } = useCopyToClipboard(value)
+  const { preferences } = useEditorPreferences()
   const [height, setHeight] = useState(MIN_HEIGHT)
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null)
+
+  const handleBeforeMount: BeforeMount = useCallback((monaco) => {
+    registerEditorThemes(monaco)
+  }, [])
 
   const handleMount: OnMount = useCallback((editor) => {
     editorRef.current = editor
@@ -64,17 +71,19 @@ export function CodeEditor({ value, onChange, language, readOnly = false }: Code
         height={height}
         value={value}
         language={language?.toLowerCase() || 'plaintext'}
-        theme="vs-dark"
+        theme={preferences.theme}
+        beforeMount={handleBeforeMount}
         onChange={(val) => onChange?.(val ?? '')}
         onMount={handleMount}
         options={{
           readOnly,
-          minimap: { enabled: false },
+          minimap: { enabled: preferences.minimap },
           scrollBeyondLastLine: false,
           lineNumbers: 'off',
           folding: false,
-          wordWrap: 'on',
-          fontSize: 13,
+          wordWrap: preferences.wordWrap ? 'on' : 'off',
+          fontSize: preferences.fontSize,
+          tabSize: preferences.tabSize,
           fontFamily: 'var(--font-geist-mono), "Geist Mono", monospace',
           padding: { top: 12, bottom: 12 },
           renderLineHighlight: readOnly ? 'none' : 'line',
