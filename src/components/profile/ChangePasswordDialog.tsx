@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { KeyRound } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -54,8 +55,9 @@ export function ChangePasswordDialog() {
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger render={<Button variant="outline" />}>
-        Change password
+      <AlertDialogTrigger render={<Button variant="outline" className="shrink-0 gap-2" />}>
+        <KeyRound className="size-4" />
+        Change Password
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

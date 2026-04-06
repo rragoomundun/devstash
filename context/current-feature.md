@@ -1,16 +1,22 @@
-# Current Feature
+# Current Feature: Settings Page
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- Create a `/settings` route protected by auth
+- Settings page includes Account actions: Delete Account and Change Password (moved from /profile)
+- Add a "Settings" link in the user icon dropdown at the bottom of the sidebar
+- Profile page no longer contains Account actions section
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- The sidebar user dropdown already exists — add a Settings link that navigates to `/settings`
+- Move the Delete Account AlertDialog and Change Password Dialog (currently in /profile) to the Settings page
+- Keep the profile page but remove the account actions from it (or simplify it)
+- `/settings` must be protected (redirect to sign-in if unauthenticated)
 
 ## History
 

@@ -9,6 +9,7 @@ import {
   ChevronDown,
   ChevronRight,
   LogOut,
+  Settings,
   User,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -189,6 +190,13 @@ export function SidebarContent({ collapsed, sidebarData }: { collapsed?: boolean
                 >
                   <User className="size-3.5" />
                   Profile
+                </Menu.Item>
+                <Menu.Item
+                  render={<Link href="/settings" />}
+                  className="flex items-center gap-2 px-2 py-1.5 rounded-md text-sm text-foreground/80 hover:text-foreground hover:bg-muted transition-colors cursor-pointer outline-none data-highlighted:bg-muted data-highlighted:text-foreground"
+                >
+                  <Settings className="size-3.5" />
+                  Settings
                 </Menu.Item>
                 <Menu.Item
                   onClick={() => signOut({ callbackUrl: '/sign-in' })}
