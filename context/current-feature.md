@@ -1,25 +1,16 @@
-# Current Feature: Pagination
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- Paginate `/items/[type]` — show `ITEMS_PER_PAGE = 21` items per page
-- Paginate `/collections/[id]` (collection detail) — show `ITEMS_PER_PAGE = 21` items per page
-- Paginate `/collections` (all collections list) — show `COLLECTIONS_PER_PAGE = 21` per page
-- Pagination controls at the bottom with numbered page links and prev/next buttons
-- Prev/next buttons are greyed out (disabled) when unavailable
-- Only fetch the items needed for the current page (no fetching all then slicing)
-- Dashboard limits remain: `DASHBOARD_COLLECTIONS_LIMIT = 6`, `DASHBOARD_RECENT_ITEMS_LIMIT = 10`
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- `ITEMS_PER_PAGE = 21` applies to both `/items/[type]` and `/collections/[id]`
-- `COLLECTIONS_PER_PAGE = 21` applies to the `/collections` all-collections list page
-- Page state should live in the URL (`?page=2`) so links are shareable and browser back works
-- Fetch must use Prisma `skip`/`take` — do not fetch all records and slice in JS
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -59,3 +50,4 @@ In Progress
 - **2026-04-05** — Collections Pages: /collections lists all user collections; /collections/[id] shows collection detail with items grid; routes and shared layout moved under (app) route group; sidebar "View all collections" link and collection cards on dashboard link to correct routes; ImageCard updated (no aspect-video, max-h-50)
 - **2026-04-05** — Collection Actions: Edit (modal), Delete (AlertDialog, unlinks items), and Favorite (UI-only) on /collections/[id] header; 3-dots dropdown on collection cards (dashboard + /collections); card body navigates, dropdown sits in top-right corner; revalidatePath on all mutations for sidebar freshness
 - **2026-04-05** — Global Search / Command Palette: Cmd+K / Ctrl+K opens cmdk palette; grouped Items and Collections results; items open drawer, collections navigate; search matches title+type for items, name for collections; TopBar search button opens palette with ⌘K hint
+- **2026-04-06** — Pagination: URL-based ?page= pagination on /items/[type], /collections, and /collections/[id]; ITEMS_PER_PAGE=21, COLLECTIONS_PER_PAGE=21; DB-level skip/take; reusable Pagination component with numbered links, prev/next (greyed when unavailable), and ellipsis; dashboard limits extracted as named constants
