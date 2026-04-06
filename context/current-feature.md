@@ -1,29 +1,16 @@
-# Current Feature: Editor Preferences Settings
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- Add `editorPreferences` JSON column to the User model via a migration (no db push)
-- Create a server action to update editor preferences
-- Create `EditorPreferencesContext` to provide preferences to client components
-- Apply preferences to the Monaco editor (font size, tab size, word wrap, minimap, theme)
-- Add an Editor Preferences section to the Settings page with:
-  - Font size dropdown
-  - Tab size dropdown
-  - Word wrap toggle (default: on)
-  - Minimap toggle (default: off)
-  - Theme dropdown: vs-dark, monokai, github-dark (default: vs-dark)
-- Auto-save on change with a success toast — no save button
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- Store preferences as a JSON column `editorPreferences` on the User model
-- Supported themes: `vs-dark`, `monokai`, `github-dark`
-- Defaults: word wrap on, minimap off, theme vs-dark
-- Context must be usable by the existing CodeEditor component
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -65,3 +52,4 @@ In Progress
 - **2026-04-05** — Global Search / Command Palette: Cmd+K / Ctrl+K opens cmdk palette; grouped Items and Collections results; items open drawer, collections navigate; search matches title+type for items, name for collections; TopBar search button opens palette with ⌘K hint
 - **2026-04-06** — Pagination: URL-based ?page= pagination on /items/[type], /collections, and /collections/[id]; ITEMS_PER_PAGE=21, COLLECTIONS_PER_PAGE=21; DB-level skip/take; reusable Pagination component with numbered links, prev/next (greyed when unavailable), and ellipsis; dashboard limits extracted as named constants
 - **2026-04-06** — Settings Page: /settings route inside (app) group (sidebar + topbar visible); Account section with Change Password and Delete Account rows (icon buttons, description text); Settings link added to sidebar user dropdown; /profile moved into (app) group; account actions removed from profile
+- **2026-04-06** — Editor Preferences Settings: editorPreferences Json column on User (migration); EditorPreferences type + defaults; server actions (get/update) with Zod validation; EditorPreferencesProvider context in (app) layout; CodeEditor reads fontSize, tabSize, wordWrap, minimap, theme from context; monokai and github-dark themes registered; EditorPreferencesSection on settings page with dropdowns and toggles, auto-saves on change with toast
