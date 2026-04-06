@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma'
+import { ITEMS_PER_PAGE, DASHBOARD_RECENT_ITEMS_LIMIT } from '@/lib/pagination'
 
 export const itemSelect = {
   id: true,
@@ -35,20 +36,27 @@ export async function getRecentItems(userId: string) {
   return prisma.item.findMany({
     where: { userId },
     orderBy: { updatedAt: 'desc' },
-    take: 10,
+    take: DASHBOARD_RECENT_ITEMS_LIMIT,
     select: itemSelect,
   })
 }
 
-export async function getItemsByType(userId: string, typeName: string) {
-  return prisma.item.findMany({
-    where: {
-      userId,
-      itemType: { name: { equals: typeName, mode: 'insensitive' } },
-    },
-    orderBy: { updatedAt: 'desc' },
-    select: itemSelect,
-  })
+export async function getItemsByType(userId: string, typeName: string, page: number) {
+  const where = {
+    userId,
+    itemType: { name: { equals: typeName, mode: 'insensitive' as const } },
+  }
+  const [items, total] = await Promise.all([
+    prisma.item.findMany({
+      where,
+      orderBy: { updatedAt: 'desc' },
+      skip: (page - 1) * ITEMS_PER_PAGE,
+      take: ITEMS_PER_PAGE,
+      select: itemSelect,
+    }),
+    prisma.item.count({ where }),
+  ])
+  return { items, total }
 }
 
 const itemDetailSelect = {

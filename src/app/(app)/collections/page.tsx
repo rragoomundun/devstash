@@ -6,8 +6,10 @@ import { redirect } from 'next/navigation'
 import { auth } from '@/auth'
 import { getAllCollections } from '@/lib/db/collections'
 import { CollectionCardMenu } from '@/components/dashboard/CollectionCardMenu'
+import { Pagination } from '@/components/dashboard/Pagination'
+import { parsePage, pageCount, COLLECTIONS_PER_PAGE } from '@/lib/pagination'
 
-type Collection = Awaited<ReturnType<typeof getAllCollections>>[number]
+type Collection = Awaited<ReturnType<typeof getAllCollections>>['collections'][number]
 
 function CollectionCard({ col }: { col: Collection }) {
   return (
@@ -51,18 +53,26 @@ function CollectionCard({ col }: { col: Collection }) {
   )
 }
 
-export default async function CollectionsPage() {
+export default async function CollectionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>
+}) {
   const session = await auth()
   if (!session?.user?.id) redirect('/sign-in')
 
-  const collections = await getAllCollections(session.user.id)
+  const { page: pageParam } = await searchParams
+  const page = parsePage(pageParam)
+
+  const { collections, total } = await getAllCollections(session.user.id, page)
+  const totalPages = pageCount(total, COLLECTIONS_PER_PAGE)
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       <div>
         <h1 className="text-xl font-bold">Collections</h1>
         <p className="text-sm text-muted-foreground">
-          {collections.length} {collections.length === 1 ? 'collection' : 'collections'}
+          {total} {total === 1 ? 'collection' : 'collections'}
         </p>
       </div>
 
@@ -77,6 +87,8 @@ export default async function CollectionsPage() {
           ))}
         </div>
       )}
+
+      <Pagination page={page} totalPages={totalPages} basePath="/collections" />
     </div>
   )
 }

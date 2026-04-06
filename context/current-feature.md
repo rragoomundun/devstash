@@ -1,16 +1,25 @@
-# Current Feature
+# Current Feature: Pagination
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- Paginate `/items/[type]` — show `ITEMS_PER_PAGE = 21` items per page
+- Paginate `/collections/[id]` (collection detail) — show `ITEMS_PER_PAGE = 21` items per page
+- Paginate `/collections` (all collections list) — show `COLLECTIONS_PER_PAGE = 21` per page
+- Pagination controls at the bottom with numbered page links and prev/next buttons
+- Prev/next buttons are greyed out (disabled) when unavailable
+- Only fetch the items needed for the current page (no fetching all then slicing)
+- Dashboard limits remain: `DASHBOARD_COLLECTIONS_LIMIT = 6`, `DASHBOARD_RECENT_ITEMS_LIMIT = 10`
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- `ITEMS_PER_PAGE = 21` applies to both `/items/[type]` and `/collections/[id]`
+- `COLLECTIONS_PER_PAGE = 21` applies to the `/collections` all-collections list page
+- Page state should live in the URL (`?page=2`) so links are shareable and browser back works
+- Fetch must use Prisma `skip`/`take` — do not fetch all records and slice in JS
 
 ## History
 

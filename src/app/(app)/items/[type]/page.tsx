@@ -6,7 +6,9 @@ import { getItemsByType } from '@/lib/db/items'
 import { ItemCard } from '@/components/dashboard/ItemCard'
 import { ImageCard } from '@/components/dashboard/ImageCard'
 import { AddTypeItemButton } from '@/components/dashboard/AddTypeItemButton'
+import { Pagination } from '@/components/dashboard/Pagination'
 import { ICON_MAP } from '@/lib/icon-map'
+import { parsePage, pageCount, ITEMS_PER_PAGE } from '@/lib/pagination'
 import { prisma } from '@/lib/prisma'
 
 const SLUG_TO_TYPE: Record<string, string> = {
@@ -21,8 +23,10 @@ const SLUG_TO_TYPE: Record<string, string> = {
 
 export default async function ItemsPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ type: string }>
+  searchParams: Promise<{ page?: string }>
 }) {
   const session = await auth()
   if (!session?.user?.id) redirect('/sign-in')
@@ -31,7 +35,11 @@ export default async function ItemsPage({
   const typeName = SLUG_TO_TYPE[slug]
   if (!typeName) notFound()
 
-  const items = await getItemsByType(session.user.id, typeName)
+  const { page: pageParam } = await searchParams
+  const page = parsePage(pageParam)
+
+  const { items, total } = await getItemsByType(session.user.id, typeName, page)
+  const totalPages = pageCount(total, ITEMS_PER_PAGE)
 
   const itemType = items.length > 0
     ? items[0].itemType
@@ -56,7 +64,7 @@ export default async function ItemsPage({
         <div>
           <h1 className="text-xl font-bold">{typeName}s</h1>
           <p className="text-sm text-muted-foreground">
-            {items.length} {items.length === 1 ? 'item' : 'items'}
+            {total} {total === 1 ? 'item' : 'items'}
           </p>
         </div>
         {itemType && (
@@ -85,6 +93,8 @@ export default async function ItemsPage({
           ))}
         </div>
       )}
+
+      <Pagination page={page} totalPages={totalPages} basePath={`/items/${slug}`} />
     </div>
   )
 }

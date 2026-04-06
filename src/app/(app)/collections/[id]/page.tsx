@@ -7,19 +7,28 @@ import { getCollectionWithItems } from '@/lib/db/collections'
 import { ItemCard } from '@/components/dashboard/ItemCard'
 import { ImageCard } from '@/components/dashboard/ImageCard'
 import { CollectionActions } from '@/components/dashboard/CollectionActions'
+import { Pagination } from '@/components/dashboard/Pagination'
+import { parsePage, pageCount, ITEMS_PER_PAGE } from '@/lib/pagination'
 
 export default async function CollectionPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>
+  searchParams: Promise<{ page?: string }>
 }) {
   const session = await auth()
   if (!session?.user?.id) redirect('/sign-in')
 
   const { id } = await params
-  const collection = await getCollectionWithItems(session.user.id, id)
+  const { page: pageParam } = await searchParams
+  const page = parsePage(pageParam)
+
+  const collection = await getCollectionWithItems(session.user.id, id, page)
 
   if (!collection) notFound()
+
+  const totalPages = pageCount(collection.itemCount, ITEMS_PER_PAGE)
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
@@ -54,6 +63,8 @@ export default async function CollectionPage({
           )}
         </div>
       )}
+
+      <Pagination page={page} totalPages={totalPages} basePath={`/collections/${id}`} />
     </div>
   )
 }

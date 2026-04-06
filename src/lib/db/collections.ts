@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import { itemSelect } from '@/lib/db/items'
+import { COLLECTIONS_PER_PAGE, DASHBOARD_COLLECTIONS_LIMIT, ITEMS_PER_PAGE } from '@/lib/pagination'
 
 const TYPE_ORDER = ['Snippet', 'Prompt', 'Command', 'Note', 'Link', 'File', 'Image']
 
@@ -17,7 +18,7 @@ export async function getRecentCollections(userId: string) {
   const collections = await prisma.collection.findMany({
     where: { userId },
     orderBy: { updatedAt: 'desc' },
-    take: 6,
+    take: DASHBOARD_COLLECTIONS_LIMIT,
     select: {
       id: true,
       name: true,
@@ -118,31 +119,37 @@ export async function getSidebarData(userId: string) {
   }
 }
 
-export async function getAllCollections(userId: string) {
-  const collections = await prisma.collection.findMany({
-    where: { userId },
-    orderBy: { updatedAt: 'desc' },
-    select: {
-      id: true,
-      name: true,
-      description: true,
-      isFavorite: true,
-      updatedAt: true,
-      createdAt: true,
-      _count: { select: { items: true } },
-      items: {
-        select: {
-          item: {
-            select: {
-              itemType: { select: { id: true, name: true, color: true } },
+export async function getAllCollections(userId: string, page: number) {
+  const where = { userId }
+  const [rawCollections, total] = await Promise.all([
+    prisma.collection.findMany({
+      where,
+      orderBy: { updatedAt: 'desc' },
+      skip: (page - 1) * COLLECTIONS_PER_PAGE,
+      take: COLLECTIONS_PER_PAGE,
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        isFavorite: true,
+        updatedAt: true,
+        createdAt: true,
+        _count: { select: { items: true } },
+        items: {
+          select: {
+            item: {
+              select: {
+                itemType: { select: { id: true, name: true, color: true } },
+              },
             },
           },
         },
       },
-    },
-  })
+    }),
+    prisma.collection.count({ where }),
+  ])
 
-  return collections.map(col => {
+  const collections = rawCollections.map(col => {
     const itemTypes = col.items.map(ic => ic.item.itemType)
     const dominantColor = getDominantColor(itemTypes)
 
@@ -167,9 +174,11 @@ export async function getAllCollections(userId: string) {
       createdAt: col.createdAt,
     }
   })
+
+  return { collections, total }
 }
 
-export async function getCollectionWithItems(userId: string, collectionId: string) {
+export async function getCollectionWithItems(userId: string, collectionId: string, page: number) {
   const collection = await prisma.collection.findFirst({
     where: { id: collectionId, userId },
     select: {
@@ -182,6 +191,8 @@ export async function getCollectionWithItems(userId: string, collectionId: strin
       _count: { select: { items: true } },
       items: {
         orderBy: { addedAt: 'desc' },
+        skip: (page - 1) * ITEMS_PER_PAGE,
+        take: ITEMS_PER_PAGE,
         select: {
           item: { select: itemSelect },
         },
@@ -228,6 +239,18 @@ export async function createCollection(userId: string, data: { name: string; des
     },
     select: { id: true, name: true, description: true },
   })
+}
+
+export async function getCollectionsForSearch(userId: string) {
+  return prisma.collection.findMany({
+    where: { userId },
+    orderBy: { updatedAt: 'desc' },
+    select: {
+      id: true,
+      name: true,
+      _count: { select: { items: true } },
+    },
+  }).then(cols => cols.map(c => ({ id: c.id, name: c.name, itemCount: c._count.items })))
 }
 
 export async function getDashboardStats(userId: string) {
