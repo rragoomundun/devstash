@@ -1,22 +1,16 @@
-# Current Feature: Settings Page
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- Create a `/settings` route protected by auth
-- Settings page includes Account actions: Delete Account and Change Password (moved from /profile)
-- Add a "Settings" link in the user icon dropdown at the bottom of the sidebar
-- Profile page no longer contains Account actions section
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- The sidebar user dropdown already exists — add a Settings link that navigates to `/settings`
-- Move the Delete Account AlertDialog and Change Password Dialog (currently in /profile) to the Settings page
-- Keep the profile page but remove the account actions from it (or simplify it)
-- `/settings` must be protected (redirect to sign-in if unauthenticated)
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -57,3 +51,4 @@ In Progress
 - **2026-04-05** — Collection Actions: Edit (modal), Delete (AlertDialog, unlinks items), and Favorite (UI-only) on /collections/[id] header; 3-dots dropdown on collection cards (dashboard + /collections); card body navigates, dropdown sits in top-right corner; revalidatePath on all mutations for sidebar freshness
 - **2026-04-05** — Global Search / Command Palette: Cmd+K / Ctrl+K opens cmdk palette; grouped Items and Collections results; items open drawer, collections navigate; search matches title+type for items, name for collections; TopBar search button opens palette with ⌘K hint
 - **2026-04-06** — Pagination: URL-based ?page= pagination on /items/[type], /collections, and /collections/[id]; ITEMS_PER_PAGE=21, COLLECTIONS_PER_PAGE=21; DB-level skip/take; reusable Pagination component with numbered links, prev/next (greyed when unavailable), and ellipsis; dashboard limits extracted as named constants
+- **2026-04-06** — Settings Page: /settings route inside (app) group (sidebar + topbar visible); Account section with Change Password and Delete Account rows (icon buttons, description text); Settings link added to sidebar user dropdown; /profile moved into (app) group; account actions removed from profile
