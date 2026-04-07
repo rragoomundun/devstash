@@ -43,7 +43,7 @@ export function TopBar({ onMenuClick }: TopBarProps) {
           className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
           aria-label="Favorites"
         >
-          <Star className="size-4" />
+          <Star className="size-4 fill-yellow-400 text-yellow-400" />
         </Link>
         <Button variant="outline" size="sm" className="gap-1.5 hidden sm:inline-flex" onClick={openCreateCollection}>
           <Plus className="size-4" />

@@ -1,16 +1,22 @@
-# Current Feature
+# Current Feature: Favorites Sorting
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- Sort controls on the favorites page for both items and collections sections
+- Sort options: Name (A→Z), Date (newest first), Item Type (items only)
+- Sorting is client-side (no page reload)
+- Default sort is Date (newest first, matching current behavior)
+- Sort state is per-section (items and collections sorted independently)
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- All sorting logic lives in FavoritesList (client component) — no DB changes needed
+- Collections have no type, so Item Type sort only applies to items section
+- Keep the UI minimal and consistent with the existing compact list style
 
 ## History
 
