@@ -1,25 +1,16 @@
-# Current Feature: Favorites Page
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- Star icon button in TopBar links to /favorites
-- /favorites route with auth protection
-- Separate sections for favorited items and favorited collections with counts
-- Compact list view (VS Code/terminal style): type icon, title, type badge, date
-- Click item opens ItemDrawer; click collection navigates to /collections/[id]
-- Empty state when no favorites exist
-- Sorted by most recently favorited (updatedAt desc)
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- Monospace or semi-monospace font, minimal padding, high density
-- Subtle hover states; no cards or heavy borders — clean lines only
-- Reuse ItemsProvider/drawer context for item click behavior
-- Use existing isFavorite flag on Item and Collection models
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -62,3 +53,4 @@ In Progress
 - **2026-04-06** — Pagination: URL-based ?page= pagination on /items/[type], /collections, and /collections/[id]; ITEMS_PER_PAGE=21, COLLECTIONS_PER_PAGE=21; DB-level skip/take; reusable Pagination component with numbered links, prev/next (greyed when unavailable), and ellipsis; dashboard limits extracted as named constants
 - **2026-04-06** — Settings Page: /settings route inside (app) group (sidebar + topbar visible); Account section with Change Password and Delete Account rows (icon buttons, description text); Settings link added to sidebar user dropdown; /profile moved into (app) group; account actions removed from profile
 - **2026-04-06** — Editor Preferences Settings: editorPreferences Json column on User (migration); EditorPreferences type + defaults; server actions (get/update) with Zod validation; EditorPreferencesProvider context in (app) layout; CodeEditor reads fontSize, tabSize, wordWrap, minimap, theme from context; monokai and github-dark themes registered; EditorPreferencesSection on settings page with dropdowns and toggles, auto-saves on change with toast
+- **2026-04-07** — Favorites Page: /favorites route with auth guard; getFavoriteItems/getFavoriteCollections DB queries; FavoritesList client component with compact monospace list (type icon, title, colored type badge, date); items open ItemDrawer, collections navigate; empty state; star icon in TopBar linking to /favorites; yellow star indicator on ItemCard and ImageCard for favorited items
