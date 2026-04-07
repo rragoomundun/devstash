@@ -2,7 +2,7 @@
 
 import { z } from 'zod'
 import { auth } from '@/auth'
-import { updateItem as dbUpdateItem, deleteItem as dbDeleteItem, createItem as dbCreateItem, getItemFileUrl, toggleItemFavorite as dbToggleItemFavorite } from '@/lib/db/items'
+import { updateItem as dbUpdateItem, deleteItem as dbDeleteItem, createItem as dbCreateItem, getItemFileUrl, toggleItemFavorite as dbToggleItemFavorite, toggleItemPin as dbToggleItemPin } from '@/lib/db/items'
 import type { ItemDetail } from '@/lib/db/items'
 import { UpdateItemSchema, CreateItemSchema } from '@/lib/schemas/items'
 import { deleteFromR2, keyFromUrl } from '@/lib/r2'
@@ -88,6 +88,18 @@ export async function toggleItemFavorite(itemId: string, isFavorite: boolean): P
     return { success: true }
   } catch {
     return { success: false, error: 'Failed to update favorite' }
+  }
+}
+
+export async function toggleItemPin(itemId: string, isPinned: boolean): Promise<DeleteResult> {
+  const session = await auth()
+  if (!session?.user?.id) return { success: false, error: 'Unauthorized' }
+
+  try {
+    await dbToggleItemPin(session.user.id, itemId, isPinned)
+    return { success: true }
+  } catch {
+    return { success: false, error: 'Failed to update pin' }
   }
 }
 

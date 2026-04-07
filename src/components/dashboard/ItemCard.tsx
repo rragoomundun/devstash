@@ -1,6 +1,6 @@
 'use client'
 
-import { Download, Copy, Check, FileText, FileJson, FileCode, FileSpreadsheet, FileType, Star, type LucideIcon } from 'lucide-react'
+import { Download, Copy, Check, FileText, FileJson, FileCode, FileSpreadsheet, FileType, Star, Pin, type LucideIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { ICON_MAP } from '@/lib/icon-map'
 import { useItems } from '@/components/dashboard/ItemsProvider'
@@ -128,6 +128,9 @@ export function ItemCard({ item, large }: { item: DashboardItem; large?: boolean
         )}
         {item.isFavorite && (
           <Star className="shrink-0 size-3 fill-yellow-400 text-yellow-400" />
+        )}
+        {item.isPinned && (
+          <Pin className="shrink-0 size-3 fill-foreground text-foreground" />
         )}
       </div>
     </div>

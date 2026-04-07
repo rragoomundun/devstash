@@ -1,6 +1,6 @@
 'use client'
 
-import { Star } from 'lucide-react'
+import { Star, Pin } from 'lucide-react'
 import { useItems } from '@/components/dashboard/ItemsProvider'
 import type { DashboardItem } from '@/lib/db/items'
 
@@ -35,6 +35,9 @@ export function ImageCard({ item }: { item: DashboardItem }) {
           <p className="text-sm font-medium leading-tight truncate flex-1">{item.title}</p>
           {item.isFavorite && (
             <Star className="shrink-0 size-3 fill-yellow-400 text-yellow-400 mt-0.5" />
+          )}
+          {item.isPinned && (
+            <Pin className="shrink-0 size-3 fill-foreground text-foreground mt-0.5" />
           )}
         </div>
         {item.description && (
