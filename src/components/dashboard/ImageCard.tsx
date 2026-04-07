@@ -1,5 +1,6 @@
 'use client'
 
+import { Star } from 'lucide-react'
 import { useItems } from '@/components/dashboard/ItemsProvider'
 import type { DashboardItem } from '@/lib/db/items'
 
@@ -30,7 +31,12 @@ export function ImageCard({ item }: { item: DashboardItem }) {
       </div>
 
       <div className="p-2.5 space-y-0.5">
-        <p className="text-sm font-medium leading-tight truncate">{item.title}</p>
+        <div className="flex items-start gap-1.5">
+          <p className="text-sm font-medium leading-tight truncate flex-1">{item.title}</p>
+          {item.isFavorite && (
+            <Star className="shrink-0 size-3 fill-yellow-400 text-yellow-400 mt-0.5" />
+          )}
+        </div>
         {item.description && (
           <p className="text-xs text-muted-foreground truncate">{item.description}</p>
         )}

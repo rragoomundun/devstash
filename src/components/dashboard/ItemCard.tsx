@@ -1,6 +1,6 @@
 'use client'
 
-import { Download, Copy, Check, FileText, FileJson, FileCode, FileSpreadsheet, FileType, type LucideIcon } from 'lucide-react'
+import { Download, Copy, Check, FileText, FileJson, FileCode, FileSpreadsheet, FileType, Star, type LucideIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { ICON_MAP } from '@/lib/icon-map'
 import { useItems } from '@/components/dashboard/ItemsProvider'
@@ -125,6 +125,9 @@ export function ItemCard({ item, large }: { item: DashboardItem; large?: boolean
           >
             {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
           </button>
+        )}
+        {item.isFavorite && (
+          <Star className="shrink-0 size-3 fill-yellow-400 text-yellow-400" />
         )}
       </div>
     </div>

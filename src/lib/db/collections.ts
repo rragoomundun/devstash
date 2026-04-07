@@ -253,6 +253,23 @@ export async function getCollectionsForSearch(userId: string) {
   }).then(cols => cols.map(c => ({ id: c.id, name: c.name, itemCount: c._count.items })))
 }
 
+export async function getFavoriteCollections(userId: string) {
+  const rows = await prisma.collection.findMany({
+    where: { userId, isFavorite: true },
+    orderBy: { updatedAt: 'desc' },
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      updatedAt: true,
+      _count: { select: { items: true } },
+    },
+  })
+  return rows.map(c => ({ ...c, itemCount: c._count.items }))
+}
+
+export type FavoriteCollection = Awaited<ReturnType<typeof getFavoriteCollections>>[number]
+
 export async function getDashboardStats(userId: string) {
   const [totalItems, totalCollections, favoriteItems, favoriteCollections] = await Promise.all([
     prisma.item.count({ where: { userId } }),

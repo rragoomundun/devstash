@@ -1,16 +1,25 @@
-# Current Feature
+# Current Feature: Favorites Page
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- Star icon button in TopBar links to /favorites
+- /favorites route with auth protection
+- Separate sections for favorited items and favorited collections with counts
+- Compact list view (VS Code/terminal style): type icon, title, type badge, date
+- Click item opens ItemDrawer; click collection navigates to /collections/[id]
+- Empty state when no favorites exist
+- Sorted by most recently favorited (updatedAt desc)
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- Monospace or semi-monospace font, minimal padding, high density
+- Subtle hover states; no cards or heavy borders — clean lines only
+- Reuse ItemsProvider/drawer context for item click behavior
+- Use existing isFavorite flag on Item and Collection models
 
 ## History
 

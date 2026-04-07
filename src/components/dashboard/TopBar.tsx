@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Search, Plus, Menu } from 'lucide-react'
+import { Search, Plus, Menu, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useItems } from './ItemsProvider'
 
@@ -38,6 +38,13 @@ export function TopBar({ onMenuClick }: TopBarProps) {
       </div>
 
       <div className="flex items-center gap-2">
+        <Link
+          href="/favorites"
+          className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+          aria-label="Favorites"
+        >
+          <Star className="size-4" />
+        </Link>
         <Button variant="outline" size="sm" className="gap-1.5 hidden sm:inline-flex" onClick={openCreateCollection}>
           <Plus className="size-4" />
           New Collection
