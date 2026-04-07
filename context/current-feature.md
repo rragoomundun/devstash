@@ -1,23 +1,16 @@
-# Current Feature: Pinned Items
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- `toggleItemPin` server action created
-- Pin button in ItemDrawer is wired up with onClick and optimistic UI
-- Toast notification on pin/unpin success/error
-- Pinned items sort to the top of item listings (/items/[type] pages)
-- Pinned items appear in the pinned items section on the dashboard
-- Pin icon on ItemCard remains a static indicator (no interaction on card)
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- Items only — no pin feature for collections
-- Follow the Favorite Button pattern (toggleItemFavorite / toggleCollectionFavorite) for implementation style
-- Optimistic UI for instant feedback before server response
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -63,3 +56,4 @@ In Progress
 - **2026-04-07** — Favorites Page: /favorites route with auth guard; getFavoriteItems/getFavoriteCollections DB queries; FavoritesList client component with compact monospace list (type icon, title, colored type badge, date); items open ItemDrawer, collections navigate; empty state; star icon in TopBar linking to /favorites; yellow star indicator on ItemCard and ImageCard for favorited items
 - **2026-04-07** — Favorite Toggle: toggleItemFavorite/toggleCollectionFavorite DB functions + server actions; ItemDrawer favorite button wired up; CollectionActions (collection page header) wired up; CollectionCardMenu wired up; favorite star moved to bottom-right of collection cards on dashboard and /collections; collection card dropdown menus removed from both dashboard and /collections page
 - **2026-04-07** — Favorites Sorting: per-section client-side sort controls on /favorites; items sortable by Date/Name/Type, collections by Date/Name; default Date (newest first); SortToggle inline in section header; TopBar star icon filled yellow
+- **2026-04-07** — Pinned Items: toggleItemPin DB function + server action; Pin button in ItemDrawer wired with optimistic UI and toast; pinned items sort to top of /items/[type] listings; pin indicator on ItemCard and ImageCard; PinnedItems dashboard section renders image types as ImageCard
