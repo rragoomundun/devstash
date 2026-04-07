@@ -1,23 +1,16 @@
-# Current Feature: Favorite Toggle
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- Favorite toggle button in ItemDrawer action bar (star icon, fills yellow when active)
-- Favorite toggle on collection page header (star icon button)
-- Favorite toggle on collection cards (dashboard + /collections list)
-- Toggling persists to the database immediately (server action)
-- UI reflects the new state optimistically or after revalidation
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- Item isFavorite already exists on the Item model; Collection isFavorite already exists on Collection model
-- Reuse existing server action patterns (return { success, error }, revalidatePath)
-- Collection favorite is currently UI-only — wire it up to the DB
-- Keep toggle visually consistent: outlined star = not favorite, filled yellow star = favorite
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -61,3 +54,4 @@ In Progress
 - **2026-04-06** — Settings Page: /settings route inside (app) group (sidebar + topbar visible); Account section with Change Password and Delete Account rows (icon buttons, description text); Settings link added to sidebar user dropdown; /profile moved into (app) group; account actions removed from profile
 - **2026-04-06** — Editor Preferences Settings: editorPreferences Json column on User (migration); EditorPreferences type + defaults; server actions (get/update) with Zod validation; EditorPreferencesProvider context in (app) layout; CodeEditor reads fontSize, tabSize, wordWrap, minimap, theme from context; monokai and github-dark themes registered; EditorPreferencesSection on settings page with dropdowns and toggles, auto-saves on change with toast
 - **2026-04-07** — Favorites Page: /favorites route with auth guard; getFavoriteItems/getFavoriteCollections DB queries; FavoritesList client component with compact monospace list (type icon, title, colored type badge, date); items open ItemDrawer, collections navigate; empty state; star icon in TopBar linking to /favorites; yellow star indicator on ItemCard and ImageCard for favorited items
+- **2026-04-07** — Favorite Toggle: toggleItemFavorite/toggleCollectionFavorite DB functions + server actions; ItemDrawer favorite button wired up; CollectionActions (collection page header) wired up; CollectionCardMenu wired up; favorite star moved to bottom-right of collection cards on dashboard and /collections; collection card dropdown menus removed from both dashboard and /collections page
