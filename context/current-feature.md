@@ -1,22 +1,16 @@
-# Current Feature: Favorites Sorting
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- Sort controls on the favorites page for both items and collections sections
-- Sort options: Name (A→Z), Date (newest first), Item Type (items only)
-- Sorting is client-side (no page reload)
-- Default sort is Date (newest first, matching current behavior)
-- Sort state is per-section (items and collections sorted independently)
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- All sorting logic lives in FavoritesList (client component) — no DB changes needed
-- Collections have no type, so Item Type sort only applies to items section
-- Keep the UI minimal and consistent with the existing compact list style
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -61,3 +55,4 @@ In Progress
 - **2026-04-06** — Editor Preferences Settings: editorPreferences Json column on User (migration); EditorPreferences type + defaults; server actions (get/update) with Zod validation; EditorPreferencesProvider context in (app) layout; CodeEditor reads fontSize, tabSize, wordWrap, minimap, theme from context; monokai and github-dark themes registered; EditorPreferencesSection on settings page with dropdowns and toggles, auto-saves on change with toast
 - **2026-04-07** — Favorites Page: /favorites route with auth guard; getFavoriteItems/getFavoriteCollections DB queries; FavoritesList client component with compact monospace list (type icon, title, colored type badge, date); items open ItemDrawer, collections navigate; empty state; star icon in TopBar linking to /favorites; yellow star indicator on ItemCard and ImageCard for favorited items
 - **2026-04-07** — Favorite Toggle: toggleItemFavorite/toggleCollectionFavorite DB functions + server actions; ItemDrawer favorite button wired up; CollectionActions (collection page header) wired up; CollectionCardMenu wired up; favorite star moved to bottom-right of collection cards on dashboard and /collections; collection card dropdown menus removed from both dashboard and /collections page
+- **2026-04-07** — Favorites Sorting: per-section client-side sort controls on /favorites; items sortable by Date/Name/Type, collections by Date/Name; default Date (newest first); SortToggle inline in section header; TopBar star icon filled yellow
