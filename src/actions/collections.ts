@@ -7,6 +7,7 @@ import {
   createCollection as dbCreateCollection,
   updateCollection as dbUpdateCollection,
   deleteCollection as dbDeleteCollection,
+  toggleCollectionFavorite as dbToggleCollectionFavorite,
 } from '@/lib/db/collections'
 import { CreateCollectionSchema } from '@/lib/schemas/collections'
 
@@ -64,6 +65,19 @@ export async function updateCollection(
     return { success: true }
   } catch {
     return { success: false, error: 'Failed to update collection' }
+  }
+}
+
+export async function toggleCollectionFavorite(collectionId: string, isFavorite: boolean): Promise<MutateResult> {
+  const session = await auth()
+  if (!session?.user?.id) return { success: false, error: 'Unauthorized' }
+
+  try {
+    await dbToggleCollectionFavorite(session.user.id, collectionId, isFavorite)
+    revalidatePath('/', 'layout')
+    return { success: true }
+  } catch {
+    return { success: false, error: 'Failed to update favorite' }
   }
 }
 

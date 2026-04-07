@@ -176,6 +176,14 @@ export async function deleteItem(userId: string, itemId: string) {
   })
 }
 
+export async function toggleItemFavorite(userId: string, itemId: string, isFavorite: boolean) {
+  return prisma.item.update({
+    where: { id: itemId, userId },
+    data: { isFavorite },
+    select: itemSelect,
+  })
+}
+
 export async function getFavoriteItems(userId: string) {
   return prisma.item.findMany({
     where: { userId, isFavorite: true },

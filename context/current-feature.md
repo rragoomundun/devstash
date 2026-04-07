@@ -1,16 +1,23 @@
-# Current Feature
+# Current Feature: Favorite Toggle
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- Favorite toggle button in ItemDrawer action bar (star icon, fills yellow when active)
+- Favorite toggle on collection page header (star icon button)
+- Favorite toggle on collection cards (dashboard + /collections list)
+- Toggling persists to the database immediately (server action)
+- UI reflects the new state optimistically or after revalidation
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- Item isFavorite already exists on the Item model; Collection isFavorite already exists on Collection model
+- Reuse existing server action patterns (return { success, error }, revalidatePath)
+- Collection favorite is currently UI-only — wire it up to the DB
+- Keep toggle visually consistent: outlined star = not favorite, filled yellow star = favorite
 
 ## History
 

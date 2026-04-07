@@ -253,6 +253,14 @@ export async function getCollectionsForSearch(userId: string) {
   }).then(cols => cols.map(c => ({ id: c.id, name: c.name, itemCount: c._count.items })))
 }
 
+export async function toggleCollectionFavorite(userId: string, collectionId: string, isFavorite: boolean) {
+  return prisma.collection.update({
+    where: { id: collectionId, userId },
+    data: { isFavorite },
+    select: { id: true, isFavorite: true },
+  })
+}
+
 export async function getFavoriteCollections(userId: string) {
   const rows = await prisma.collection.findMany({
     where: { userId, isFavorite: true },

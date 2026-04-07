@@ -5,7 +5,6 @@ import { Star } from 'lucide-react'
 import { redirect } from 'next/navigation'
 import { auth } from '@/auth'
 import { getAllCollections } from '@/lib/db/collections'
-import { CollectionCardMenu } from '@/components/dashboard/CollectionCardMenu'
 import { Pagination } from '@/components/dashboard/Pagination'
 import { parsePage, pageCount, COLLECTIONS_PER_PAGE } from '@/lib/pagination'
 
@@ -14,16 +13,11 @@ type Collection = Awaited<ReturnType<typeof getAllCollections>>['collections'][n
 function CollectionCard({ col }: { col: Collection }) {
   return (
     <div
-      className="group relative rounded-lg border border-border bg-card hover:bg-muted/30 transition-colors"
+      className="rounded-lg border border-border bg-card hover:bg-muted/30 transition-colors"
       style={{ borderLeftColor: col.dominantColor, borderLeftWidth: 2 }}
     >
       <Link href={`/collections/${col.id}`} className="flex flex-col gap-2 p-4">
-        <div className="flex items-start justify-between gap-2">
-          <p className="font-semibold text-sm leading-tight">{col.name}</p>
-          {col.isFavorite && (
-            <Star className="size-3.5 shrink-0 fill-amber-400 text-amber-400 mt-0.5" />
-          )}
-        </div>
+        <p className="font-semibold text-sm leading-tight">{col.name}</p>
 
         {col.description && (
           <p className="text-xs text-muted-foreground line-clamp-2">{col.description}</p>
@@ -43,12 +37,13 @@ function CollectionCard({ col }: { col: Collection }) {
           <span className="text-xs text-muted-foreground ml-auto">
             {col.itemCount} {col.itemCount === 1 ? 'item' : 'items'}
           </span>
+          {col.isFavorite && (
+            <Star className="size-3 shrink-0 fill-amber-400 text-amber-400" />
+          )}
         </div>
       </Link>
 
-      <div className="absolute top-2 right-2">
-        <CollectionCardMenu collection={col} />
-      </div>
+
     </div>
   )
 }

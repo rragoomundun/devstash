@@ -20,7 +20,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { toast } from 'sonner'
-import { deleteCollection } from '@/actions/collections'
+import { deleteCollection, toggleCollectionFavorite } from '@/actions/collections'
 import { EditCollectionDialog } from '@/components/dashboard/EditCollectionDialog'
 
 interface CollectionCardMenuProps {
@@ -32,6 +32,21 @@ export function CollectionCardMenu({ collection }: CollectionCardMenuProps) {
   const [editOpen, setEditOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [isDeleting, startDelete] = useTransition()
+  const [isFavorite, setIsFavorite] = useState(collection.isFavorite)
+  const [isTogglingFavorite, startToggleFavorite] = useTransition()
+
+  function handleToggleFavorite() {
+    startToggleFavorite(async () => {
+      const next = !isFavorite
+      const result = await toggleCollectionFavorite(collection.id, next)
+      if (!result.success) {
+        toast.error(result.error)
+        return
+      }
+      setIsFavorite(next)
+      router.refresh()
+    })
+  }
 
   function handleDelete() {
     startDelete(async () => {
@@ -60,9 +75,9 @@ export function CollectionCardMenu({ collection }: CollectionCardMenuProps) {
             <Pencil className="size-3.5 mr-2" />
             Edit
           </DropdownMenuItem>
-          <DropdownMenuItem disabled>
-            <Star className={`size-3.5 mr-2 ${collection.isFavorite ? 'fill-amber-400 text-amber-400' : ''}`} />
-            Favorite
+          <DropdownMenuItem onSelect={handleToggleFavorite} disabled={isTogglingFavorite}>
+            <Star className={`size-3.5 mr-2 ${isFavorite ? 'fill-amber-400 text-amber-400' : ''}`} />
+            {isFavorite ? 'Unfavorite' : 'Favorite'}
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => setDeleteOpen(true)}

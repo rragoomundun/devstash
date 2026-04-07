@@ -14,7 +14,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { toast } from 'sonner'
-import { deleteCollection } from '@/actions/collections'
+import { deleteCollection, toggleCollectionFavorite } from '@/actions/collections'
 import { EditCollectionDialog } from '@/components/dashboard/EditCollectionDialog'
 
 interface CollectionActionsProps {
@@ -28,6 +28,21 @@ export function CollectionActions({ collection, redirectOnDelete }: CollectionAc
   const [editOpen, setEditOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [isDeleting, startDelete] = useTransition()
+  const [isFavorite, setIsFavorite] = useState(collection.isFavorite)
+  const [isTogglingFavorite, startToggleFavorite] = useTransition()
+
+  function handleToggleFavorite() {
+    startToggleFavorite(async () => {
+      const next = !isFavorite
+      const result = await toggleCollectionFavorite(collection.id, next)
+      if (!result.success) {
+        toast.error(result.error)
+        return
+      }
+      setIsFavorite(next)
+      router.refresh()
+    })
+  }
 
   function handleDelete() {
     startDelete(async () => {
@@ -57,12 +72,13 @@ export function CollectionActions({ collection, redirectOnDelete }: CollectionAc
           Edit
         </button>
         <button
-          className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-          title="Favorite collection"
-          disabled
+          className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors disabled:opacity-50"
+          title={isFavorite ? 'Unfavorite' : 'Favorite'}
+          onClick={handleToggleFavorite}
+          disabled={isTogglingFavorite}
         >
-          <Star className={`size-3.5 ${collection.isFavorite ? 'fill-amber-400 text-amber-400' : ''}`} />
-          Favorite
+          <Star className={`size-3.5 ${isFavorite ? 'fill-amber-400 text-amber-400' : ''}`} />
+          {isFavorite ? 'Favorited' : 'Favorite'}
         </button>
         <button
           onClick={() => setDeleteOpen(true)}

@@ -35,7 +35,7 @@ import {
   FileText,
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { updateItem, deleteItem } from '@/actions/items'
+import { updateItem, deleteItem, toggleItemFavorite } from '@/actions/items'
 import type { ItemDetail } from '@/lib/db/items'
 import { useItemDetail } from '@/hooks/useItemDetail'
 import { TEXT_CONTENT_TYPES, LANGUAGE_TYPES } from '@/lib/item-type-utils'
@@ -126,6 +126,20 @@ export function ItemDrawer({ itemId, open, onOpenChange, collections }: ItemDraw
   const [isSaving, setIsSaving] = useState(false)
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [isTogglingFavorite, setIsTogglingFavorite] = useState(false)
+
+  async function handleToggleFavorite() {
+    if (!item) return
+    setIsTogglingFavorite(true)
+    const result = await toggleItemFavorite(item.id, !item.isFavorite)
+    setIsTogglingFavorite(false)
+    if (!result.success) {
+      toast.error(result.error)
+      return
+    }
+    setItem({ ...item, isFavorite: !item.isFavorite })
+    router.refresh()
+  }
   const [editState, setEditState] = useState<EditState>({
     title: '',
     description: '',
@@ -294,8 +308,10 @@ export function ItemDrawer({ itemId, open, onOpenChange, collections }: ItemDraw
               ) : (
                 <>
                   <button
-                    className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                    className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:bg-muted transition-colors disabled:opacity-50"
                     title={item.isFavorite ? 'Unfavorite' : 'Favorite'}
+                    onClick={handleToggleFavorite}
+                    disabled={isTogglingFavorite}
                   >
                     <Star
                       className={`size-3.5 ${item.isFavorite ? 'fill-amber-400 text-amber-400' : ''}`}
