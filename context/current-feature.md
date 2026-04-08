@@ -1,29 +1,16 @@
-# Current Feature: Homepage Mockup
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- `prototypes/homepage/index.html`, `styles.css`, `script.js` created
-- Fixed navbar with logo, links, Sign In / Get Started buttons; goes opaque on scroll
-- Hero section: chaos container (floating bouncing icons, mouse repel) → pulsing arrow → dashboard preview mockup
-- Hero text: gradient headline, subheadline, CTA buttons
-- Features section: 6 cards (Snippets, Prompts, Search, Commands, Files, Collections) with type accent colors
-- AI section: Pro badge + checklist left, code editor mockup with AI tag demo right
-- Pricing section: Free vs Pro cards, yearly/monthly toggle, Pro highlighted with "Most Popular"
-- CTA section and footer with logo, link columns, current-year copyright
-- Scroll fade-in animations on all sections
-- Responsive: chaos/arrow/dashboard stack vertically on mobile, arrow rotates 90°
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- Output is a standalone prototype in `prototypes/homepage/` — not part of the Next.js app
-- Item type accent colors: Snippet #3b82f6, Prompt #f59e0b, Command #06b6d4, Note #22c55e, File #64748b, Image #ec4899, URL #6366f1
-- Chaos icons: Notion, GitHub, Slack, VS Code logos + Browser tabs, Terminal, Text file, Bookmark icons — animate with requestAnimationFrame, bounce off walls, repel from mouse
-- Dark theme throughout
-- Pricing: Free $0 (50 items, 3 collections) / Pro $8/mo or $72/yr (unlimited, AI features)
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -70,3 +57,4 @@ In Progress
 - **2026-04-07** — Favorite Toggle: toggleItemFavorite/toggleCollectionFavorite DB functions + server actions; ItemDrawer favorite button wired up; CollectionActions (collection page header) wired up; CollectionCardMenu wired up; favorite star moved to bottom-right of collection cards on dashboard and /collections; collection card dropdown menus removed from both dashboard and /collections page
 - **2026-04-07** — Favorites Sorting: per-section client-side sort controls on /favorites; items sortable by Date/Name/Type, collections by Date/Name; default Date (newest first); SortToggle inline in section header; TopBar star icon filled yellow
 - **2026-04-07** — Pinned Items: toggleItemPin DB function + server action; Pin button in ItemDrawer wired with optimistic UI and toast; pinned items sort to top of /items/[type] listings; pin indicator on ItemCard and ImageCard; PinnedItems dashboard section renders image types as ImageCard
+- **2026-04-08** — Homepage Mockup: standalone prototype in prototypes/homepage/ (index.html, styles.css, script.js); dark theme; navbar with scroll opacity; hero with chaos container (8 DOM-based floating SVG icons matching devstash.io physics: bounce, repel, rotate, scale) → pulsing arrow → dashboard mockup; features grid; AI section with code editor mockup; pricing with monthly/yearly toggle; CTA; footer; scroll fade-ins; responsive mobile layout
