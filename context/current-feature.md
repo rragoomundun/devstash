@@ -1,16 +1,29 @@
-# Current Feature
+# Current Feature: Homepage Mockup
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- `prototypes/homepage/index.html`, `styles.css`, `script.js` created
+- Fixed navbar with logo, links, Sign In / Get Started buttons; goes opaque on scroll
+- Hero section: chaos container (floating bouncing icons, mouse repel) → pulsing arrow → dashboard preview mockup
+- Hero text: gradient headline, subheadline, CTA buttons
+- Features section: 6 cards (Snippets, Prompts, Search, Commands, Files, Collections) with type accent colors
+- AI section: Pro badge + checklist left, code editor mockup with AI tag demo right
+- Pricing section: Free vs Pro cards, yearly/monthly toggle, Pro highlighted with "Most Popular"
+- CTA section and footer with logo, link columns, current-year copyright
+- Scroll fade-in animations on all sections
+- Responsive: chaos/arrow/dashboard stack vertically on mobile, arrow rotates 90°
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- Output is a standalone prototype in `prototypes/homepage/` — not part of the Next.js app
+- Item type accent colors: Snippet #3b82f6, Prompt #f59e0b, Command #06b6d4, Note #22c55e, File #64748b, Image #ec4899, URL #6366f1
+- Chaos icons: Notion, GitHub, Slack, VS Code logos + Browser tabs, Terminal, Text file, Bookmark icons — animate with requestAnimationFrame, bounce off walls, repel from mouse
+- Dark theme throughout
+- Pricing: Free $0 (50 items, 3 collections) / Pro $8/mo or $72/yr (unlimited, AI features)
 
 ## History
 
