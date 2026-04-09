@@ -1,32 +1,16 @@
-# Current Feature: Homepage
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- Public marketing homepage at `/` (outside `(app)` group, no sidebar/topbar)
-- Navbar with scroll opacity, mobile hamburger menu, Sign In and Get Started links
-- Hero section with `ChaosAnimation` (bouncing SVG icons + mouse repel) and static `DashboardMockup`
-- Features grid (6 cards with type-colored icons)
-- AI section with Pro badge, checklist, and static code editor mockup
-- Pricing section with monthly/yearly toggle (client island), Free and Pro cards
-- CTA section and footer with correct links
-- All buttons/links point to correct routes (`/sign-in`, `/register`, `#features`, `#pricing`)
-- Scroll fade-in animations via `IntersectionObserver`
-- Responsive (mobile: stacked layout, arrow rotates 90°)
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- Spec: `context/features/homepage-spec.md`
-- Component structure lives in `src/app/(homepage)/components/`
-- Minimal `src/app/layout.tsx` — no sidebar or topbar
-- `ChaosAnimation`: rAF loop, `ResizeObserver` re-init, cleanup on unmount
-- `PricingToggle`: client island only, pricing cards are server-rendered
-- Copyright year can use `new Date().getFullYear()` server-side
-- Dark background (`bg-background`) to match app theme
-- Replaces any existing root redirect
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -74,3 +58,4 @@ In Progress
 - **2026-04-07** — Favorites Sorting: per-section client-side sort controls on /favorites; items sortable by Date/Name/Type, collections by Date/Name; default Date (newest first); SortToggle inline in section header; TopBar star icon filled yellow
 - **2026-04-07** — Pinned Items: toggleItemPin DB function + server action; Pin button in ItemDrawer wired with optimistic UI and toast; pinned items sort to top of /items/[type] listings; pin indicator on ItemCard and ImageCard; PinnedItems dashboard section renders image types as ImageCard
 - **2026-04-08** — Homepage Mockup: standalone prototype in prototypes/homepage/ (index.html, styles.css, script.js); dark theme; navbar with scroll opacity; hero with chaos container (8 DOM-based floating SVG icons matching devstash.io physics: bounce, repel, rotate, scale) → pulsing arrow → dashboard mockup; features grid; AI section with code editor mockup; pricing with monthly/yearly toggle; CTA; footer; scroll fade-ins; responsive mobile layout
+- **2026-04-09** — Homepage: public `/` marketing page converted from prototype to Next.js; Navbar (scroll opacity, mobile hamburger, Sign In/Get Started links); Hero with ChaosAnimation (rAF + mouse repel, ResizeObserver) and DashboardMockup; FeaturesSection (6 type-colored cards); AiSection (Pro badge, checklist, code editor mockup); PricingSection (monthly/yearly toggle client island, Free/Pro cards); CtaSection; Footer; ScrollFadeIn IntersectionObserver wrapper; statically prerendered
