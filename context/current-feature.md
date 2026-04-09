@@ -1,22 +1,16 @@
-# Current Feature: TopBar Mobile UX
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- On mobile, hide the "DevStash" title text and show "DS" instead
-- Replace the separate "New Item" and "New Collection" buttons with a single `+` icon button on mobile
-- Clicking `+` opens a dropdown with two options: "New Item" and "New Collection"
-- Desktop layout remains unchanged
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- Changes are in `src/components/dashboard/TopBar.tsx`
-- Use existing shadcn DropdownMenu for the `+` dropdown
-- "New Item" calls `openCreate()`, "New Collection" calls `openCreateCollection()` — same as the existing buttons
-- The "DS" monogram replaces the full "DevStash" text only on small screens (`sm:hidden` / `hidden sm:inline` pattern)
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -65,3 +59,4 @@ In Progress
 - **2026-04-07** — Pinned Items: toggleItemPin DB function + server action; Pin button in ItemDrawer wired with optimistic UI and toast; pinned items sort to top of /items/[type] listings; pin indicator on ItemCard and ImageCard; PinnedItems dashboard section renders image types as ImageCard
 - **2026-04-08** — Homepage Mockup: standalone prototype in prototypes/homepage/ (index.html, styles.css, script.js); dark theme; navbar with scroll opacity; hero with chaos container (8 DOM-based floating SVG icons matching devstash.io physics: bounce, repel, rotate, scale) → pulsing arrow → dashboard mockup; features grid; AI section with code editor mockup; pricing with monthly/yearly toggle; CTA; footer; scroll fade-ins; responsive mobile layout
 - **2026-04-09** — Homepage: public `/` marketing page converted from prototype to Next.js; Navbar (scroll opacity, mobile hamburger, Sign In/Get Started links); Hero with ChaosAnimation (rAF + mouse repel, ResizeObserver) and DashboardMockup; FeaturesSection (6 type-colored cards); AiSection (Pro badge, checklist, code editor mockup); PricingSection (monthly/yearly toggle client island, Free/Pro cards); CtaSection; Footer; ScrollFadeIn IntersectionObserver wrapper; statically prerendered
+- **2026-04-09** — TopBar Mobile UX: "DevStash" title replaced with "DS" monogram on small screens; separate New Item/New Collection buttons replaced with a single + icon dropdown on mobile (DropdownMenuItem onClick wired to openCreate/openCreateCollection); desktop layout unchanged
