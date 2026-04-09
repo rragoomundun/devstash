@@ -128,6 +128,16 @@
     }
 }
 
+/* Homepage arrow pulse animation */
+@keyframes pulse-arrow {
+  0%, 100% { opacity: 0.6; transform: scaleX(1); }
+  50% { opacity: 1; transform: scaleX(1.1); }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 /* Markdown preview styles */
 .markdown-preview {
   color: #e4e4e7;

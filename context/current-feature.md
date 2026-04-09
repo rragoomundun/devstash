@@ -1,16 +1,32 @@
-# Current Feature
+# Current Feature: Homepage
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- Public marketing homepage at `/` (outside `(app)` group, no sidebar/topbar)
+- Navbar with scroll opacity, mobile hamburger menu, Sign In and Get Started links
+- Hero section with `ChaosAnimation` (bouncing SVG icons + mouse repel) and static `DashboardMockup`
+- Features grid (6 cards with type-colored icons)
+- AI section with Pro badge, checklist, and static code editor mockup
+- Pricing section with monthly/yearly toggle (client island), Free and Pro cards
+- CTA section and footer with correct links
+- All buttons/links point to correct routes (`/sign-in`, `/register`, `#features`, `#pricing`)
+- Scroll fade-in animations via `IntersectionObserver`
+- Responsive (mobile: stacked layout, arrow rotates 90°)
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- Spec: `context/features/homepage-spec.md`
+- Component structure lives in `src/app/(homepage)/components/`
+- Minimal `src/app/layout.tsx` — no sidebar or topbar
+- `ChaosAnimation`: rAF loop, `ResizeObserver` re-init, cleanup on unmount
+- `PricingToggle`: client island only, pricing cards are server-rendered
+- Copyright year can use `new Date().getFullYear()` server-side
+- Dark background (`bg-background`) to match app theme
+- Replaces any existing root redirect
 
 ## History
 
