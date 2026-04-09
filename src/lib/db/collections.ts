@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma'
 import { itemSelect } from '@/lib/db/items'
 import { COLLECTIONS_PER_PAGE, DASHBOARD_COLLECTIONS_LIMIT, ITEMS_PER_PAGE } from '@/lib/pagination'
+import { isOverCollectionLimit } from '@/lib/usage-limits'
 
 const TYPE_ORDER = ['Snippet', 'Prompt', 'Command', 'Note', 'Link', 'File', 'Image']
 
@@ -231,6 +232,14 @@ export async function deleteCollection(userId: string, collectionId: string) {
 }
 
 export async function createCollection(userId: string, data: { name: string; description: string | null }) {
+  const [collectionCount, user] = await Promise.all([
+    prisma.collection.count({ where: { userId } }),
+    prisma.user.findUnique({ where: { id: userId }, select: { isPro: true } }),
+  ])
+  if (isOverCollectionLimit(collectionCount, user?.isPro ?? false)) {
+    throw new Error('Free tier is limited to 3 collections. Upgrade to Pro for unlimited collections.')
+  }
+
   return prisma.collection.create({
     data: {
       name: data.name,

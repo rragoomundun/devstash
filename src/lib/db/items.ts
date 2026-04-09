@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import { ITEMS_PER_PAGE, DASHBOARD_RECENT_ITEMS_LIMIT } from '@/lib/pagination'
+import { isOverItemLimit } from '@/lib/usage-limits'
 
 export const itemSelect = {
   id: true,
@@ -91,6 +92,14 @@ export interface CreateItemData {
 }
 
 export async function createItem(userId: string, data: CreateItemData) {
+  const [itemCount, user] = await Promise.all([
+    prisma.item.count({ where: { userId } }),
+    prisma.user.findUnique({ where: { id: userId }, select: { isPro: true } }),
+  ])
+  if (isOverItemLimit(itemCount, user?.isPro ?? false)) {
+    throw new Error('Free tier is limited to 50 items. Upgrade to Pro for unlimited items.')
+  }
+
   const contentType = data.url ? 'URL' : data.fileUrl ? 'FILE' : 'TEXT'
   return prisma.item.create({
     data: {
