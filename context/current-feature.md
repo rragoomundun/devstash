@@ -1,16 +1,22 @@
-# Current Feature
+# Current Feature: TopBar Mobile UX
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- On mobile, hide the "DevStash" title text and show "DS" instead
+- Replace the separate "New Item" and "New Collection" buttons with a single `+` icon button on mobile
+- Clicking `+` opens a dropdown with two options: "New Item" and "New Collection"
+- Desktop layout remains unchanged
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- Changes are in `src/components/dashboard/TopBar.tsx`
+- Use existing shadcn DropdownMenu for the `+` dropdown
+- "New Item" calls `openCreate()`, "New Collection" calls `openCreateCollection()` — same as the existing buttons
+- The "DS" monogram replaces the full "DevStash" text only on small screens (`sm:hidden` / `hidden sm:inline` pattern)
 
 ## History
 
