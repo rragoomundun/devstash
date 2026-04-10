@@ -30,7 +30,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   return (
     <EditorPreferencesProvider initialPreferences={editorPreferences}>
-      <ItemsProvider itemTypes={availableTypes} collections={sidebarData.collections} searchData={searchData}>
+      <ItemsProvider itemTypes={availableTypes} collections={sidebarData.collections} searchData={searchData} isPro={session.user.isPro}>
         <DashboardShell sidebarData={sidebarData}>
           {children}
         </DashboardShell>
