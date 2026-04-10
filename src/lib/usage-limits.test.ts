@@ -33,8 +33,8 @@ describe('isOverCollectionLimit', () => {
     expect(isOverCollectionLimit(FREE_COLLECTION_LIMIT - 1, false)).toBe(false)
   })
 
-  it('returns false at exactly the limit boundary (3 is the last allowed)', () => {
-    expect(isOverCollectionLimit(FREE_COLLECTION_LIMIT, false)).toBe(false)
+  it('returns true when at the limit (3 collections, free tier is full)', () => {
+    expect(isOverCollectionLimit(FREE_COLLECTION_LIMIT, false)).toBe(true)
   })
 
   it('returns true when over the free collection limit (4 collections)', () => {

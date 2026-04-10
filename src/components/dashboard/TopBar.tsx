@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Search, Plus, Menu, Star, FolderPlus, FilePlus } from 'lucide-react'
+import { Search, Plus, Menu, Star, FolderPlus, FilePlus, Zap } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -16,7 +16,7 @@ interface TopBarProps {
 }
 
 export function TopBar({ onMenuClick }: TopBarProps) {
-  const { openCreate, openCreateCollection, openSearch } = useItems()
+  const { isPro, openCreate, openCreateCollection, openSearch } = useItems()
 
   return (
     <header className="flex items-center gap-3 border-b border-border px-4 h-14 shrink-0">
@@ -54,6 +54,13 @@ export function TopBar({ onMenuClick }: TopBarProps) {
         >
           <Star className="size-4 fill-yellow-400 text-yellow-400" />
         </Link>
+
+        {!isPro && (
+          <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground hidden sm:inline-flex" render={<Link href="/upgrade" />}>
+            <Zap className="size-3.5" />
+            Upgrade
+          </Button>
+        )}
 
         {/* Desktop buttons */}
         <Button variant="outline" size="sm" className="gap-1.5 hidden sm:inline-flex" onClick={openCreateCollection}>

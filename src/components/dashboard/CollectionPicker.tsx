@@ -21,10 +21,10 @@ interface CollectionPickerProps {
 }
 
 export function CollectionPicker({ collections, selectedIds, onChange }: CollectionPickerProps) {
-  if (collections.length === 0) return null
-
   const triggerRef = useRef<HTMLButtonElement>(null)
   const [width, setWidth] = useState<number | undefined>()
+
+  if (collections.length === 0) return null
 
   function toggle(id: string) {
     onChange(

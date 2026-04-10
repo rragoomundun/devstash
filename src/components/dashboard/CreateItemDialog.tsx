@@ -77,6 +77,7 @@ export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId,
 
   useEffect(() => {
     if (open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedTypeId(initialTypeId ?? itemTypes[0]?.id ?? '')
       setSelectedCollectionIds([])
     }

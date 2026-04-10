@@ -9,6 +9,7 @@ export function useItemDetail(itemId: string | null, open: boolean) {
 
   useEffect(() => {
     if (!itemId || !open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setItem(null)
       setError(false)
       return

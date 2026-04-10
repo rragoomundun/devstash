@@ -29,6 +29,7 @@ export function EditCollectionDialog({ open, onOpenChange, collection }: EditCol
 
   useEffect(() => {
     if (open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setName(collection.name)
       setDescription(collection.description ?? '')
     }

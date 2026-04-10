@@ -1,12 +1,14 @@
 'use client'
 
 import { createContext, useContext, useState, useCallback } from 'react'
+import { toast } from 'sonner'
 import { ItemDrawer } from './ItemDrawer'
 import { CreateItemDialog } from './CreateItemDialog'
 import { CreateCollectionDialog } from './CreateCollectionDialog'
 import { CommandPalette } from './CommandPalette'
 import type { SearchItem } from '@/lib/db/items'
 import { PRO_TYPES } from '@/lib/item-type-utils'
+import { FREE_COLLECTION_LIMIT } from '@/lib/usage-limits'
 
 interface ItemType {
   id: string
@@ -32,6 +34,7 @@ interface SearchData {
 }
 
 interface ItemsContextValue {
+  isPro: boolean
   openItem: (id: string) => void
   openCreate: (typeId?: string) => void
   openCreateCollection: () => void
@@ -74,8 +77,12 @@ export function ItemsProvider({ children, itemTypes, collections, searchData, is
   }, [])
 
   const openCreateCollection = useCallback(() => {
+    if (!isPro && collections.length >= FREE_COLLECTION_LIMIT) {
+      toast.error(`Free plan is limited to ${FREE_COLLECTION_LIMIT} collections. Upgrade to Pro for unlimited collections.`)
+      return
+    }
     setCreateCollectionOpen(true)
-  }, [])
+  }, [isPro, collections.length])
 
   const openSearch = useCallback(() => {
     setSearchOpen(true)
@@ -87,7 +94,7 @@ export function ItemsProvider({ children, itemTypes, collections, searchData, is
   }, [])
 
   return (
-    <ItemsContext value={{ openItem, openCreate, openCreateCollection, openSearch }}>
+    <ItemsContext value={{ isPro, openItem, openCreate, openCreateCollection, openSearch }}>
       {children}
       <ItemDrawer itemId={selectedItemId} open={drawerOpen} onOpenChange={handleDrawerOpenChange} collections={collections} />
       <CreateItemDialog open={createOpen} onOpenChange={setCreateOpen} itemTypes={dialogTypes} initialTypeId={preselectedTypeId} collections={collections} />

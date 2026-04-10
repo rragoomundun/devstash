@@ -8,5 +8,5 @@ export function isOverItemLimit(count: number, isPro: boolean): boolean {
 
 export function isOverCollectionLimit(count: number, isPro: boolean): boolean {
   if (isPro) return false
-  return count > FREE_COLLECTION_LIMIT
+  return count >= FREE_COLLECTION_LIMIT
 }

@@ -36,7 +36,7 @@ export default async function ItemsPage({
   if (!typeName) notFound()
 
   if (!session.user.isPro && (slug === 'files' || slug === 'images')) {
-    redirect('/settings?upgrade=true')
+    redirect('/upgrade')
   }
 
   const { page: pageParam } = await searchParams

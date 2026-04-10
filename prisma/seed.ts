@@ -60,11 +60,12 @@ async function main() {
       console.log("  Demo user already exists")
     }
 
-    // Skip collections if already seeded
+    // Reset demo user's content (idempotent reseed)
     const existingCollections = await prisma.collection.count({ where: { userId: user.id } })
     if (existingCollections > 0) {
-      console.log(`  Collections already seeded (${existingCollections})`)
-      return
+      await prisma.item.deleteMany({ where: { userId: user.id } })
+      await prisma.collection.deleteMany({ where: { userId: user.id } })
+      console.log("  Reset demo user's existing content")
     }
 
     // ── React Patterns ─────────────────────────────────────────────────────
@@ -285,14 +286,71 @@ Code to refactor:
     })
     console.log(`✓ Created "AI Workflows" (3 prompts)`)
 
-    // ── DevOps ─────────────────────────────────────────────────────────────
+    // ── Dev Toolkit ────────────────────────────────────────────────────────
     await prisma.collection.create({
       data: {
-        name: "DevOps",
-        description: "Infrastructure and deployment resources",
+        name: "Dev Toolkit",
+        description: "Shell commands, Docker, and essential developer links",
         userId: user.id,
         items: {
           create: [
+            {
+              item: {
+                create: {
+                  title: "Git branch cleanup",
+                  description: "Delete merged local branches and prune remote tracking refs",
+                  contentType: "TEXT",
+                  userId: user.id,
+                  itemTypeId: T.command,
+                  content: `# Delete all local branches already merged into main
+git branch --merged main | grep -v '\\* main' | xargs git branch -d
+
+# Prune stale remote-tracking refs
+git fetch --prune
+
+# Show branches not yet merged
+git branch --no-merged main`,
+                },
+              },
+            },
+            {
+              item: {
+                create: {
+                  title: "Kill process on port",
+                  description: "Find and kill whatever is listening on a given port",
+                  contentType: "TEXT",
+                  userId: user.id,
+                  itemTypeId: T.command,
+                  content: `PORT=3000
+
+# Find PID
+lsof -ti tcp:$PORT
+
+# Kill it
+kill -9 $(lsof -ti tcp:$PORT)
+
+# One-liner
+lsof -ti tcp:$PORT | xargs kill -9`,
+                },
+              },
+            },
+            {
+              item: {
+                create: {
+                  title: "Docker build & push to registry",
+                  description: "Build image, tag, and push to container registry",
+                  contentType: "TEXT",
+                  userId: user.id,
+                  itemTypeId: T.command,
+                  content: `IMAGE=ghcr.io/USERNAME/APP_NAME
+TAG=$(git rev-parse --short HEAD)
+
+docker build -t $IMAGE:$TAG -t $IMAGE:latest .
+docker push $IMAGE:$TAG
+docker push $IMAGE:latest`,
+                },
+              },
+            },
             {
               item: {
                 create: {
@@ -325,158 +383,6 @@ CMD ["node", "dist/index.js"]`,
             {
               item: {
                 create: {
-                  title: "Docker build & push to registry",
-                  description: "Build image, tag, and push to container registry",
-                  contentType: "TEXT",
-                  userId: user.id,
-                  itemTypeId: T.command,
-                  content: `IMAGE=ghcr.io/USERNAME/APP_NAME
-TAG=$(git rev-parse --short HEAD)
-
-docker build -t $IMAGE:$TAG -t $IMAGE:latest .
-docker push $IMAGE:$TAG
-docker push $IMAGE:latest`,
-                },
-              },
-            },
-            {
-              item: {
-                create: {
-                  title: "Docker Documentation",
-                  description: "Official Docker docs — references, guides, and CLI reference",
-                  contentType: "URL",
-                  url: "https://docs.docker.com",
-                  userId: user.id,
-                  itemTypeId: T.link,
-                },
-              },
-            },
-            {
-              item: {
-                create: {
-                  title: "GitHub Actions Documentation",
-                  description: "Automate workflows with GitHub Actions — CI/CD, deployments, and more",
-                  contentType: "URL",
-                  url: "https://docs.github.com/en/actions",
-                  userId: user.id,
-                  itemTypeId: T.link,
-                },
-              },
-            },
-          ],
-        },
-      },
-    })
-    console.log(`✓ Created "DevOps" (1 snippet, 1 command, 2 links)`)
-
-    // ── Terminal Commands ──────────────────────────────────────────────────
-    await prisma.collection.create({
-      data: {
-        name: "Terminal Commands",
-        description: "Useful shell commands for everyday development",
-        userId: user.id,
-        items: {
-          create: [
-            {
-              item: {
-                create: {
-                  title: "Git branch cleanup",
-                  description: "Delete merged local branches and prune remote tracking refs",
-                  contentType: "TEXT",
-                  userId: user.id,
-                  itemTypeId: T.command,
-                  content: `# Delete all local branches already merged into main
-git branch --merged main | grep -v '\\* main' | xargs git branch -d
-
-# Prune stale remote-tracking refs
-git fetch --prune
-
-# Show branches not yet merged
-git branch --no-merged main`,
-                },
-              },
-            },
-            {
-              item: {
-                create: {
-                  title: "Docker system cleanup",
-                  description: "Free up disk space by removing unused Docker resources",
-                  contentType: "TEXT",
-                  userId: user.id,
-                  itemTypeId: T.command,
-                  content: `# Remove stopped containers, dangling images, unused networks
-docker system prune -f
-
-# Also remove unused volumes (caution: data loss)
-docker system prune -f --volumes
-
-# Remove all unused images (not just dangling)
-docker image prune -a -f`,
-                },
-              },
-            },
-            {
-              item: {
-                create: {
-                  title: "Kill process on port",
-                  description: "Find and kill whatever is listening on a given port",
-                  contentType: "TEXT",
-                  userId: user.id,
-                  itemTypeId: T.command,
-                  content: `PORT=3000
-
-# Find PID
-lsof -ti tcp:$PORT
-
-# Kill it
-kill -9 $(lsof -ti tcp:$PORT)
-
-# One-liner
-lsof -ti tcp:$PORT | xargs kill -9`,
-                },
-              },
-            },
-            {
-              item: {
-                create: {
-                  title: "npm / pnpm utilities",
-                  description: "Handy package manager commands for auditing and cleaning",
-                  contentType: "TEXT",
-                  userId: user.id,
-                  itemTypeId: T.command,
-                  content: `# List outdated packages
-npm outdated
-pnpm outdated
-
-# Clean install (delete node_modules first)
-rm -rf node_modules && npm ci
-
-# Check for security vulnerabilities
-npm audit
-npm audit fix
-
-# List all installed package sizes (sorted)
-du -sh node_modules/* | sort -rh | head -20`,
-                },
-              },
-            },
-          ],
-        },
-      },
-    })
-    console.log(`✓ Created "Terminal Commands" (4 commands)`)
-
-    // ── Design Resources ───────────────────────────────────────────────────
-    await prisma.collection.create({
-      data: {
-        name: "Design Resources",
-        description: "UI/UX resources and references",
-        userId: user.id,
-        items: {
-          create: [
-            {
-              item: {
-                create: {
                   title: "Tailwind CSS Docs",
                   description: "Official Tailwind CSS documentation — utilities, configuration, and guides",
                   contentType: "URL",
@@ -501,22 +407,10 @@ du -sh node_modules/* | sort -rh | head -20`,
             {
               item: {
                 create: {
-                  title: "Material Design 3",
-                  description: "Google's open-source design system with components, guidelines, and tokens",
+                  title: "GitHub Actions Documentation",
+                  description: "Automate workflows with GitHub Actions — CI/CD, deployments, and more",
                   contentType: "URL",
-                  url: "https://m3.material.io",
-                  userId: user.id,
-                  itemTypeId: T.link,
-                },
-              },
-            },
-            {
-              item: {
-                create: {
-                  title: "Lucide Icons",
-                  description: "Beautiful & consistent icon library — open-source, MIT license",
-                  contentType: "URL",
-                  url: "https://lucide.dev/icons",
+                  url: "https://docs.github.com/en/actions",
                   userId: user.id,
                   itemTypeId: T.link,
                 },
@@ -526,7 +420,7 @@ du -sh node_modules/* | sort -rh | head -20`,
         },
       },
     })
-    console.log(`✓ Created "Design Resources" (4 links)`)
+    console.log(`✓ Created "Dev Toolkit" (2 commands, 1 snippet, 3 links)`)
 
     console.log("\nSeed complete.")
   } finally {

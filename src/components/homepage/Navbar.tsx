@@ -30,12 +30,12 @@ export function Navbar() {
         </Link>
 
         <div className="hidden md:flex gap-6 flex-1">
-          <a href="/#features" className="text-sm text-zinc-400 hover:text-foreground transition-colors">
+          <Link href="/#features" className="text-sm text-zinc-400 hover:text-foreground transition-colors">
             Features
-          </a>
-          <a href="/#pricing" className="text-sm text-zinc-400 hover:text-foreground transition-colors">
+          </Link>
+          <Link href="/#pricing" className="text-sm text-zinc-400 hover:text-foreground transition-colors">
             Pricing
-          </a>
+          </Link>
         </div>
 
         <div className="hidden md:flex items-center gap-2">
@@ -58,20 +58,20 @@ export function Navbar() {
 
       {menuOpen && (
         <div className="md:hidden px-6 pb-4 border-t border-white/8 flex flex-col gap-0.5">
-          <a
+          <Link
             href="/#features"
             className="py-2.5 text-sm text-zinc-400 border-b border-white/8"
             onClick={() => setMenuOpen(false)}
           >
             Features
-          </a>
-          <a
+          </Link>
+          <Link
             href="/#pricing"
             className="py-2.5 text-sm text-zinc-400 border-b border-white/8"
             onClick={() => setMenuOpen(false)}
           >
             Pricing
-          </a>
+          </Link>
           <Link
             href="/sign-in"
             className="py-2.5 text-sm text-zinc-400"

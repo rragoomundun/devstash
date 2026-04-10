@@ -17,6 +17,18 @@ function getFileIcon(fileName: string | null): LucideIcon {
   return FileText
 }
 
+function ItemTypeIcon({ contentType, fileName, typeIcon, typeColor }: {
+  contentType: string
+  fileName: string | null
+  typeIcon: string
+  typeColor: string
+}) {
+  const Icon = contentType === 'FILE' ? getFileIcon(fileName) : (ICON_MAP[typeIcon] ?? null)
+  if (!Icon) return null
+  // eslint-disable-next-line react-hooks/static-components
+  return <Icon className="size-3.5 shrink-0" style={{ color: typeColor }} />
+}
+
 function formatDate(date: Date) {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
@@ -25,7 +37,6 @@ export function ItemCard({ item, large }: { item: DashboardItem; large?: boolean
   const { openItem } = useItems()
   const { copied, copy } = useCopyToClipboard(item.content ?? item.url ?? '')
   const type = item.itemType
-  const Icon = item.contentType === 'FILE' ? getFileIcon(item.fileName) : (ICON_MAP[type.icon] ?? null)
   const tags = item.tags.map(t => t.tag.name)
 
   return (
@@ -42,7 +53,7 @@ export function ItemCard({ item, large }: { item: DashboardItem; large?: boolean
     >
       {/* Type badge */}
       <div className="flex items-center gap-1.5">
-        {Icon && <Icon className="size-3.5 shrink-0" style={{ color: type.color }} />}
+        <ItemTypeIcon contentType={item.contentType} fileName={item.fileName} typeIcon={type.icon} typeColor={type.color} />
         <span className="text-xs font-medium" style={{ color: type.color }}>
           {type.name}
         </span>
@@ -88,7 +99,7 @@ export function ItemCard({ item, large }: { item: DashboardItem; large?: boolean
       {/* Content preview */}
       {item.content && (
         <pre
-          className={cn('text-xs font-mono bg-muted/50 rounded p-2 overflow-hidden whitespace-pre-wrap break-all', large ? 'max-h-[140px]' : 'max-h-[68px]')}
+          className={cn('text-xs font-mono bg-muted/50 rounded p-2 overflow-hidden whitespace-pre-wrap break-all', large ? 'max-h-35' : 'max-h-17')}
         >
           {item.content}
         </pre>

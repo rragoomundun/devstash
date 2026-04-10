@@ -165,6 +165,7 @@ export function ItemDrawer({ itemId, open, onOpenChange, collections }: ItemDraw
   })
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsEditing(false)
   }, [itemId, open])
 
