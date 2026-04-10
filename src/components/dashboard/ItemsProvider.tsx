@@ -6,6 +6,7 @@ import { CreateItemDialog } from './CreateItemDialog'
 import { CreateCollectionDialog } from './CreateCollectionDialog'
 import { CommandPalette } from './CommandPalette'
 import type { SearchItem } from '@/lib/db/items'
+import { PRO_TYPES } from '@/lib/item-type-utils'
 
 interface ItemType {
   id: string
@@ -50,9 +51,11 @@ interface ItemsProviderProps {
   itemTypes: ItemType[]
   collections: Collection[]
   searchData: SearchData
+  isPro: boolean
 }
 
-export function ItemsProvider({ children, itemTypes, collections, searchData }: ItemsProviderProps) {
+export function ItemsProvider({ children, itemTypes, collections, searchData, isPro }: ItemsProviderProps) {
+  const dialogTypes = isPro ? itemTypes : itemTypes.filter(t => !PRO_TYPES.has(t.name))
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [createOpen, setCreateOpen] = useState(false)
@@ -87,7 +90,7 @@ export function ItemsProvider({ children, itemTypes, collections, searchData }: 
     <ItemsContext value={{ openItem, openCreate, openCreateCollection, openSearch }}>
       {children}
       <ItemDrawer itemId={selectedItemId} open={drawerOpen} onOpenChange={handleDrawerOpenChange} collections={collections} />
-      <CreateItemDialog open={createOpen} onOpenChange={setCreateOpen} itemTypes={itemTypes} initialTypeId={preselectedTypeId} collections={collections} />
+      <CreateItemDialog open={createOpen} onOpenChange={setCreateOpen} itemTypes={dialogTypes} initialTypeId={preselectedTypeId} collections={collections} />
       <CreateCollectionDialog open={createCollectionOpen} onOpenChange={setCreateCollectionOpen} />
       <CommandPalette open={searchOpen} onOpenChange={setSearchOpen} searchData={searchData} onOpenItem={openItem} />
     </ItemsContext>

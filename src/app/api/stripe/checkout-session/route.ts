@@ -31,8 +31,8 @@ export async function POST(request: Request) {
   const checkoutSession = await getStripe().checkout.sessions.create({
     mode: 'subscription',
     line_items: [{ price: priceId, quantity: 1 }],
-    success_url: `${appUrl}/settings?checkout=success`,
-    cancel_url: `${appUrl}/settings?checkout=cancelled`,
+    success_url: `${appUrl}/settings?upgraded=true`,
+    cancel_url: `${appUrl}/settings`,
     ...(user?.stripeCustomerId ? { customer: user.stripeCustomerId } : {}),
     metadata: { userId: session.user.id },
   })
