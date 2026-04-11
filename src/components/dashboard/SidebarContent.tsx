@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { signOut } from 'next-auth/react'
 import { Menu } from '@base-ui/react/menu'
@@ -28,6 +29,7 @@ function getTypeSlug(name: string) {
 
 export function SidebarContent({ collapsed, sidebarData }: { collapsed?: boolean; sidebarData: SidebarData }) {
   const [collectionsOpen, setCollectionsOpen] = useState(true)
+  const pathname = usePathname()
 
   const { itemTypes, favoriteCollections, recentCollections, user } = sidebarData
 
@@ -47,12 +49,17 @@ export function SidebarContent({ collapsed, sidebarData }: { collapsed?: boolean
               const Icon = ICON_MAP[type.icon]
               const isPro = PRO_TYPES.has(type.name)
               const slug = getTypeSlug(type.name)
+              const href = `/items/${slug}`
+              const isActive = pathname === href
               return (
                 <li key={type.id}>
                   <Link
-                    href={`/items/${slug}`}
+                    href={href}
                     className={cn(
-                      'flex items-center gap-2.5 px-2 py-1.5 rounded-md text-sm text-foreground/80 hover:text-foreground hover:bg-muted transition-colors',
+                      'flex items-center gap-2.5 px-2 py-1.5 rounded-md text-sm transition-colors',
+                      isActive
+                        ? 'bg-muted text-foreground font-medium'
+                        : 'text-foreground/80 hover:text-foreground hover:bg-muted',
                       collapsed && 'justify-center px-0'
                     )}
                     title={collapsed ? type.name : undefined}
@@ -107,7 +114,12 @@ export function SidebarContent({ collapsed, sidebarData }: { collapsed?: boolean
                         <li key={col.id}>
                           <Link
                             href={`/collections/${col.id}`}
-                            className="flex items-center gap-2 px-2 py-1.5 rounded-md text-sm text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
+                            className={cn(
+                              'flex items-center gap-2 px-2 py-1.5 rounded-md text-sm transition-colors',
+                              pathname === `/collections/${col.id}`
+                                ? 'bg-muted text-foreground font-medium'
+                                : 'text-foreground/80 hover:text-foreground hover:bg-muted'
+                            )}
                           >
                             <Star className="size-3.5 shrink-0 fill-amber-400 text-amber-400" />
                             <span className="flex-1 truncate">{col.name}</span>
@@ -131,7 +143,12 @@ export function SidebarContent({ collapsed, sidebarData }: { collapsed?: boolean
                         <li key={col.id}>
                           <Link
                             href={`/collections/${col.id}`}
-                            className="flex items-center gap-2 px-2 py-1.5 rounded-md text-sm text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
+                            className={cn(
+                              'flex items-center gap-2 px-2 py-1.5 rounded-md text-sm transition-colors',
+                              pathname === `/collections/${col.id}`
+                                ? 'bg-muted text-foreground font-medium'
+                                : 'text-foreground/80 hover:text-foreground hover:bg-muted'
+                            )}
                           >
                             <span
                               className="size-3.5 shrink-0 rounded-full"

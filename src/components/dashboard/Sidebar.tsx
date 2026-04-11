@@ -21,14 +21,9 @@ export function Sidebar({ sidebarData }: { sidebarData: SidebarData }) {
       <div
         className={cn(
           'flex items-center border-b border-border h-10 shrink-0',
-          collapsed ? 'justify-center px-0' : 'px-3'
+          collapsed ? 'justify-center px-0' : 'justify-end px-3'
         )}
       >
-        {!collapsed && (
-          <span className="flex-1 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-            Navigation
-          </span>
-        )}
         <button
           onClick={() => setCollapsed(c => !c)}
           className="p-1.5 rounded-md hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"

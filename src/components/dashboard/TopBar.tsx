@@ -28,7 +28,8 @@ export function TopBar({ onMenuClick }: TopBarProps) {
         <Menu className="size-5" />
       </button>
 
-      <Link href="/dashboard" className="text-base font-semibold tracking-tight">
+      <Link href="/dashboard" className="text-base font-semibold tracking-tight flex items-center gap-1.5">
+        <span className="text-primary">⬡</span>
         <span className="hidden sm:inline">DevStash</span>
         <span className="sm:hidden">DS</span>
       </Link>

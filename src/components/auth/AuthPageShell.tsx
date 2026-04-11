@@ -12,6 +12,7 @@ export function AuthPageShell({ subtitle, children }: AuthPageShellProps) {
       <div className="min-h-screen flex items-center justify-center p-4 pt-19">
         <div className="w-full max-w-sm space-y-6">
           <div className="text-center space-y-1">
+            <p className="text-2xl font-bold tracking-tight">⬡ DevStash</p>
             {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
           </div>
           {children}
