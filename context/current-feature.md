@@ -2,15 +2,22 @@
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- Language selector rendered above the CodeEditor (not below it) for snippet/command types
+- Selecting a language immediately updates Monaco's syntax highlighting as you type
+- Works in **CreateItemDialog** (new item modal)
+- Works in **ItemDrawer** edit mode
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- The language field currently lives below the editor in both places — it needs to move above it, integrated into the editor header or just above the CodeEditor component
+- The CodeEditor already accepts a `language` prop and passes it to Monaco; we just need the selector to be co-located and reactive
+- Use a dropdown/select (not a free-text input) with a curated list of common languages; keep the plain-text fallback for unlisted ones
+- Language list should live in `src/lib/item-type-utils.ts` or a new `src/lib/languages.ts` constant
+- The language label in the CodeEditor macOS header bar should update live as the selection changes
 
 ## History
 
