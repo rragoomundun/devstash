@@ -42,6 +42,7 @@ import { TEXT_CONTENT_TYPES, LANGUAGE_TYPES } from '@/lib/item-type-utils'
 import { CodeEditor } from './CodeEditor'
 import { MarkdownEditor } from './MarkdownEditor'
 import { CollectionPicker } from './CollectionPicker'
+import { SuggestTagsButton } from './SuggestTagsButton'
 
 function formatDate(date: string) {
   return new Date(date).toLocaleDateString('en-US', {
@@ -117,9 +118,10 @@ interface ItemDrawerProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   collections: Collection[]
+  isPro: boolean
 }
 
-export function ItemDrawer({ itemId, open, onOpenChange, collections }: ItemDrawerProps) {
+export function ItemDrawer({ itemId, open, onOpenChange, collections, isPro }: ItemDrawerProps) {
   const router = useRouter()
   const { item, setItem, error } = useItemDetail(itemId, open)
   const [isEditing, setIsEditing] = useState(false)
@@ -425,6 +427,14 @@ export function ItemDrawer({ itemId, open, onOpenChange, collections }: ItemDraw
                       onChange={e => setEditState(s => ({ ...s, tags: e.target.value }))}
                       placeholder="react, hooks, typescript"
                     />
+                    {isPro && (
+                      <SuggestTagsButton
+                        title={editState.title}
+                        content={editState.content}
+                        currentTags={editState.tags}
+                        onTagsUpdate={tags => setEditState(s => ({ ...s, tags }))}
+                      />
+                    )}
                   </div>
 
                   <CollectionPicker

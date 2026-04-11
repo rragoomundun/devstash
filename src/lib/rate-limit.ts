@@ -115,3 +115,7 @@ export const AUTH_LIMITS = {
   resendVerification: { limit: 3, window: "15 m", prefix: "auth:resend-verification" },
   changePassword: { limit: 5, window: "15 m", prefix: "auth:change-password" },
 } as const satisfies Record<string, RateLimitConfig>;
+
+export const AI_LIMITS = {
+  autoTag: { limit: 20, window: "1 h", prefix: "ai:auto-tag" },
+} as const satisfies Record<string, RateLimitConfig>;

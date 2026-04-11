@@ -24,6 +24,7 @@ import { CodeEditor } from './CodeEditor'
 import { MarkdownEditor } from './MarkdownEditor'
 import { FileUpload } from './FileUpload'
 import { CollectionPicker } from './CollectionPicker'
+import { SuggestTagsButton } from './SuggestTagsButton'
 
 interface ItemType {
   id: string
@@ -43,6 +44,7 @@ interface CreateItemDialogProps {
   itemTypes: ItemType[]
   initialTypeId?: string
   collections: Collection[]
+  isPro: boolean
 }
 
 interface UploadedFile {
@@ -70,7 +72,7 @@ const emptyForm: FormState = {
   tags: '',
 }
 
-export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId, collections }: CreateItemDialogProps) {
+export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId, collections, isPro }: CreateItemDialogProps) {
   const router = useRouter()
   const [selectedTypeId, setSelectedTypeId] = useState<string>(initialTypeId ?? itemTypes[0]?.id ?? '')
   const [selectedCollectionIds, setSelectedCollectionIds] = useState<string[]>([])
@@ -233,12 +235,22 @@ export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId,
             />
           )}
 
-          <input
-            className={inputClass}
-            value={form.tags}
-            onChange={e => setForm(f => ({ ...f, tags: e.target.value }))}
-            placeholder="Tags (comma-separated)"
-          />
+          <div className="space-y-1.5">
+            <input
+              className={inputClass}
+              value={form.tags}
+              onChange={e => setForm(f => ({ ...f, tags: e.target.value }))}
+              placeholder="Tags (comma-separated)"
+            />
+            {isPro && (
+              <SuggestTagsButton
+                title={form.title}
+                content={form.content}
+                currentTags={form.tags}
+                onTagsUpdate={tags => setForm(f => ({ ...f, tags }))}
+              />
+            )}
+          </div>
 
           <CollectionPicker
             collections={collections}
