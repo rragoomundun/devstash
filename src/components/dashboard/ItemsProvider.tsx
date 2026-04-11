@@ -96,8 +96,8 @@ export function ItemsProvider({ children, itemTypes, collections, searchData, is
   return (
     <ItemsContext value={{ isPro, openItem, openCreate, openCreateCollection, openSearch }}>
       {children}
-      <ItemDrawer itemId={selectedItemId} open={drawerOpen} onOpenChange={handleDrawerOpenChange} collections={collections} />
-      <CreateItemDialog open={createOpen} onOpenChange={setCreateOpen} itemTypes={dialogTypes} initialTypeId={preselectedTypeId} collections={collections} />
+      <ItemDrawer itemId={selectedItemId} open={drawerOpen} onOpenChange={handleDrawerOpenChange} collections={collections} isPro={isPro} />
+      <CreateItemDialog open={createOpen} onOpenChange={setCreateOpen} itemTypes={dialogTypes} initialTypeId={preselectedTypeId} collections={collections} isPro={isPro} />
       <CreateCollectionDialog open={createCollectionOpen} onOpenChange={setCreateCollectionOpen} />
       <CommandPalette open={searchOpen} onOpenChange={setSearchOpen} searchData={searchData} onOpenItem={openItem} />
     </ItemsContext>
