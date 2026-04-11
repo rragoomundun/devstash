@@ -106,7 +106,7 @@ function itemToEditState(item: ItemDetail): EditState {
     description: item.description ?? '',
     content: item.content ?? '',
     url: item.url ?? '',
-    language: item.language ?? '',
+    language: item.language ?? 'plaintext',
     tags: item.tags.map(t => t.tag.name).join(', '),
     collectionIds: item.collections?.map(c => c.collection.id) ?? [],
   }
@@ -193,7 +193,7 @@ export function ItemDrawer({ itemId, open, onOpenChange, collections }: ItemDraw
       description: editState.description || null,
       content: editState.content || null,
       url: editState.url || null,
-      language: editState.language || null,
+      language: (editState.language && editState.language !== 'plaintext') ? editState.language : null,
       tags,
       collectionIds: editState.collectionIds,
     })
@@ -392,7 +392,8 @@ export function ItemDrawer({ itemId, open, onOpenChange, collections }: ItemDraw
                         <CodeEditor
                           value={editState.content}
                           onChange={(val) => setEditState(s => ({ ...s, content: val }))}
-                          language={editState.language || undefined}
+                          language={editState.language || 'plaintext'}
+                          onLanguageChange={(lang) => setEditState(s => ({ ...s, language: lang }))}
                         />
                       ) : (
                         <MarkdownEditor
@@ -400,18 +401,6 @@ export function ItemDrawer({ itemId, open, onOpenChange, collections }: ItemDraw
                           onChange={(val) => setEditState(s => ({ ...s, content: val }))}
                         />
                       )}
-                    </div>
-                  )}
-
-                  {showLanguage && (
-                    <div className="space-y-1">
-                      <label className="text-xs text-muted-foreground">Language</label>
-                      <input
-                        className={inputClass}
-                        value={editState.language}
-                        onChange={e => setEditState(s => ({ ...s, language: e.target.value }))}
-                        placeholder="e.g. typescript"
-                      />
                     </div>
                   )}
 

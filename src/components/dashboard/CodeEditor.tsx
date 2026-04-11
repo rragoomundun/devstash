@@ -3,10 +3,11 @@
 import { useState, useRef, useCallback } from 'react'
 import Editor, { type OnMount, type BeforeMount } from '@monaco-editor/react'
 import type { editor } from 'monaco-editor'
-import { Copy, Check } from 'lucide-react'
+import { Copy, Check, ChevronDown } from 'lucide-react'
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
 import { useEditorPreferences } from '@/components/dashboard/EditorPreferencesProvider'
 import { registerEditorThemes } from '@/lib/editor-themes'
+import { LANGUAGES } from '@/lib/languages'
 
 const MIN_HEIGHT = 80
 const MAX_HEIGHT = 400
@@ -15,10 +16,11 @@ interface CodeEditorProps {
   value: string
   onChange?: (value: string) => void
   language?: string
+  onLanguageChange?: (language: string) => void
   readOnly?: boolean
 }
 
-export function CodeEditor({ value, onChange, language, readOnly = false }: CodeEditorProps) {
+export function CodeEditor({ value, onChange, language, onLanguageChange, readOnly = false }: CodeEditorProps) {
   const { copied, copy: handleCopy } = useCopyToClipboard(value)
   const { preferences } = useEditorPreferences()
   const [height, setHeight] = useState(MIN_HEIGHT)
@@ -40,6 +42,8 @@ export function CodeEditor({ value, onChange, language, readOnly = false }: Code
     editor.onDidContentSizeChange(updateHeight)
   }, [])
 
+  const displayLabel = LANGUAGES.find(l => l.value === language)?.label ?? language
+
   return (
     <div className="rounded-lg overflow-hidden border border-white/10">
       {/* macOS-style header */}
@@ -49,8 +53,25 @@ export function CodeEditor({ value, onChange, language, readOnly = false }: Code
           <span className="size-3 rounded-full bg-[#febc2e]" />
           <span className="size-3 rounded-full bg-[#28c840]" />
         </div>
-        {language && (
-          <span className="ml-2 text-xs text-zinc-500 font-mono">{language}</span>
+        {onLanguageChange ? (
+          <div className="relative ml-2">
+            <select
+              value={language ?? 'plaintext'}
+              onChange={e => onLanguageChange(e.target.value)}
+              className="appearance-none bg-transparent text-xs text-zinc-400 font-mono pr-4 focus:outline-none cursor-pointer hover:text-zinc-200 transition-colors"
+            >
+              {LANGUAGES.map(l => (
+                <option key={l.value} value={l.value} className="bg-[#1e1e1e] text-zinc-200">
+                  {l.label}
+                </option>
+              ))}
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 size-3 text-zinc-500" />
+          </div>
+        ) : (
+          displayLabel && (
+            <span className="ml-2 text-xs text-zinc-500 font-mono">{displayLabel}</span>
+          )
         )}
         <button
           className="ml-auto flex items-center gap-1 text-xs text-zinc-500 hover:text-zinc-200 transition-colors"

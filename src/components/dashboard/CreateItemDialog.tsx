@@ -124,7 +124,7 @@ export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId,
       description: form.description || null,
       content: form.content || null,
       url: form.url || null,
-      language: form.language || null,
+      language: (form.language && form.language !== 'plaintext') ? form.language : null,
       fileUrl: uploadedFile?.fileUrl ?? null,
       fileName: uploadedFile?.fileName ?? null,
       fileSize: uploadedFile?.fileSize ?? null,
@@ -204,7 +204,8 @@ export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId,
               <CodeEditor
                 value={form.content}
                 onChange={(val) => setForm(f => ({ ...f, content: val }))}
-                language={form.language || undefined}
+                language={form.language || 'plaintext'}
+                onLanguageChange={(lang) => setForm(f => ({ ...f, language: lang }))}
               />
             ) : (
               <MarkdownEditor
@@ -219,15 +220,6 @@ export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId,
               itemType={typeName as 'file' | 'image'}
               value={uploadedFile}
               onChange={setUploadedFile}
-            />
-          )}
-
-          {showLanguage && (
-            <input
-              className={inputClass}
-              value={form.language}
-              onChange={e => setForm(f => ({ ...f, language: e.target.value }))}
-              placeholder="Language (e.g. typescript)"
             />
           )}
 
