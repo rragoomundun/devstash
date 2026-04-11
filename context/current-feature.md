@@ -2,38 +2,15 @@
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- Add active link highlighting to sidebar navigation (type links + collection links)
-- Add GitHub OAuth button to register page (parity with sign-in page)
-- Add DevStash logo/title inside auth cards (sign-in + register)
-- Fix empty state on /collections when no collections exist (dead black space)
-- Fix dashboard stat cards showing "0 Favorites" with no guidance text
-- Replace redundant "NAVIGATION" sidebar header label
-- Fix missing left-border color accent on Dev Toolkit card on /collections page
-- Add DevStash hex icon next to wordmark in the TopBar (parity with homepage navbar)
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-UI review conducted via Playwright on 2026-04-11. Screenshots taken of dashboard, /items/snippets, /collections, /sign-in, and /register.
-
-### Findings by priority
-
-**HIGH**
-- Sidebar has no active/highlighted state — on /items/snippets the "Snippet" link looks identical to all other links; no background, color change, or indicator. Fix: `usePathname()` + conditional `bg-muted text-foreground` class in SidebarContent.tsx
-- Register page is missing the GitHub OAuth button — sign-in has it, register does not. A user wanting to register via GitHub has no path from this page.
-
-**MEDIUM**
-- Auth cards (sign-in + register) show only a subtitle with no DevStash branding inside the card. The fixed navbar is visually separate, leaving the card feeling unbranded.
-- /collections page with 3 cards leaves a large dead-black empty area below. Needs a minimum content height or empty-state prompt.
-- Dashboard stat cards show "0 Favorite Items" / "0 Favorite Collections" on fresh accounts with no guidance. Should have a hint like "Star items to see them here."
-
-**LOW**
-- Sidebar "NAVIGATION" header label is redundant — replace with DevStash wordmark or remove.
-- Dev Toolkit collection card on /collections is missing its left-border color accent (present on dashboard, missing on /collections page).
-- TopBar "DevStash" wordmark has no hex icon (homepage navbar has `⬡ DevStash` — app shell has plain text).
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -90,3 +67,4 @@ UI review conducted via Playwright on 2026-04-11. Screenshots taken of dashboard
 - **2026-04-10** — Upgrade page: /upgrade route with monthly/yearly pricing cards and direct Stripe checkout; "Upgrade" ghost button in TopBar for free users; isPro exposed via ItemsContext; Pro users redirected to /dashboard on /upgrade
 - **2026-04-11** — Language Selector: LANGUAGES constant (31 languages) in src/lib/languages.ts; CodeEditor gains onLanguageChange prop — when provided renders a native select in the macOS header bar with live Monaco highlighting; removed separate language text input below the editor in CreateItemDialog and ItemDrawer edit mode; plaintext saved as null
 - **2026-04-11** — AI Auto-Tagging: OpenAI client utility (src/lib/openai.ts) with AI_MODEL constant; generateAutoTags server action (Responses API, gpt-5-nano) with auth, Pro gate, Zod validation, rate limiting (20 req/hr); SuggestTagsButton component with accept/reject badge UI; integrated in CreateItemDialog and ItemDrawer edit mode; button hidden for free users; 11 unit tests
+- **2026-04-11** — UI Polish: sidebar active link highlighting via usePathname (type + collection links); GitHub OAuth button added to register page; DevStash heading added inside auth card shell; redundant "NAVIGATION" sidebar label removed; hex icon added to TopBar wordmark
