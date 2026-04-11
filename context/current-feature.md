@@ -2,22 +2,15 @@
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- Language selector rendered above the CodeEditor (not below it) for snippet/command types
-- Selecting a language immediately updates Monaco's syntax highlighting as you type
-- Works in **CreateItemDialog** (new item modal)
-- Works in **ItemDrawer** edit mode
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- The language field currently lives below the editor in both places — it needs to move above it, integrated into the editor header or just above the CodeEditor component
-- The CodeEditor already accepts a `language` prop and passes it to Monaco; we just need the selector to be co-located and reactive
-- Use a dropdown/select (not a free-text input) with a curated list of common languages; keep the plain-text fallback for unlisted ones
-- Language list should live in `src/lib/item-type-utils.ts` or a new `src/lib/languages.ts` constant
-- The language label in the CodeEditor macOS header bar should update live as the selection changes
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -72,3 +65,4 @@ In Progress
 - **2026-04-10** — Stripe Phase 2: POST /api/webhooks/stripe with signature verification and 3 event handlers (checkout.session.completed, customer.subscription.updated/deleted); Pro gate on POST /api/upload (403); PRO_TYPES constant in item-type-utils.ts; ItemsProvider filters File/Image from CreateItemDialog for free users; BillingSection (free: usage bars + monthly/yearly upgrade; Pro: manage subscription portal); UpgradeToast for ?upgraded=true param; BillingSection added to settings page after EditorPreferences
 - **2026-04-10** — Free tier enforcement: isOverCollectionLimit off-by-one fixed (>= instead of >); client-side toast in ItemsProvider.openCreateCollection when free user hits 3-collection limit; /items/files and /items/images redirect free users to /upgrade
 - **2026-04-10** — Upgrade page: /upgrade route with monthly/yearly pricing cards and direct Stripe checkout; "Upgrade" ghost button in TopBar for free users; isPro exposed via ItemsContext; Pro users redirected to /dashboard on /upgrade
+- **2026-04-11** — Language Selector: LANGUAGES constant (31 languages) in src/lib/languages.ts; CodeEditor gains onLanguageChange prop — when provided renders a native select in the macOS header bar with live Monaco highlighting; removed separate language text input below the editor in CreateItemDialog and ItemDrawer edit mode; plaintext saved as null
