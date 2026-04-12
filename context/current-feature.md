@@ -2,22 +2,15 @@
 
 ## Status
 
-Complete
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- Extract `requireAuth()` helper in `src/lib/auth-utils.ts` — replaces 10+ repeated auth check blocks across all actions
-- Extract `parseInput<S>()` in `src/lib/action-utils.ts` — replaces 6 repeated Zod parse+error patterns
-- Extract `withAction<T>()` and `withMutation()` in `src/lib/action-utils.ts` — replaces repeated try/catch wrappers
-- Add `revalidateCollections()` inline helper in `collections.ts` — deduplicates 4 identical `revalidatePath` calls
-- Define `ActionResult<T>` and `MutateResult` in `src/types/actions.ts` — replaces 5 local duplicate type aliases
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- Refactoring only — no behavior changes
-- `AutoTagResult` in `ai.ts` keeps its custom shape (`tags` field instead of `data`)
-- `updateEditorPreferences` has no try/catch in original; behavior preserved
-- `deleteItem` nested try/catch for R2 cleanup is intentional and kept as-is
+<!-- additional context, constraints, or details -->
 
 ## History
 
