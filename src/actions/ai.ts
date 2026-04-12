@@ -1,7 +1,8 @@
 'use server'
 
 import { z } from 'zod'
-import { auth } from '@/auth'
+import { requireAuth } from '@/lib/auth-utils'
+import { parseInput } from '@/lib/action-utils'
 import { getOpenAI, AI_MODEL } from '@/lib/openai'
 import { rateLimit, AI_LIMITS } from '@/lib/rate-limit'
 
@@ -12,27 +13,18 @@ const GenerateAutoTagsSchema = z.object({
 
 export type GenerateAutoTagsInput = z.input<typeof GenerateAutoTagsSchema>
 
-type AutoTagResult =
-  | { success: true; tags: string[] }
-  | { success: false; error: string }
+type AutoTagResult = { success: true; tags: string[] } | { success: false; error: string }
 
 export async function generateAutoTags(input: GenerateAutoTagsInput): Promise<AutoTagResult> {
-  const session = await auth()
-  if (!session?.user?.id) {
-    return { success: false, error: 'Unauthorized' }
-  }
+  const user = await requireAuth()
+  if (!user) return { success: false, error: 'Unauthorized' }
 
-  if (!session.user.isPro) {
-    return { success: false, error: 'AI features require a Pro subscription' }
-  }
+  if (!user.isPro) return { success: false, error: 'AI features require a Pro subscription' }
 
-  const parsed = GenerateAutoTagsSchema.safeParse(input)
-  if (!parsed.success) {
-    const message = parsed.error.issues[0]?.message ?? 'Invalid input'
-    return { success: false, error: message }
-  }
+  const parsed = parseInput(GenerateAutoTagsSchema, input)
+  if ('error' in parsed) return { success: false, error: parsed.error }
 
-  const rl = await rateLimit(AI_LIMITS.autoTag, session.user.id)
+  const rl = await rateLimit(AI_LIMITS.autoTag, user.userId)
   if (!rl.success) {
     const minutes = Math.ceil(rl.resetInSeconds / 60)
     return {
