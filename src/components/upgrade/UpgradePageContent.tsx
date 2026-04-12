@@ -1,31 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { toast } from 'sonner'
 import { Check, Zap } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-
-const FREE_FEATURES = [
-  { label: 'Up to 50 items', included: true },
-  { label: 'Up to 3 collections', included: true },
-  { label: 'All item types (except files & images)', included: true },
-  { label: 'Basic search', included: true },
-  { label: 'Monaco code editor', included: true },
-  { label: 'AI features', included: false },
-  { label: 'File & image uploads', included: false },
-  { label: 'Export data', included: false },
-]
-
-const PRO_FEATURES = [
-  { label: 'Unlimited items', accent: false },
-  { label: 'Unlimited collections', accent: false },
-  { label: 'All item types including files & images', accent: true },
-  { label: 'Full-text search', accent: false },
-  { label: 'Monaco code editor', accent: false },
-  { label: 'AI Auto-Tag, Summary & Explain', accent: true },
-  { label: 'File & image uploads (R2)', accent: true },
-  { label: 'Export data (JSON / ZIP)', accent: true },
-]
+import { FREE_FEATURES, PRO_FEATURES } from '@/lib/pricing'
+import { startStripeCheckout } from '@/lib/stripe-client'
+import { BillingIntervalToggle } from '@/components/ui/BillingIntervalToggle'
 
 interface UpgradePageContentProps {
   monthlyPriceId: string
@@ -39,23 +19,8 @@ export function UpgradePageContent({ monthlyPriceId, yearlyPriceId }: UpgradePag
   async function handleUpgrade() {
     const priceId = yearly ? yearlyPriceId : monthlyPriceId
     setLoading(true)
-    try {
-      const res = await fetch('/api/stripe/checkout-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ priceId }),
-      })
-      const data = await res.json()
-      if (!res.ok) {
-        toast.error(data.error ?? 'Failed to start checkout.')
-        return
-      }
-      window.location.href = data.url
-    } catch {
-      toast.error('Failed to start checkout.')
-    } finally {
-      setLoading(false)
-    }
+    await startStripeCheckout(priceId)
+    setLoading(false)
   }
 
   return (
@@ -69,37 +34,7 @@ export function UpgradePageContent({ monthlyPriceId, yearlyPriceId }: UpgradePag
       </div>
 
       {/* Billing toggle */}
-      <div className="flex items-center gap-3">
-        <span
-          className={`text-sm cursor-pointer transition-colors ${!yearly ? 'text-foreground font-medium' : 'text-muted-foreground'}`}
-          onClick={() => setYearly(false)}
-        >
-          Monthly
-        </span>
-        <button
-          role="switch"
-          aria-checked={yearly}
-          aria-label="Toggle billing period"
-          onClick={() => setYearly(v => !v)}
-          className={`relative w-10 h-5.5 rounded-full border transition-all duration-200 shrink-0 ${
-            yearly ? 'bg-primary border-primary' : 'bg-muted border-border'
-          }`}
-        >
-          <span
-            className="absolute w-3.5 h-3.5 bg-white rounded-full shadow-sm transition-transform duration-200"
-            style={{ top: 3, left: 3, transform: yearly ? 'translateX(18px)' : 'translateX(0)' }}
-          />
-        </button>
-        <span
-          className={`text-sm cursor-pointer transition-colors flex items-center gap-1.5 ${yearly ? 'text-foreground font-medium' : 'text-muted-foreground'}`}
-          onClick={() => setYearly(true)}
-        >
-          Yearly
-          <span className="px-1.5 py-0.5 bg-emerald-500/15 text-emerald-500 rounded-full text-[11px] font-semibold">
-            Save 25%
-          </span>
-        </span>
-      </div>
+      <BillingIntervalToggle yearly={yearly} onChange={setYearly} />
 
       {/* Pricing cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

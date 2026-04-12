@@ -1,5 +1,4 @@
-import { ItemCard } from './ItemCard'
-import { ImageCard } from './ImageCard'
+import { DashboardItemCard } from './DashboardItemCard'
 import type { DashboardItem } from '@/lib/db/items'
 
 export function PinnedItems({ items }: { items: DashboardItem[] }) {
@@ -11,13 +10,9 @@ export function PinnedItems({ items }: { items: DashboardItem[] }) {
         Pinned Items
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-        {items.map(item =>
-          item.itemType.name.toLowerCase() === 'image' ? (
-            <ImageCard key={item.id} item={item} />
-          ) : (
-            <ItemCard key={item.id} item={item} large />
-          )
-        )}
+        {items.map(item => (
+          <DashboardItemCard key={item.id} item={item} large />
+        ))}
       </div>
     </section>
   )

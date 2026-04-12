@@ -4,28 +4,8 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ScrollFadeIn } from './ScrollFadeIn'
-
-const FREE_FEATURES = [
-  { label: 'Up to 50 items', included: true },
-  { label: 'Up to 3 collections', included: true },
-  { label: 'All item types (except files & images)', included: true },
-  { label: 'Basic search', included: true },
-  { label: 'Monaco code editor', included: true },
-  { label: 'AI features', included: false },
-  { label: 'File & image uploads', included: false },
-  { label: 'Export data', included: false },
-]
-
-const PRO_FEATURES = [
-  { label: 'Unlimited items', accent: false },
-  { label: 'Unlimited collections', accent: false },
-  { label: 'All item types including files & images', accent: false },
-  { label: 'Full-text search', accent: false },
-  { label: 'Monaco code editor', accent: false },
-  { label: 'AI Auto-Tag, Summary & Explain', accent: true },
-  { label: 'File & image uploads (R2)', accent: true },
-  { label: 'Export data (JSON / ZIP)', accent: true },
-]
+import { FREE_FEATURES, PRO_FEATURES } from '@/lib/pricing'
+import { BillingIntervalToggle } from '@/components/ui/BillingIntervalToggle'
 
 export function PricingSection() {
   const [yearly, setYearly] = useState(false)
@@ -43,36 +23,8 @@ export function PricingSection() {
           <p className="text-base text-zinc-400 mb-6">Start free. Upgrade when you&apos;re ready.</p>
 
           {/* Toggle */}
-          <div className="flex items-center justify-center gap-3">
-            <span
-              className={`text-sm cursor-pointer transition-colors ${!yearly ? 'text-foreground font-medium' : 'text-zinc-400'}`}
-              onClick={() => setYearly(false)}
-            >
-              Monthly
-            </span>
-            <button
-              role="switch"
-              aria-checked={yearly}
-              aria-label="Toggle billing period"
-              onClick={() => setYearly(!yearly)}
-              className={`relative w-11 h-6 rounded-full border transition-all duration-300 shrink-0 ${
-                yearly ? 'bg-indigo-500 border-indigo-500' : 'bg-zinc-800 border-white/8'
-              }`}
-            >
-              <span
-                className="absolute w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-300"
-                style={{ top: 3, left: 3, transform: yearly ? 'translateX(20px)' : 'translateX(0)' }}
-              />
-            </button>
-            <span
-              className={`text-sm cursor-pointer transition-colors flex items-center gap-1.5 ${yearly ? 'text-foreground font-medium' : 'text-zinc-400'}`}
-              onClick={() => setYearly(true)}
-            >
-              Yearly
-              <span className="px-1.5 py-0.5 bg-green-500/15 text-green-400 rounded-full text-[11px] font-semibold">
-                Save 25%
-              </span>
-            </span>
+          <div className="flex justify-center">
+            <BillingIntervalToggle yearly={yearly} onChange={setYearly} />
           </div>
         </ScrollFadeIn>
 

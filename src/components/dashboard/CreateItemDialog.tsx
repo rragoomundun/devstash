@@ -20,6 +20,8 @@ import { ICON_MAP } from '@/lib/icon-map'
 import { toast } from 'sonner'
 import { createItem } from '@/actions/items'
 import { TEXT_CONTENT_TYPES, LANGUAGE_TYPES, FILE_CONTENT_TYPES } from '@/lib/item-type-utils'
+import { INPUT_CLASS } from '@/lib/styles'
+import { Button } from '@/components/ui/button'
 import { CodeEditor } from './CodeEditor'
 import { MarkdownEditor } from './MarkdownEditor'
 import { FileUpload } from './FileUpload'
@@ -147,9 +149,6 @@ export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId,
     router.refresh()
   }
 
-  const inputClass =
-    'w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring'
-
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-lg">
@@ -187,7 +186,7 @@ export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId,
           </Select>
 
           <input
-            className={inputClass}
+            className={INPUT_CLASS}
             value={form.title}
             onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
             placeholder="Title *"
@@ -195,7 +194,7 @@ export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId,
           />
 
           <input
-            className={inputClass}
+            className={INPUT_CLASS}
             value={form.description}
             onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
             placeholder="Description (optional)"
@@ -227,7 +226,7 @@ export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId,
 
           {showUrl && (
             <input
-              className={inputClass}
+              className={INPUT_CLASS}
               type="url"
               value={form.url}
               onChange={e => setForm(f => ({ ...f, url: e.target.value }))}
@@ -237,7 +236,7 @@ export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId,
 
           <div className="space-y-1.5">
             <input
-              className={inputClass}
+              className={INPUT_CLASS}
               value={form.tags}
               onChange={e => setForm(f => ({ ...f, tags: e.target.value }))}
               placeholder="Tags (comma-separated)"
@@ -260,20 +259,12 @@ export function CreateItemDialog({ open, onOpenChange, itemTypes, initialTypeId,
         </div>
 
         <DialogFooter>
-          <button
-            className="rounded-md px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-            onClick={() => handleOpenChange(false)}
-            disabled={isSaving}
-          >
+          <Button variant="ghost" className="text-muted-foreground" onClick={() => handleOpenChange(false)} disabled={isSaving}>
             Cancel
-          </button>
-          <button
-            className="rounded-md px-4 py-2 text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50"
-            onClick={handleSave}
-            disabled={!canSave || isSaving}
-          >
+          </Button>
+          <Button onClick={handleSave} disabled={!canSave || isSaving}>
             {isSaving ? 'Creating…' : 'Create'}
-          </button>
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

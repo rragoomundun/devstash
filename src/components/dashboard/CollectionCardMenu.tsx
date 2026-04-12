@@ -1,7 +1,5 @@
 'use client'
 
-import { useState, useTransition } from 'react'
-import { useRouter } from 'next/navigation'
 import { MoreHorizontal, Pencil, Trash2, Star } from 'lucide-react'
 import {
   DropdownMenu,
@@ -19,46 +17,25 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
-import { toast } from 'sonner'
-import { deleteCollection, toggleCollectionFavorite } from '@/actions/collections'
 import { EditCollectionDialog } from '@/components/dashboard/EditCollectionDialog'
+import { useCollectionActions } from '@/hooks/useCollectionActions'
 
 interface CollectionCardMenuProps {
   collection: { id: string; name: string; description: string | null; isFavorite: boolean }
 }
 
 export function CollectionCardMenu({ collection }: CollectionCardMenuProps) {
-  const router = useRouter()
-  const [editOpen, setEditOpen] = useState(false)
-  const [deleteOpen, setDeleteOpen] = useState(false)
-  const [isDeleting, startDelete] = useTransition()
-  const [isFavorite, setIsFavorite] = useState(collection.isFavorite)
-  const [isTogglingFavorite, startToggleFavorite] = useTransition()
-
-  function handleToggleFavorite() {
-    startToggleFavorite(async () => {
-      const next = !isFavorite
-      const result = await toggleCollectionFavorite(collection.id, next)
-      if (!result.success) {
-        toast.error(result.error)
-        return
-      }
-      setIsFavorite(next)
-      router.refresh()
-    })
-  }
-
-  function handleDelete() {
-    startDelete(async () => {
-      const result = await deleteCollection(collection.id)
-      if (!result.success) {
-        toast.error(result.error)
-        return
-      }
-      toast.success('Collection deleted')
-      router.refresh()
-    })
-  }
+  const {
+    isFavorite,
+    isDeleting,
+    isTogglingFavorite,
+    handleToggleFavorite,
+    handleDelete,
+    deleteOpen,
+    setDeleteOpen,
+    editOpen,
+    setEditOpen,
+  } = useCollectionActions(collection)
 
   return (
     <>
@@ -89,11 +66,7 @@ export function CollectionCardMenu({ collection }: CollectionCardMenuProps) {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <EditCollectionDialog
-        open={editOpen}
-        onOpenChange={setEditOpen}
-        collection={collection}
-      />
+      <EditCollectionDialog open={editOpen} onOpenChange={setEditOpen} collection={collection} />
 
       <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <AlertDialogContent>

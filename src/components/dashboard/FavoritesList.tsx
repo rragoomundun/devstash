@@ -5,15 +5,13 @@ import Link from 'next/link'
 import { Star, FolderOpen } from 'lucide-react'
 import { ICON_MAP } from '@/lib/icon-map'
 import { useItems } from '@/components/dashboard/ItemsProvider'
+import { formatLongDate } from '@/lib/format'
 import type { DashboardItem } from '@/lib/db/items'
 import type { FavoriteCollection } from '@/lib/db/collections'
 
 type ItemSortKey = 'date' | 'name' | 'type'
 type CollectionSortKey = 'date' | 'name'
 
-function formatDate(date: Date) {
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-}
 
 function SortToggle<T extends string>({
   options,
@@ -80,7 +78,7 @@ function ItemRow({ item }: { item: DashboardItem }) {
         {type.name}
       </span>
       <span className="shrink-0 text-xs text-muted-foreground font-mono tabular-nums">
-        {formatDate(item.updatedAt)}
+        {formatLongDate(item.updatedAt)}
       </span>
     </button>
   )
@@ -98,7 +96,7 @@ function CollectionRow({ collection }: { collection: FavoriteCollection }) {
         {collection.itemCount} {collection.itemCount === 1 ? 'item' : 'items'}
       </span>
       <span className="shrink-0 text-xs text-muted-foreground font-mono tabular-nums">
-        {formatDate(collection.updatedAt)}
+        {formatLongDate(collection.updatedAt)}
       </span>
     </Link>
   )

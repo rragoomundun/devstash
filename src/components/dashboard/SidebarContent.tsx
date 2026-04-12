@@ -17,11 +17,10 @@ import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { UserAvatar } from '@/components/ui/UserAvatar'
 import { ICON_MAP } from '@/lib/icon-map'
+import { PRO_TYPES } from '@/lib/item-type-utils'
 import type { getSidebarData } from '@/lib/db/collections'
 
 type SidebarData = Awaited<ReturnType<typeof getSidebarData>>
-
-const PRO_TYPES = new Set(['File', 'Image'])
 
 function getTypeSlug(name: string) {
   return name.toLowerCase() + 's'
