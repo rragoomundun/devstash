@@ -1,38 +1,36 @@
 'use server'
 
 import { z } from 'zod'
-import { auth } from '@/auth'
-import { updateItem as dbUpdateItem, deleteItem as dbDeleteItem, createItem as dbCreateItem, getItemFileUrl, toggleItemFavorite as dbToggleItemFavorite, toggleItemPin as dbToggleItemPin } from '@/lib/db/items'
+import { requireAuth } from '@/lib/auth-utils'
+import { parseInput, withMutation } from '@/lib/action-utils'
+import {
+  updateItem as dbUpdateItem,
+  deleteItem as dbDeleteItem,
+  createItem as dbCreateItem,
+  getItemFileUrl,
+  toggleItemFavorite as dbToggleItemFavorite,
+  toggleItemPin as dbToggleItemPin,
+} from '@/lib/db/items'
 import type { ItemDetail } from '@/lib/db/items'
 import { UpdateItemSchema, CreateItemSchema } from '@/lib/schemas/items'
 import { deleteFromR2, keyFromUrl } from '@/lib/r2'
+import type { ActionResult, MutateResult } from '@/types/actions'
 
 type UpdateItemInput = z.input<typeof UpdateItemSchema>
 type CreateItemInput = z.input<typeof CreateItemSchema>
 
-type ActionResult =
-  | { success: true; data: ItemDetail }
-  | { success: false; error: string }
-
-type DeleteResult = { success: true } | { success: false; error: string }
-
 export async function updateItem(
   itemId: string,
-  input: UpdateItemInput
-): Promise<ActionResult> {
-  const session = await auth()
-  if (!session?.user?.id) {
-    return { success: false, error: 'Unauthorized' }
-  }
+  input: UpdateItemInput,
+): Promise<ActionResult<ItemDetail>> {
+  const user = await requireAuth()
+  if (!user) return { success: false, error: 'Unauthorized' }
 
-  const parsed = UpdateItemSchema.safeParse(input)
-  if (!parsed.success) {
-    const message = parsed.error.issues[0]?.message ?? 'Invalid input'
-    return { success: false, error: message }
-  }
+  const parsed = parseInput(UpdateItemSchema, input)
+  if ('error' in parsed) return { success: false, error: parsed.error }
 
   try {
-    const item = await dbUpdateItem(session.user.id, itemId, {
+    const item = await dbUpdateItem(user.userId, itemId, {
       title: parsed.data.title,
       description: parsed.data.description,
       content: parsed.data.content,
@@ -47,20 +45,15 @@ export async function updateItem(
   }
 }
 
-export async function createItem(input: CreateItemInput): Promise<ActionResult> {
-  const session = await auth()
-  if (!session?.user?.id) {
-    return { success: false, error: 'Unauthorized' }
-  }
+export async function createItem(input: CreateItemInput): Promise<ActionResult<ItemDetail>> {
+  const user = await requireAuth()
+  if (!user) return { success: false, error: 'Unauthorized' }
 
-  const parsed = CreateItemSchema.safeParse(input)
-  if (!parsed.success) {
-    const message = parsed.error.issues[0]?.message ?? 'Invalid input'
-    return { success: false, error: message }
-  }
+  const parsed = parseInput(CreateItemSchema, input)
+  if ('error' in parsed) return { success: false, error: parsed.error }
 
   try {
-    const item = await dbCreateItem(session.user.id, {
+    const item = await dbCreateItem(user.userId, {
       title: parsed.data.title,
       description: parsed.data.description,
       content: parsed.data.content,
@@ -79,39 +72,34 @@ export async function createItem(input: CreateItemInput): Promise<ActionResult> 
   }
 }
 
-export async function toggleItemFavorite(itemId: string, isFavorite: boolean): Promise<DeleteResult> {
-  const session = await auth()
-  if (!session?.user?.id) return { success: false, error: 'Unauthorized' }
-
-  try {
-    await dbToggleItemFavorite(session.user.id, itemId, isFavorite)
-    return { success: true }
-  } catch {
-    return { success: false, error: 'Failed to update favorite' }
-  }
+export async function toggleItemFavorite(
+  itemId: string,
+  isFavorite: boolean,
+): Promise<MutateResult> {
+  const user = await requireAuth()
+  if (!user) return { success: false, error: 'Unauthorized' }
+  return withMutation(
+    () => dbToggleItemFavorite(user.userId, itemId, isFavorite),
+    'Failed to update favorite',
+  )
 }
 
-export async function toggleItemPin(itemId: string, isPinned: boolean): Promise<DeleteResult> {
-  const session = await auth()
-  if (!session?.user?.id) return { success: false, error: 'Unauthorized' }
-
-  try {
-    await dbToggleItemPin(session.user.id, itemId, isPinned)
-    return { success: true }
-  } catch {
-    return { success: false, error: 'Failed to update pin' }
-  }
+export async function toggleItemPin(itemId: string, isPinned: boolean): Promise<MutateResult> {
+  const user = await requireAuth()
+  if (!user) return { success: false, error: 'Unauthorized' }
+  return withMutation(
+    () => dbToggleItemPin(user.userId, itemId, isPinned),
+    'Failed to update pin',
+  )
 }
 
-export async function deleteItem(itemId: string): Promise<DeleteResult> {
-  const session = await auth()
-  if (!session?.user?.id) {
-    return { success: false, error: 'Unauthorized' }
-  }
+export async function deleteItem(itemId: string): Promise<MutateResult> {
+  const user = await requireAuth()
+  if (!user) return { success: false, error: 'Unauthorized' }
 
   try {
-    const fileUrl = await getItemFileUrl(session.user.id, itemId)
-    await dbDeleteItem(session.user.id, itemId)
+    const fileUrl = await getItemFileUrl(user.userId, itemId)
+    await dbDeleteItem(user.userId, itemId)
     if (fileUrl) {
       try {
         await deleteFromR2(keyFromUrl(fileUrl))

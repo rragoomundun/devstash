@@ -2,15 +2,22 @@
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+Complete
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- Extract `requireAuth()` helper in `src/lib/auth-utils.ts` — replaces 10+ repeated auth check blocks across all actions
+- Extract `parseInput<S>()` in `src/lib/action-utils.ts` — replaces 6 repeated Zod parse+error patterns
+- Extract `withAction<T>()` and `withMutation()` in `src/lib/action-utils.ts` — replaces repeated try/catch wrappers
+- Add `revalidateCollections()` inline helper in `collections.ts` — deduplicates 4 identical `revalidatePath` calls
+- Define `ActionResult<T>` and `MutateResult` in `src/types/actions.ts` — replaces 5 local duplicate type aliases
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- Refactoring only — no behavior changes
+- `AutoTagResult` in `ai.ts` keeps its custom shape (`tags` field instead of `data`)
+- `updateEditorPreferences` has no try/catch in original; behavior preserved
+- `deleteItem` nested try/catch for R2 cleanup is intentional and kept as-is
 
 ## History
 
@@ -68,3 +75,4 @@
 - **2026-04-11** — Language Selector: LANGUAGES constant (31 languages) in src/lib/languages.ts; CodeEditor gains onLanguageChange prop — when provided renders a native select in the macOS header bar with live Monaco highlighting; removed separate language text input below the editor in CreateItemDialog and ItemDrawer edit mode; plaintext saved as null
 - **2026-04-11** — AI Auto-Tagging: OpenAI client utility (src/lib/openai.ts) with AI_MODEL constant; generateAutoTags server action (Responses API, gpt-5-nano) with auth, Pro gate, Zod validation, rate limiting (20 req/hr); SuggestTagsButton component with accept/reject badge UI; integrated in CreateItemDialog and ItemDrawer edit mode; button hidden for free users; 11 unit tests
 - **2026-04-11** — UI Polish: sidebar active link highlighting via usePathname (type + collection links); GitHub OAuth button added to register page; DevStash heading added inside auth card shell; redundant "NAVIGATION" sidebar label removed; hex icon added to TopBar wordmark
+- **2026-04-12** — Action utilities refactor: extracted `requireAuth()` (src/lib/auth-utils.ts), `parseInput<S>()`/`withAction<T>()`/`withMutation()` (src/lib/action-utils.ts), `ActionResult<T>`/`MutateResult` (src/types/actions.ts); `revalidateCollections()` inline helper in collections.ts; removes 10+ repeated auth blocks and 6 Zod parse patterns across all actions; refactoring only, no behavior changes

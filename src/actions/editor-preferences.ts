@@ -1,10 +1,12 @@
 'use server'
 
 import { z } from 'zod'
-import { auth } from '@/auth'
+import { requireAuth } from '@/lib/auth-utils'
+import { parseInput } from '@/lib/action-utils'
 import { prisma } from '@/lib/prisma'
 import { DEFAULT_EDITOR_PREFERENCES } from '@/types/editor'
 import type { EditorPreferences } from '@/types/editor'
+import type { MutateResult } from '@/types/actions'
 
 const EditorPreferencesSchema = z.object({
   fontSize: z.number().int().min(10).max(24),
@@ -14,19 +16,15 @@ const EditorPreferencesSchema = z.object({
   theme: z.enum(['vs-dark', 'monokai', 'github-dark']),
 })
 
-type Result = { success: true } | { success: false; error: string }
+export async function updateEditorPreferences(input: EditorPreferences): Promise<MutateResult> {
+  const user = await requireAuth()
+  if (!user) return { success: false, error: 'Unauthorized' }
 
-export async function updateEditorPreferences(input: EditorPreferences): Promise<Result> {
-  const session = await auth()
-  if (!session?.user?.id) return { success: false, error: 'Unauthorized' }
-
-  const parsed = EditorPreferencesSchema.safeParse(input)
-  if (!parsed.success) {
-    return { success: false, error: parsed.error.issues[0]?.message ?? 'Invalid input' }
-  }
+  const parsed = parseInput(EditorPreferencesSchema, input)
+  if ('error' in parsed) return { success: false, error: parsed.error }
 
   await prisma.user.update({
-    where: { id: session.user.id },
+    where: { id: user.userId },
     data: { editorPreferences: parsed.data },
   })
 
@@ -34,16 +32,16 @@ export async function updateEditorPreferences(input: EditorPreferences): Promise
 }
 
 export async function getEditorPreferences(): Promise<EditorPreferences> {
-  const session = await auth()
-  if (!session?.user?.id) return DEFAULT_EDITOR_PREFERENCES
+  const user = await requireAuth()
+  if (!user) return DEFAULT_EDITOR_PREFERENCES
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
+  const dbUser = await prisma.user.findUnique({
+    where: { id: user.userId },
     select: { editorPreferences: true },
   })
 
-  if (!user?.editorPreferences) return DEFAULT_EDITOR_PREFERENCES
+  if (!dbUser?.editorPreferences) return DEFAULT_EDITOR_PREFERENCES
 
-  const parsed = EditorPreferencesSchema.safeParse(user.editorPreferences)
+  const parsed = EditorPreferencesSchema.safeParse(dbUser.editorPreferences)
   return parsed.success ? parsed.data : DEFAULT_EDITOR_PREFERENCES
 }
