@@ -1,27 +1,16 @@
-# refactor/component-decomposition
+# Current Feature
 
 ## Status
 
-In Progress
+<!-- Not Started | In Progress | Complete -->
 
 ## Goals
 
-- Extract `INPUT_CLASS` constant to `src/lib/styles.ts` (used in 4 dialog/drawer files)
-- Replace raw `<button>` elements in dialog footers with shadcn `<Button>` (3 files: CreateCollectionDialog, EditCollectionDialog, CreateItemDialog)
-- Extract `useCollectionActions()` hook to `src/hooks/useCollectionActions.ts` (deduplicates CollectionActions + CollectionCardMenu logic + AlertDialog)
-- Extract pricing feature arrays (`FREE_FEATURES`, `PRO_FEATURES`) to `src/lib/pricing.ts` (used in PricingSection + UpgradePageContent; fix inconsistent `accent` value)
-- Add `formatShortDate` / `formatLongDate` to existing `src/lib/format.ts` (used in ItemDrawer, ItemCard, FavoritesList)
-- Extract `startStripeCheckout(priceId)` to `src/lib/stripe-client.ts` (used in BillingSection + UpgradePageContent)
-- Extract `<DashboardItemCard>` wrapper to `src/components/dashboard/DashboardItemCard.tsx` (deduplicates Image/ItemCard branch in PinnedItems + RecentItems; fix inconsistent `.toLowerCase()` comparison)
-- Extract `<BillingIntervalToggle>` to `src/components/ui/BillingIntervalToggle.tsx` (used in PricingSection, UpgradePageContent, BillingSection)
-- Split `ItemDrawer.tsx` (569 lines) into `ItemDrawerView`, `ItemDrawerEditForm`, `ItemDrawerActionBar`, keeping `ItemDrawer` as orchestrator
-- Remove local `PRO_TYPES` redefinition in `SidebarContent.tsx` — import from `src/lib/item-type-utils.ts` instead
+<!-- bullet points of what success looks like -->
 
 ## Notes
 
-- Refactoring only — no behavior changes
-- `SortToggle` in `FavoritesList.tsx` is a candidate to move to `src/components/ui/` but has no current duplication; low priority
-- The `accent` inconsistency in `PRO_FEATURES` between PricingSection and UpgradePageContent is likely a copy-paste omission — reconcile when extracting to `pricing.ts`
+<!-- additional context, constraints, or details -->
 
 ## History
 
@@ -80,3 +69,4 @@ In Progress
 - **2026-04-11** — AI Auto-Tagging: OpenAI client utility (src/lib/openai.ts) with AI_MODEL constant; generateAutoTags server action (Responses API, gpt-5-nano) with auth, Pro gate, Zod validation, rate limiting (20 req/hr); SuggestTagsButton component with accept/reject badge UI; integrated in CreateItemDialog and ItemDrawer edit mode; button hidden for free users; 11 unit tests
 - **2026-04-11** — UI Polish: sidebar active link highlighting via usePathname (type + collection links); GitHub OAuth button added to register page; DevStash heading added inside auth card shell; redundant "NAVIGATION" sidebar label removed; hex icon added to TopBar wordmark
 - **2026-04-12** — Action utilities refactor: extracted `requireAuth()` (src/lib/auth-utils.ts), `parseInput<S>()`/`withAction<T>()`/`withMutation()` (src/lib/action-utils.ts), `ActionResult<T>`/`MutateResult` (src/types/actions.ts); `revalidateCollections()` inline helper in collections.ts; removes 10+ repeated auth blocks and 6 Zod parse patterns across all actions; refactoring only, no behavior changes
+- **2026-04-12** — Component decomposition: INPUT_CLASS → src/lib/styles.ts; FREE/PRO_FEATURES → src/lib/pricing.ts (fixed accent inconsistency); startStripeCheckout → src/lib/stripe-client.ts; formatShortDate/formatLongDate → src/lib/format.ts; useCollectionActions hook extracted; DashboardItemCard wrapper (fixed .toLowerCase inconsistency); BillingIntervalToggle component; ItemDrawer (569 lines) split into ItemDrawerView + ItemDrawerEditForm + ItemDrawerActionBar; dialog footers use shadcn Button; SidebarContent imports PRO_TYPES from item-type-utils
