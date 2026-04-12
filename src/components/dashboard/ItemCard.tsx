@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { ICON_MAP } from '@/lib/icon-map'
 import { useItems } from '@/components/dashboard/ItemsProvider'
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
-import { formatBytes } from '@/lib/format'
+import { formatBytes, formatShortDate } from '@/lib/format'
 import type { DashboardItem } from '@/lib/db/items'
 
 function getFileIcon(fileName: string | null): LucideIcon {
@@ -29,9 +29,6 @@ function ItemTypeIcon({ contentType, fileName, typeIcon, typeColor }: {
   return <Icon className="size-3.5 shrink-0" style={{ color: typeColor }} />
 }
 
-function formatDate(date: Date) {
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-}
 
 export function ItemCard({ item, large }: { item: DashboardItem; large?: boolean }) {
   const { openItem } = useItems()
@@ -123,7 +120,7 @@ export function ItemCard({ item, large }: { item: DashboardItem; large?: boolean
           ))}
         </div>
         <span className="text-xs text-muted-foreground shrink-0">
-          {formatDate(item.updatedAt)}
+          {formatShortDate(item.updatedAt)}
         </span>
         {(item.content || item.url) && (
           <button

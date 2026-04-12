@@ -11,15 +11,14 @@ import {
 } from '@/components/ui/dialog'
 import { toast } from 'sonner'
 import { updateCollection } from '@/actions/collections'
+import { INPUT_CLASS } from '@/lib/styles'
+import { Button } from '@/components/ui/button'
 
 interface EditCollectionDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   collection: { id: string; name: string; description: string | null }
 }
-
-const inputClass =
-  'w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring'
 
 export function EditCollectionDialog({ open, onOpenChange, collection }: EditCollectionDialogProps) {
   const router = useRouter()
@@ -62,7 +61,7 @@ export function EditCollectionDialog({ open, onOpenChange, collection }: EditCol
 
         <div className="space-y-3 py-1">
           <input
-            className={inputClass}
+            className={INPUT_CLASS}
             value={name}
             onChange={e => setName(e.target.value)}
             placeholder="Name *"
@@ -70,7 +69,7 @@ export function EditCollectionDialog({ open, onOpenChange, collection }: EditCol
             onKeyDown={e => { if (e.key === 'Enter') handleSave() }}
           />
           <textarea
-            className={`${inputClass} resize-none`}
+            className={`${INPUT_CLASS} resize-none`}
             rows={3}
             value={description}
             onChange={e => setDescription(e.target.value)}
@@ -79,20 +78,12 @@ export function EditCollectionDialog({ open, onOpenChange, collection }: EditCol
         </div>
 
         <DialogFooter>
-          <button
-            className="rounded-md px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-            onClick={() => onOpenChange(false)}
-            disabled={isSaving}
-          >
+          <Button variant="ghost" className="text-muted-foreground" onClick={() => onOpenChange(false)} disabled={isSaving}>
             Cancel
-          </button>
-          <button
-            className="rounded-md px-4 py-2 text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50"
-            onClick={handleSave}
-            disabled={!name.trim() || isSaving}
-          >
+          </Button>
+          <Button onClick={handleSave} disabled={!name.trim() || isSaving}>
             {isSaving ? 'Saving…' : 'Save'}
-          </button>
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

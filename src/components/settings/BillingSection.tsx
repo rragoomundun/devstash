@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { FREE_ITEM_LIMIT, FREE_COLLECTION_LIMIT } from '@/lib/usage-limits'
+import { startStripeCheckout } from '@/lib/stripe-client'
 
 interface BillingSectionProps {
   isPro: boolean
@@ -18,25 +19,9 @@ export function BillingSection({ isPro, itemCount, collectionCount, monthlyPrice
 
   async function handleUpgrade() {
     const priceId = billingInterval === 'monthly' ? monthlyPriceId : yearlyPriceId
-
     setLoading(true)
-    try {
-      const res = await fetch('/api/stripe/checkout-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ priceId }),
-      })
-      const data = await res.json()
-      if (!res.ok) {
-        toast.error(data.error ?? 'Failed to start checkout.')
-        return
-      }
-      window.location.href = data.url
-    } catch {
-      toast.error('Failed to start checkout.')
-    } finally {
-      setLoading(false)
-    }
+    await startStripeCheckout(priceId)
+    setLoading(false)
   }
 
   async function handleManageSubscription() {

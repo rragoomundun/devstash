@@ -1,16 +1,27 @@
-# Current Feature
+# refactor/component-decomposition
 
 ## Status
 
-<!-- Not Started | In Progress | Complete -->
+In Progress
 
 ## Goals
 
-<!-- bullet points of what success looks like -->
+- Extract `INPUT_CLASS` constant to `src/lib/styles.ts` (used in 4 dialog/drawer files)
+- Replace raw `<button>` elements in dialog footers with shadcn `<Button>` (3 files: CreateCollectionDialog, EditCollectionDialog, CreateItemDialog)
+- Extract `useCollectionActions()` hook to `src/hooks/useCollectionActions.ts` (deduplicates CollectionActions + CollectionCardMenu logic + AlertDialog)
+- Extract pricing feature arrays (`FREE_FEATURES`, `PRO_FEATURES`) to `src/lib/pricing.ts` (used in PricingSection + UpgradePageContent; fix inconsistent `accent` value)
+- Add `formatShortDate` / `formatLongDate` to existing `src/lib/format.ts` (used in ItemDrawer, ItemCard, FavoritesList)
+- Extract `startStripeCheckout(priceId)` to `src/lib/stripe-client.ts` (used in BillingSection + UpgradePageContent)
+- Extract `<DashboardItemCard>` wrapper to `src/components/dashboard/DashboardItemCard.tsx` (deduplicates Image/ItemCard branch in PinnedItems + RecentItems; fix inconsistent `.toLowerCase()` comparison)
+- Extract `<BillingIntervalToggle>` to `src/components/ui/BillingIntervalToggle.tsx` (used in PricingSection, UpgradePageContent, BillingSection)
+- Split `ItemDrawer.tsx` (569 lines) into `ItemDrawerView`, `ItemDrawerEditForm`, `ItemDrawerActionBar`, keeping `ItemDrawer` as orchestrator
+- Remove local `PRO_TYPES` redefinition in `SidebarContent.tsx` — import from `src/lib/item-type-utils.ts` instead
 
 ## Notes
 
-<!-- additional context, constraints, or details -->
+- Refactoring only — no behavior changes
+- `SortToggle` in `FavoritesList.tsx` is a candidate to move to `src/components/ui/` but has no current duplication; low priority
+- The `accent` inconsistency in `PRO_FEATURES` between PricingSection and UpgradePageContent is likely a copy-paste omission — reconcile when extracting to `pricing.ts`
 
 ## History
 

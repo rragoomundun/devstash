@@ -1,8 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
-import { useRouter } from 'next/navigation'
-import { Pencil, Trash2, Star } from 'lucide-react'
+import { Star, Pencil, Trash2 } from 'lucide-react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,9 +11,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
-import { toast } from 'sonner'
-import { deleteCollection, toggleCollectionFavorite } from '@/actions/collections'
 import { EditCollectionDialog } from '@/components/dashboard/EditCollectionDialog'
+import { useCollectionActions } from '@/hooks/useCollectionActions'
 
 interface CollectionActionsProps {
   collection: { id: string; name: string; description: string | null; isFavorite: boolean }
@@ -24,41 +21,17 @@ interface CollectionActionsProps {
 }
 
 export function CollectionActions({ collection, redirectOnDelete }: CollectionActionsProps) {
-  const router = useRouter()
-  const [editOpen, setEditOpen] = useState(false)
-  const [deleteOpen, setDeleteOpen] = useState(false)
-  const [isDeleting, startDelete] = useTransition()
-  const [isFavorite, setIsFavorite] = useState(collection.isFavorite)
-  const [isTogglingFavorite, startToggleFavorite] = useTransition()
-
-  function handleToggleFavorite() {
-    startToggleFavorite(async () => {
-      const next = !isFavorite
-      const result = await toggleCollectionFavorite(collection.id, next)
-      if (!result.success) {
-        toast.error(result.error)
-        return
-      }
-      setIsFavorite(next)
-      router.refresh()
-    })
-  }
-
-  function handleDelete() {
-    startDelete(async () => {
-      const result = await deleteCollection(collection.id)
-      if (!result.success) {
-        toast.error(result.error)
-        return
-      }
-      toast.success('Collection deleted')
-      if (redirectOnDelete) {
-        router.push('/collections')
-      } else {
-        router.refresh()
-      }
-    })
-  }
+  const {
+    isFavorite,
+    isDeleting,
+    isTogglingFavorite,
+    handleToggleFavorite,
+    handleDelete,
+    deleteOpen,
+    setDeleteOpen,
+    editOpen,
+    setEditOpen,
+  } = useCollectionActions(collection, redirectOnDelete)
 
   return (
     <>
@@ -90,11 +63,7 @@ export function CollectionActions({ collection, redirectOnDelete }: CollectionAc
         </button>
       </div>
 
-      <EditCollectionDialog
-        open={editOpen}
-        onOpenChange={setEditOpen}
-        collection={collection}
-      />
+      <EditCollectionDialog open={editOpen} onOpenChange={setEditOpen} collection={collection} />
 
       <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <AlertDialogContent>
